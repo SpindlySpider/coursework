@@ -1,0 +1,29 @@
+  svg {
+    color: dodgerblue;
+  }
+    circle {
+    --strokeLength: 1538.7584228515625;
+    --strokeIncrement: 4;
+    --strokeCalc: 0;
+    stroke-dasharray: var(--strokeLength);
+    stroke-dashoffset: var(--strokeCalc);
+    transition: stroke-dashoffset 1s ease;
+  }
+
+#timerContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.columnContainer{
+    display: flex;
+    
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+.columnItem{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
