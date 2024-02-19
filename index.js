@@ -1,10 +1,10 @@
-const express = require("express");
-const path = require('path');
+import express from "express";
 let app = express();
-const port = 3000;
+const port = 8080;
 
-app.use(express.static("./src/pages/"));
+app.get("/",(request,response) =>{
+  response.sendFile(__dirname+"public/index.html");
+});
 app.listen(port, function(){
-  console.log("started application");
   console.log('Server started at http://localhost:' + port);
-})
+});
