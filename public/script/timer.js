@@ -1,5 +1,6 @@
 
 function startTimer(){
+  //make sure can only be called once 
   console.log("timer");
   let timerContainer = document.querySelector("#timerContainer");
   let timerText = timerContainer.querySelector("h1");
