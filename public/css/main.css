@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#navbar {
+    height: 9vh;
+    width: 100vw;
+    background-color: grey;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+}
+
+.navbar-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background-color: white;
+    margin: 10px;
+    width: min(20vw, 10000px);
+}
+
+.right-floating-notification {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 8vh;
+    height: min(5vh, 500px);
+    position: absolute;
+    background-color: red;
+    width: min(40vw, 1000px);
+    right: 1vw;
+    left: auto;
+    top: auto;
+}
