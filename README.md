@@ -12,7 +12,15 @@
 ## Key features
 REMOVE ME: Introduce the key features, paying special attention to the non-code ones.  Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.  
 
-### Key Feature Name/Description.
+### new activities.
+this is a feature which will allow users to create custom workout events by giving it a title, description, duration, tags and equipment assocaited with it. 
+#### TODO
+- [ ] add storage of new events
+- [ ] create custom description field
+    - [ ] not editable untill edit button pressed 
+- [ ] create custom add photo for customising the excerize 
+- [ ] add css to make it look functional
+- [ ] push the new data to the server to store it in a mysqllite database 
 Words words words.  Words words words.
 
 ### Key Another Feature Name/Description.
@@ -37,8 +45,8 @@ A sequence of prompts helped me develop this feature:
 
 chatgpt response was that both are vaild ways of creating shadowDOM however it says that templates are may make the code more readable. because of this I may experiment using templates within the webcomponents. 
 
-looking more into templates it would be easier if the DOM is defined within the JS its self as we will have to deal with fetch requests, which for a constructor within a custom element is not ideal. Futhuer more the DOM being self contained allows for these web components to be effortlessly implemented else where. 
-
+looking more into templates it would be easier if the template is defined within the JS its self as we will have to deal with fetch requests, which for a constructor within a custom element is not ideal. Futhuer more the DOM being self contained allows for these web components to be effortlessly imported anywhere.  
+https://www.youtube.com/watch?v=2I7uX8m0Ta0 -> this youtube video helps demonstrate how to use templates and web componenets together
 
 >  this is an example prompt given to a chatbot detailing XYZ
 The response was better so I could speifically ask about QRST
