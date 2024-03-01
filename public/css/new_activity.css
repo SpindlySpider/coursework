@@ -1,0 +1,32 @@
+* {
+    /* padding: auto; */
+    margin: 0;
+
+}
+
+#newActivtyMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    bottom: 0;
+    width: 100vw;
+    height: 75vh;
+    background-color: grey;
+}
+
+#activtyMenuHeading {
+    margin: 10px;
+}
+
+#dragElement {
+    margin: 5px;
+    padding: 0 30px 0 30px;
+    width: 50px;
+    height: 20px;
+    background-color: red;
+}
+
+#newActivtyMenu input {
+    padding: 0 50px 20px 50px;
+}
