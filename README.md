@@ -1,5 +1,14 @@
 
 # HIIT up2107487
+
+## file structure
+
+## TODO
+- make a description box which has a edit button otherwise it is not editable
+- add a tag selector web componenet
+- make a equipment selector 
+- add photo selector too 
+
 ## Key features
 REMOVE ME: Introduce the key features, paying special attention to the non-code ones.  Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.  
 
@@ -26,15 +35,15 @@ A sequence of prompts helped me develop this feature:
 
 > hello i have a question about web components and best practises, I was wondering what is a standard way of defining shadow DOMs within JavaScript in a readable format, I was wondering if it was a good idea to use a template and then load it into the web component or define the structure within the web component its self
 
-chatgpt response was that both are vaild ways of creating shadowDOM however it says that templates are may make the code more readable.
+chatgpt response was that both are vaild ways of creating shadowDOM however it says that templates are may make the code more readable. because of this I may experiment using templates within the webcomponents. 
 
+looking more into templates it would be easier if the DOM is defined within the JS its self as we will have to deal with fetch requests, which for a constructor within a custom element is not ideal. Futhuer more the DOM being self contained allows for these web components to be effortlessly implemented else where. 
 
-
-The response was proved useless because the prompt wasn't specific enough about XYZ, so:
 
 >  this is an example prompt given to a chatbot detailing XYZ
 The response was better so I could speifically ask about QRST
 
+The response was proved useless because the prompt wasn't specific enough about XYZ, so:
 >  how can I integrate QRST here?
 The suggestion worked with minor modification.
 
