@@ -1,5 +1,7 @@
+import { saveActivty } from './utilities.js';
 
-const template = document.createElement("template");
+const template = document.createElement('template');
+
 template.innerHTML = `
 <style>
 :root{
@@ -39,38 +41,29 @@ header, main{
 `;
 class newActivtyMenu extends HTMLElement {
   // might be able to abstract this out and then add custom elements to it and use it just as a menu for all things
-  // also if any of the attributes change then we need to update local storage + server cache 
+  // also if any of the attributes change then we need to update local storage + server cache
   constructor() {
-    //must do all of the selections within the constructor
+    // must do all of the selections within the constructor
     super();
     this.shadow = this.attachShadow({ mode: 'open' });
-    this.shadow.innerHTML = `${template.innerHTML}`;
-    this.donebutton = this.shadow.querySelector("#doneButton");
+    this.shadow.innerHTML = template.innerHTML;
+    this.donebutton = this.shadow.querySelector('#doneButton');
   }
-  connectedCallback(){
-    this.donebutton.addEventListener("click",this.saveNewActivty.bind(this));
-    //set up event listners here
+
+  connectedCallback() {
+    this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
+    // set up event listners here
   }
-  disconnectedCallback(){
-  }
-    saveNewActivty(){
-    const title = this.shadow.querySelector("#doneButton").value;
-    const description = this.shadow.querySelector("#descriptionInput").value;
-    const duration = this.shadow.querySelector("#timeInput").value;
-    let newActivty = {
-      "UUID" : crypto.randomUUID(),
-      "title": title ,
-      "description": description,
-      "duration":  duration
-    };
-    newActivty =  JSON.stringify(newActivty);
-    // save in local cache then send to the server 
-    // must request UUID from server 
-    // fall back if server is not reachable is service worker gerneates new UUID
-    //create JSON object to store 
-    // must implment error checking 
-    localStorage["activites"] = newActivty;
-    // localStorage["activites"][crypto.randomUUID()] = newActivty;
+
+  disconnectedCallback() {}
+
+  saveNewActivty() {
+    // should abtract this to a general store activties/ edit activites
+    const title = this.shadow.querySelector('#activityNameInput').value;
+    const description = this.shadow.querySelector('#descriptionInput').value;
+    const duration = this.shadow.querySelector('#timeInput').value;
+    const UUID = crypto.randomUUID();
+    saveActivty(UUID, title, description, duration);
   }
 }
 customElements.define('new-activty-menu', newActivtyMenu);
