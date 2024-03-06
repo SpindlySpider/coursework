@@ -3,6 +3,9 @@
 
 ## file structure
 
+## justification of design 
+- multiple of the same activity title can exist, this is because users may want different versions of the activity, example : squats with differnt times
+
 ## TODO
 - make a description box which has a edit button otherwise it is not editable
 - add a tag selector web componenet
