@@ -1,29 +1,22 @@
-const checkLocalStorageEmpty = (keyName) => localStorage[keyName] != null;
+const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 
-function saveActivty() {
+export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
-  const empty = checkLocalStorageEmpty('activties');
-
-  const title = this.shadow.querySelector('#activityNameInput').value;
-  const description = this.shadow.querySelector('#descriptionInput').value;
-  const duration = this.shadow.querySelector('#timeInput').value;
-  const UUID = crypto.randomUUID();
-  if (empty) {
+  // duration should be in ms
+  const loggedIn = false; // implement later
+  if (loggedIn) {
+    // execute server authentication here? and send the event to the server
+  }
+  if (isLocalStorageEmpty('activites')) {
     // create new JSON for local localStorage
     localStorage.activites = JSON.stringify({});
   }
   const newActivty = {
-    UUID: {
-      title,
-      description,
-      duration,
-    },
+    title,
+    description,
+    duration,
   };
   const cachedActivites = JSON.parse(localStorage.activites);
-  if (Object.keys(cachedActivites).includes(UUID)) {
-    // might need to make a new cache if empty but logic should be the same
-    cachedActivites[UUID] = newActivty;
-  }
   cachedActivites[UUID] = newActivty;
   // save in local cache then send to the server
   // must request UUID from server
@@ -31,4 +24,21 @@ function saveActivty() {
   // create JSON object to store
   // must implment error checking
   localStorage.activites = JSON.stringify(cachedActivites);
+}
+
+export function getActivtyFromID(UUID) {
+  const loggedIn = false; // implement later
+  if (loggedIn) {
+    // execute server authentication here? and get event from server
+  }
+  if (isLocalStorageEmpty('activites')) {
+    // create new JSON for local localStorage
+    throw new Error('local storage is empty');
+  }
+  const cachedActivites = JSON.parse(localStorage.activites);
+  try {
+    return JSON.parse(cachedActivites[UUID]);
+  } catch (e) {
+    throw new Error('no activity matching ID within local storage');
+  }
 }
