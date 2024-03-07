@@ -1,5 +1,5 @@
 const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
-
+const ACTIVTIES_KEY = 'activites';
 export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
   // duration should be in ms
