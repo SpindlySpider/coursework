@@ -1,4 +1,4 @@
-function newActivityPageDisplay() {}
+import { displayCategoryPage } from './category_scripts/category_page.js';
 
 function displayNewEntryOptions() {
   if (document.querySelector('#newActivtyPopup') == null) {
@@ -12,34 +12,7 @@ function displayNewEntryOptions() {
     document.querySelector('#newActivtyPopup').remove();
   }
 }
-const categeoryTemplate = document.createElement('template');
 
-categeoryTemplate.innerHTML = `
-<style>
-.categoryElement{
-
-}
-.centerCategory{
-  display:flex;
-
-}
-</style>
-    <nav class="navbar ">
-      <li class="centerCategory navbar-item">list view</li>
-      <li class="centerCategory navbar-item">body view</li>
-      <li class="centerCategory navbar-item">difficulty</li>
-      <li class="rightCategory navbar-item">search</li>
-    </nav>
-    <ul class = "vertical-item-list">
-      <li id = "customActivtiesCategory" class= "categoryElement"> custom activties </li>
-    </ul>
-`;
-
-function displayCategoryPage() {
-  const main = document.querySelector('#main-content');
-  main.innerHTML = categeoryTemplate.innerHTML;
-  // console.log(':)');
-}
 document
   .querySelector('#new-entry')
   .addEventListener('click', displayNewEntryOptions);
