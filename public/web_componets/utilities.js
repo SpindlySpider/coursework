@@ -7,7 +7,7 @@ export function saveActivty(UUID, title, description, duration) {
   if (loggedIn) {
     // execute server authentication here? and send the event to the server
   }
-  if (isLocalStorageEmpty('activites')) {
+  if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
     // create new JSON for local localStorage
     localStorage.activites = JSON.stringify({});
   }
@@ -31,7 +31,7 @@ export function getActivtyFromID(UUID) {
   if (loggedIn) {
     // execute server authentication here? and get event from server
   }
-  if (isLocalStorageEmpty('activites')) {
+  if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
     // create new JSON for local localStorage
     throw new Error('local storage is empty');
   }
@@ -41,4 +41,10 @@ export function getActivtyFromID(UUID) {
   } catch (e) {
     throw new Error('no activity matching ID within local storage');
   }
+}
+
+export function getAllCustomActivites() {
+  const customActivites = JSON.parse(localStorage[ACTIVTIES_KEY]);
+  return customActivites;
+  // returns a list of activtites
 }
