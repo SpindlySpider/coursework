@@ -1,6 +1,8 @@
-export const bottomSheetTemplate = document.createElement('template');
-bottomSheetTemplate.innerHTML = `
-<style>
+* {
+  padding: 0;
+  margin: 0;
+}
+
 #bottomsheet-container {
   bottom: 0;
   left: 0;
@@ -71,27 +73,3 @@ bottomSheetTemplate.innerHTML = `
   padding-top: 2%;
   padding-bottom: 2%;
 }
-</style>
-
-<form id="bottomsheet-container">
-  <header id="bottomsheet-header">
-    <div id="drag-bar" class="bottomsheet-header-item"></div>
-    <div class="bottomsheet-header-buttons">
-      <p id="bottomsheet-header-title" class="bottomsheet-header-item">title</p>
-      <div class="empty-space"></div>
-      <button
-        id="bottomsheet-add"
-        class="bottomsheet-header-item bottomsheet-header-button">
-        add
-      </button>
-      <button
-        id="bottomsheet-done"
-        class="bottomsheet-header-item bottomsheet-header-button"
-      >
-        done
-      </button>
-    </div>
-  </header>
-  <main id="bottomsheet-content">
-  </main>
-</form>`;
