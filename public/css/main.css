@@ -1,4 +1,11 @@
+:root {
+  --nav-bar-background-color: grey;
+  --nav-bar-item-color: white;
+  --activty-popup-background-color: red;
+}
+
 * {
+  overflow-x: hidden;
   padding: 0;
   margin: 0;
 }
@@ -9,7 +16,7 @@
 .bottom-navbar {
   height: 9vh;
   width: 100vw;
-  background-color: grey;
+  background-color: var(--nav-bar-background-color);
   display: flex;
   position: absolute;
   bottom: 0;
@@ -26,7 +33,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  background-color: white;
+  background-color: var(--nav-bar-item-color);
   margin: 10px;
   width: min(20vw, 10000px);
 }
@@ -38,10 +45,9 @@
   bottom: 8vh;
   height: min(5vh, 500px);
   position: absolute;
-  background-color: red;
+  background-color: var(--activty-popup-background-color);
   width: min(40vw, 1000px);
   right: 1vw;
   left: auto;
   top: auto;
 }
-
