@@ -16,7 +16,6 @@ export class bottomSheetMenu extends HTMLElement {
   connectedCallback() {
     // this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
     // this.pullupAnimation.bind(this);
-    // this.setTitle.bind(this);
     // set up event listners here
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.doneButton.addEventListener('click', this.destorySelf.bind(this));
