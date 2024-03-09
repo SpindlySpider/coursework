@@ -1,30 +1,60 @@
-import { saveActivty } from './utilities.js';
-import { newActivtyMenuTemplate } from '../templates/new_activity_menu.js';
-class newActivtyMenu extends HTMLElement {
-  // might be able to abstract this out and then add custom elements to it and use it just as a menu for all things
+import { saveActivty, getUUID } from './utilities.js';
+import { bottomSheetMenu } from './bottom_sheet_menu.js';
+
+export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
   constructor() {
     // must do all of the selections within the constructor
     super();
-    this.shadow = this.attachShadow({ mode: 'open' });
-    this.shadow.innerHTML = newActivtyMenuTemplate.innerHTML;
     this.donebutton = this.shadow.querySelector('#doneButton');
+    this.addButton = this.shadow.querySelector('#bottomsheet-add');
+
+    this.nameInput = document.createElement('input');
+    this.descriptionInput = document.createElement('input');
+    this.timeInput = document.createElement('input');
+    this.photoInput = document.createElement('input');
+
+    this.nameInput.id = 'activityNameInput';
+    this.descriptionInput.id = 'descriptionInput';
+    this.timeInput.id = 'timeInput';
+    this.photoInput.id = 'addPhoto';
+
+    this.nameInput.classList.add('bottomsheet-content-item');
+    this.descriptionInput.classList.add('bottomsheet-content-item');
+    this.timeInput.classList.add('bottomsheet-content-item');
+    this.photoInput.classList.add('bottomsheet-content-item');
+
+    this.timeInput.type = 'time';
+
+    this.content.append(this.nameInput);
+    this.content.append(this.descriptionInput);
+    this.content.append(this.timeInput);
+    this.content.append(this.photoInput);
+
+    console.log(getUUID());
   }
 
   connectedCallback() {
-    this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
+    // this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
+    // this.setTitle('new activity menu');
     // set up event listners here
+    setTimeout(this.pullupAnimation.bind(this), 25, 75);
+    this.addButton.textContent = 'cancel';
+    this.doneButton.addEventListener('click', this.saveNewActivty.bind(this));
+    this.addButton.addEventListener('click', this.destorySelf.bind(this));
+    this.setTitle('new activity');
   }
 
   disconnectedCallback() {}
 
   saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
-    const title = this.shadow.querySelector('#activityNameInput').value;
-    const description = this.shadow.querySelector('#descriptionInput').value;
-    const duration = this.shadow.querySelector('#timeInput').value;
-    const UUID = crypto.randomUUID();
+    const title = this.nameInput.value;
+    const description = this.descriptionInput.value;
+    const duration = this.timeInput.value;
+    const UUID = getUUID();
     saveActivty(UUID, title, description, duration);
+    this.destorySelf();
   }
 }
 customElements.define('new-activty-menu', newActivtyMenu);
