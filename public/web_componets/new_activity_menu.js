@@ -47,12 +47,13 @@ export class newActivtyMenu extends bottomSheetMenu {
 
   disconnectedCallback() {}
 
-  saveNewActivty() {
+  async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
     const description = this.descriptionInput.value;
     const duration = this.timeInput.value;
-    const UUID = getUUID();
+    const UUID = await getUUID();
+    console.log(UUID);
     saveActivty(UUID, title, description, duration);
     this.destorySelf();
   }
