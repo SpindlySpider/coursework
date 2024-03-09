@@ -42,6 +42,12 @@ export function getActivtyFromID(UUID) {
     throw new Error('no activity matching ID within local storage');
   }
 }
+export async function getUUID() {
+  const newUUID = await fetch('/api/get_uuid').then((response) => {
+    return response.json();
+  });
+  return newUUID.uuid;
+}
 
 export function getAllCustomActivites() {
   const customActivites = JSON.parse(localStorage[ACTIVTIES_KEY]);
