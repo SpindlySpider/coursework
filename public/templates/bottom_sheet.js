@@ -11,13 +11,19 @@ bottomSheetTemplate.innerHTML = `
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4px 0 15vh 0;
+  padding-top: 4px;
   background-color: grey;
   position: absolute;
   bottom: 0;
+  paddingBottom: 0vh;
   border-radius: 30px 30px 0 0;
+
 }
 
+.bottom-sheet-container-hidden{
+  display:none;
+  padding-bottom:0vh;
+}
 #bottomsheet-header {
   display: flex;
   flex-direction: column;
@@ -64,6 +70,13 @@ bottomSheetTemplate.innerHTML = `
 .bottomsheet-header-button {
   font-size: 40px;
 }
+#bottomsheet-content{
+  /* transition:padding-bottom 300ms; */
+  transition:height 300ms;
+  overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
 .bottomsheet-content-title {
   display: flex;
   text-align: center;
@@ -81,12 +94,14 @@ bottomSheetTemplate.innerHTML = `
       <div class="empty-space"></div>
       <button
         id="bottomsheet-add"
-        class="bottomsheet-header-item bottomsheet-header-button">
+        class="bottomsheet-header-item bottomsheet-header-button"
+      type='button'>
         add
       </button>
       <button
         id="bottomsheet-done"
         class="bottomsheet-header-item bottomsheet-header-button"
+        type='button'
       >
         done
       </button>
