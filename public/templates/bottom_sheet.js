@@ -64,7 +64,7 @@ bottomSheetTemplate.innerHTML = `
   background-color: yellow;
   font-size: 2em;
   margin: 10px 0 10px 0;
-  padding: 2vh 35vw 2vh 35vw;
+  // padding: 2vh 35vw 2vh 35vw;
   justify-content: center;
 }
 .bottomsheet-header-button {

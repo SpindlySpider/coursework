@@ -8,7 +8,7 @@ export function displayCustomCateogryPage() {
   const customActivties = getAllCustomActivites();
   for (let item of Object.keys(customActivties)) {
     // make a web componenet for the event
-    const entry = document.createElement('p');
+    const entry = document.createElement('activity-entry');
     entry.textContent = customActivties[item].title;
     entry.classList.add('bottomsheet-content-item');
     menu.appendEntry(entry);

@@ -6,7 +6,6 @@ function displayNewActivityMenu() {
   const main = document.querySelector('#main-content');
   const menu = document.createElement('new-activty-menu');
   main.appendChild(menu);
-  //import acitvity webcomponenet here
 }
 
 function displayNewEntryOptions() {
@@ -31,3 +30,5 @@ document
 document
   .querySelector('#catagories')
   .addEventListener('click', displayCategoryPage);
+
+

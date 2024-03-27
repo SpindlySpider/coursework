@@ -54,3 +54,8 @@ export function getAllCustomActivites() {
   return customActivites;
   // returns a list of activtites
 }
+export async function fetchTemplate(shadow, templateURL) {
+  const res = await fetch(import.meta.resolve(templateURL));
+  shadow.innerHTML = await res.text();
+  shadow.append(shadow.querySelector('template').content.cloneNode(true));
+}

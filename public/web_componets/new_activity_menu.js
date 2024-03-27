@@ -11,7 +11,7 @@ export class newActivtyMenu extends bottomSheetMenu {
 
     this.nameInput = document.createElement('input');
     this.descriptionInput = document.createElement('input');
-    this.timeInput = document.createElement('input');
+    this.timeInput = document.createElement('duration-picker');
     this.photoInput = document.createElement('input');
 
     this.nameInput.id = 'activityNameInput';
@@ -24,7 +24,6 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.timeInput.classList.add('bottomsheet-content-item');
     this.photoInput.classList.add('bottomsheet-content-item');
 
-    this.timeInput.type = 'time';
 
     this.content.append(this.nameInput);
     this.content.append(this.descriptionInput);
@@ -51,7 +50,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
     const description = this.descriptionInput.value;
-    const duration = this.timeInput.value;
+    const duration = this.timeInput.getDuration();
     const UUID = await getUUID();
     console.log(UUID);
     saveActivty(UUID, title, description, duration);

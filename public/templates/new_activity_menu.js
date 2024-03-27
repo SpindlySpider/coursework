@@ -29,7 +29,7 @@ header, main{
   <main>
      <input id="descriptionInput"></input>
     <div class="column-group">
-      <input id="timeInput" type="time"></input>
+        <duration-picker id="timeInput"></duration-picker>
         <input id="addPhoto"></input>
         <div id="tags"></div>
         <div id="required equipment"></div>
