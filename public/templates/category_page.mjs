@@ -1,4 +1,4 @@
-import { bottomSheetTemplate } from '../templates/bottom_sheet.js';
+import { bottomSheetTemplate } from '../templates/bottom_sheet.mjs';
 export const categeoryTemplate = document.createElement('template');
 export const customCategeoryTemplate = document.createElement('template');
 

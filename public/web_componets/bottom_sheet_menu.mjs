@@ -1,4 +1,4 @@
-import { bottomSheetTemplate } from '../templates/bottom_sheet.js';
+import { bottomSheetTemplate } from '../templates/bottom_sheet.mjs';
 export class bottomSheetMenu extends HTMLElement {
   constructor() {
     // must do all of the selections within the constructor

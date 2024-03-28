@@ -1,5 +1,4 @@
-import { getAllCustomActivites } from '../../web_componets/utilities.js';
-
+import { getAllCustomActivites } from '../../web_componets/utilities.mjs';
 export function displayCustomCateogryPage() {
   const main = document.querySelector('#main-content');
   const menu = document.createElement('bottom-sheet-menu');
@@ -9,7 +8,8 @@ export function displayCustomCateogryPage() {
   for (let item of Object.keys(customActivties)) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
-    entry.textContent = customActivties[item].title;
+    entry.customTitle = customActivties[item].title;
+    entry.entryID = item;
     entry.classList.add('bottomsheet-content-item');
     menu.appendEntry(entry);
   }

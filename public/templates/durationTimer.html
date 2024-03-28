@@ -1,39 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <template>
-<style>
-  input {
-    outline: none;
-    border: 1px solid white;
-    text-align: center;
-    box-sizing: border-box;
-    font-size: 1.4em;
-  }
+  <style>
+    input {
+      outline: none;
+      border: 1px solid white;
+      text-align: center;
+      box-sizing: border-box;
+      font-size: 1.4em;
+    }
 
-  input.number-to-text::-webkit-outer-spin-button,
-  input.number-to-text::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    input.number-to-text::-webkit-outer-spin-button,
+    input.number-to-text::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
-  input[type=number].number-to-text {
-    -moz-appearance: textfield;
-  }
+    input[type='number'].number-to-text {
+      -moz-appearance: textfield;
+    }
 
-  #content {
-    display: flex;
-    flex-direction: row;
-  }
+    #content {
+      display: flex;
+      flex-direction: row;
+    }
 
-  p {
-    right: 0;
-  }
-</style>
-<div id="content">
-  <input type="number" id="hour" value="00" class="number-to-text" min=0 max="10">
-  <p>:h</p>
-  <input type="number" id="minute" value="00" class="number-to-text" min="00" max="59">
-  <p>:m</p>
-  <input type="number" id="seconds" value="00" class="number-to-text" min="00" max="59">
-  <p>:s</p>
-</div>
+    p {
+      right: 0;
+    }
+  </style>
+  <div id="content">
+    <input
+      type="number"
+      id="hour"
+      value="00"
+      class="duration_input"
+      min="0"
+      max="10"
+    />
+    <p>:h</p>
+    <input
+      type="number"
+      id="minute"
+      value="00"
+      class="duration_input"
+      min="00"
+      max="59"
+    />
+    <p>:m</p>
+    <input
+      type="number"
+      id="seconds"
+      value="00"
+      class="duration_input"
+      min="00"
+      max="59"
+    />
+    <p>:s</p>
+  </div>
 </template>

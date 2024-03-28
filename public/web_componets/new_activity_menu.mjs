@@ -1,5 +1,5 @@
-import { saveActivty, getUUID } from './utilities.js';
-import { bottomSheetMenu } from './bottom_sheet_menu.js';
+import { saveActivty, getUUID } from './utilities.mjs';
+import { bottomSheetMenu } from './bottom_sheet_menu.mjs';
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -24,7 +24,6 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.timeInput.classList.add('bottomsheet-content-item');
     this.photoInput.classList.add('bottomsheet-content-item');
 
-
     this.content.append(this.nameInput);
     this.content.append(this.descriptionInput);
     this.content.append(this.timeInput);
@@ -34,9 +33,6 @@ export class newActivtyMenu extends bottomSheetMenu {
   }
 
   connectedCallback() {
-    // this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
-    // this.setTitle('new activity menu');
-    // set up event listners here
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.addButton.textContent = 'cancel';
     this.doneButton.addEventListener('click', this.saveNewActivty.bind(this));

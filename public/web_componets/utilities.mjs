@@ -37,7 +37,7 @@ export function getActivtyFromID(UUID) {
   }
   const cachedActivites = JSON.parse(localStorage.activites);
   try {
-    return JSON.parse(cachedActivites[UUID]);
+    return cachedActivites[UUID];
   } catch (e) {
     throw new Error('no activity matching ID within local storage');
   }
@@ -59,3 +59,5 @@ export async function fetchTemplate(shadow, templateURL) {
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));
 }
+export function savePlaylist() {}
+export function getPlaylist(UUID) {}

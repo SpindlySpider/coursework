@@ -1,13 +1,11 @@
-import { displayCategoryPage } from './category_scripts/category_page.js';
-import { newActivtyMenu } from '../web_componets/new_activity_menu.js';
-import { bottomSheetMenu } from '../web_componets/bottom_sheet_menu.js';
+import { displayCategoryPage } from './category_scripts/category_page.mjs';
+import { displayPlaylistPage } from './playlist_page.mjs';
 function displayNewActivityMenu() {
   document.querySelector('#newActivtyPopup').remove();
   const main = document.querySelector('#main-content');
   const menu = document.createElement('new-activty-menu');
   main.appendChild(menu);
 }
-
 function displayNewEntryOptions() {
   if (document.querySelector('#newActivtyPopup') == null) {
     const newActivty = document.createElement('li');
@@ -30,5 +28,6 @@ document
 document
   .querySelector('#catagories')
   .addEventListener('click', displayCategoryPage);
-
-
+document
+  .querySelector('#workout-playlist')
+  .addEventListener('click', displayPlaylistPage);
