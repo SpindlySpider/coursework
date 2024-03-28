@@ -6,6 +6,7 @@ export class bottomSheetMenu extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' });
     this.shadow.innerHTML = bottomSheetTemplate.innerHTML;
     this.container = this.shadow.querySelector('#bottomsheet-container');
+    this.header = this.shadow.querySelector('.bottomsheet-header-buttons');
     this.customTitle = this.shadow.querySelector('#bottomsheet-header-title');
     this.content = this.shadow.querySelector('#bottomsheet-content');
     this.doneButton = this.shadow.querySelector('#bottomsheet-done');

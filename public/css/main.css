@@ -50,4 +50,8 @@
   right: 1vw;
   left: auto;
   top: auto;
+  flex-direction: column;
+}
+.hidden {
+  display: none;
 }

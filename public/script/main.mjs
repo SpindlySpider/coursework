@@ -1,24 +1,44 @@
 import { displayCategoryPage } from './category_scripts/category_page.mjs';
 import { displayPlaylistPage } from './playlist_page.mjs';
 function displayNewActivityMenu() {
-  document.querySelector('#newActivtyPopup').remove();
+  document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');
   const menu = document.createElement('new-activty-menu');
   main.appendChild(menu);
 }
+function displayNewPlaylistMenu() {
+  document.querySelector('#activtyList').remove();
+  const main = document.querySelector('#main-content');
+  const menu = document.createElement('new-playlist-menu');
+  main.appendChild(menu);
+}
 function displayNewEntryOptions() {
-  if (document.querySelector('#newActivtyPopup') == null) {
+  if (document.querySelector('#activtyList') == null) {
+    const activtyList = document.createElement('ul');
+    activtyList.id = 'activtyList';
+    activtyList.classList.add('right-floating-notification');
     const newActivty = document.createElement('li');
     newActivty.id = 'newActivtyPopup';
     newActivty.textContent = 'create new activity';
-    newActivty.classList.add('right-floating-notification');
+
+    const newPlaylist = document.createElement('li');
+    newPlaylist.id = 'newPlaylistPopup';
+    newPlaylist.textContent = 'create new playlist';
+    newPlaylist.style.transform;
+
     const container = document.querySelector('#app-container');
-    container.append(newActivty);
+    container.append(activtyList);
+    activtyList.append(newActivty);
+    activtyList.append(newPlaylist);
     document
       .querySelector('#newActivtyPopup')
       .addEventListener('click', displayNewActivityMenu);
+    document
+      .querySelector('#newPlaylistPopup')
+      .addEventListener('click', displayNewPlaylistMenu);
   } else {
-    document.querySelector('#newActivtyPopup').remove();
+    // document.querySelector('#newActivtyPopup').remove();
+    document.querySelector('#activtyList').remove();
   }
 }
 

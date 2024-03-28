@@ -1,5 +1,6 @@
 const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 const ACTIVTIES_KEY = 'activites';
+const PLAYLIST_KEY = 'playlist';
 export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
   // duration should be in ms
@@ -59,5 +60,17 @@ export async function fetchTemplate(shadow, templateURL) {
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));
 }
-export function savePlaylist() {}
+export function savePlaylist(UUID, title) {
+  if (isLocalStorageEmpty(PLAYLIST_KEY)) {
+    // create new JSON for local localStorage
+    localStorage[PLAYLIST_KEY] = JSON.stringify({});
+  }
+  const newPlaylist = {
+    title,
+    // list,
+  };
+  const cachedPlaylists = JSON.parse(localStorage[PLAYLIST_KEY]);
+  cachedPlaylists[UUID] = newPlaylist;
+  localStorage[PLAYLIST_KEY] = JSON.stringify(cachedPlaylists);
+}
 export function getPlaylist(UUID) {}
