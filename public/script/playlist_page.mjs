@@ -1,5 +1,5 @@
 import { newPlaylistMenu } from '../web_componets/new_playlist_menu.mjs';
-import { getPlaylist } from '../web_componets/utilities.mjs';
+import { getActivtyFromID, getPlaylist } from '../web_componets/utilities.mjs';
 
 export function displayPlaylistPage() {
   // const dummyPlaylist = {
@@ -29,11 +29,29 @@ export function displayPlaylistPage() {
     entry.addEventListener('click', () => {
       edit_playlist(entry);
     });
-    // play.addEventListener('click', timer);
+    play.addEventListener('click', () => {
+      startTimer(entry);
+    });
     menu.append(container);
     container.append(entry);
     container.append(play);
   }
+}
+function startTimer(entry) {
+  const main = document.querySelector('#main-content');
+  main.textContent = '';
+
+  let timer = document.createElement('timer-component');
+  const playlist = getPlaylist(entry.dataset.id);
+  let workoutItems = [];
+  for (let id of playlist.items) {
+    workoutItems.push(getActivtyFromID(id));
+  }
+  timer.timerList = workoutItems;
+  timer.customTile = playlist.title;
+  main.append(timer);
+  console.log(workoutItems);
+  console.log(timer.timerList);
 }
 
 async function edit_playlist(entry) {

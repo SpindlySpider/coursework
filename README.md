@@ -13,16 +13,17 @@
 - make a equipment selector
 - add photo selector too
 - create a web componenet for storing items in a column fashion
-- [ ] add storage of new events
+- [ x ] core functionality
+- [ x ] add storage of new events
 - [ ] create custom description field
   - [ ] not editable untill edit button pressed
 - [ ] create custom add photo for customising the excerize
 - [ ] add css to make it look functional
 - [ ] push the new data to the server to store it in a mysqllite database
 - [ ] difficulty rating for custom exercises
-- [ ] maybe make a server and client within the public folder to store code and serve
+- [ x ] maybe make a server and client within the public folder to store code and serve
 - [ ] utilities get activity and get playlist functions can be combined into one
-- [ ] implement timer
+- [ x ] implement timer
 - [ ] clean up code
 
 ## Key features

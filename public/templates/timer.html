@@ -1,0 +1,54 @@
+<template>
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    #container {
+      background-color: white;
+      position: absolute;
+      justify-content: center;
+      display: flex;
+      font-size: 2em;
+      z-index: 5;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .track {
+      stroke: lightgrey;
+      fill: none;
+    }
+
+    .progress {
+      stroke: black;
+      stroke-width: 10;
+      fill: none;
+    }
+
+    button {
+      font-size: 1em;
+    }
+
+    label {
+      font-size: 0.5em;
+    }
+
+    input {
+      font-size: 0.5em;
+    }
+  </style>
+  <div id="container">
+    <h1 id="title">title</h1>
+    <svg width="250" height="250" id="clockContainer">
+      <circle r="100" cx="125" cy="125" class="track"></circle>
+      <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
+    </svg>
+    <div id="time-display" class="row-direction"></div>
+    <div class="row-direction">
+      <button id="start">start</button>
+      <button id="stop">stop</button>
+      <button id="close">close</button>
+    </div>
+  </div>
+</template>
