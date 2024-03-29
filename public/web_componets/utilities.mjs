@@ -60,17 +60,33 @@ export async function fetchTemplate(shadow, templateURL) {
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));
 }
-export function savePlaylist(UUID, title) {
+export function savePlaylist(UUID, title, items) {
   if (isLocalStorageEmpty(PLAYLIST_KEY)) {
     // create new JSON for local localStorage
     localStorage[PLAYLIST_KEY] = JSON.stringify({});
   }
   const newPlaylist = {
     title,
-    // list,
+    items,
   };
   const cachedPlaylists = JSON.parse(localStorage[PLAYLIST_KEY]);
   cachedPlaylists[UUID] = newPlaylist;
   localStorage[PLAYLIST_KEY] = JSON.stringify(cachedPlaylists);
 }
-export function getPlaylist(UUID) {}
+
+export function getPlaylist(UUID) {
+  const loggedIn = false; // implement later
+  if (loggedIn) {
+    // execute server authentication here? and get event from server
+  }
+  if (isLocalStorageEmpty(PLAYLIST_KEY)) {
+    // create new JSON for local localStorage
+    throw new Error('local storage is empty');
+  }
+  const cachedActivites = JSON.parse(localStorage[PLAYLIST_KEY]);
+  try {
+    return cachedActivites[UUID];
+  } catch (e) {
+    throw new Error('no activity matching ID within local storage');
+  }
+}
