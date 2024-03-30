@@ -1,4 +1,4 @@
-import { fetchTemplate, getActivtyFromID } from './utilities.mjs';
+import { fetchTemplate, getActivtyFromID } from '../utilities.mjs';
 export class Entry extends HTMLElement {
   constructor() {
     super();
@@ -15,15 +15,15 @@ export class Entry extends HTMLElement {
 
   eventOptionsBottomSheet() {
     // creates a event options pop up
-    // this is just making a new activity menu but as a pop up menu there must be a way to abstract this in a better manner
     console.log(this.entryID);
     const activity = getActivtyFromID(this.entryID);
     let menu = document.createElement('edit-menu');
+    this.parentNode.append(menu);
+
     menu.entryID = this.entryID;
     menu.nameInput.value = activity.title;
     menu.descriptionInput.value = activity.description;
     menu.seconds = activity.duration;
-    this.parentNode.append(menu);
   }
 }
 

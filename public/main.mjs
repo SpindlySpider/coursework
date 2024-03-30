@@ -1,5 +1,5 @@
-import { displayCategoryPage } from './category_scripts/category_page.mjs';
-import { displayPlaylistPage } from './playlist_page.mjs';
+import { displayCategoryPage } from './script/category_page.mjs';
+import { displayPlaylistPage } from './script/playlist_page.mjs';
 function displayNewActivityMenu() {
   document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');

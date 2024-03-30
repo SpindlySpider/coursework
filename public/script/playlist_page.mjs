@@ -1,18 +1,16 @@
-import { newPlaylistMenu } from '../web_componets/new_playlist_menu.mjs';
+import { newPlaylistMenu } from '../web_componets/new-playlist-menu/new_playlist_menu.mjs';
 import { getActivtyFromID, getPlaylist } from '../web_componets/utilities.mjs';
-
+const el = {};
+function prepareHandles() {
+  el.main = document.querySelector('#main-content');
+}
 export function displayPlaylistPage() {
-  // const dummyPlaylist = {
-  //   UUID: { title: 'basic workout', list: ['UUID1', 'UUID2'] },
-  // };
-  // localStorage['playlist'] = JSON.stringify(dummyPlaylist);
   console.log('playlist');
-  const main = document.querySelector('#main-content');
-  main.textContent = '';
+  el.main.textContent = '';
   const menu = document.createElement('ul');
   const customActivties = document.createElement('h1');
   customActivties.textContent = 'playlist page';
-  main.appendChild(menu);
+  el.main.appendChild(menu);
   menu.append(customActivties);
   const localPlaylists = JSON.parse(localStorage['playlist']);
   for (let item of Object.keys(JSON.parse(localStorage['playlist']))) {
@@ -53,18 +51,16 @@ function startTimer(entry) {
   console.log(workoutItems);
   console.log(timer.timerList);
 }
-
 async function edit_playlist(entry) {
   console.log(`edit ${entry.dataset.id}`);
-  const playlist = getPlaylist(entry.dataset.id);
-  console.log(playlist);
-  console.log(playlist.items);
   let editMenu = document.createElement('new-playlist-menu');
-  const main = document.querySelector('#main-content');
-  main.append(editMenu);
-  editMenu.nameInput.value = playlist.title;
+  el.main.append(editMenu);
+  const playlist = await getPlaylist(entry.dataset.id);
+  // since the on connect call back is async it ensure all of it is connected
   editMenu.activityItems = playlist.items;
-  editMenu.playlistCreationTool();
+  editMenu.nameInput.value = playlist.title;
   editMenu.UUID = entry.dataset.id;
   editMenu.setTitle(`edit ${playlist.title}`);
+  editMenu.playlistCreationTool();
 }
+prepareHandles();

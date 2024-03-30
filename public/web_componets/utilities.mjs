@@ -56,6 +56,7 @@ export function getAllCustomActivites() {
   // returns a list of activtites
 }
 export async function fetchTemplate(shadow, templateURL) {
+  // taken from SSMB
   const res = await fetch(import.meta.resolve(templateURL));
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));

@@ -25,6 +25,8 @@
 - [ ] utilities get activity and get playlist functions can be combined into one
 - [ x ] implement timer
 - [ ] clean up code
+- [ ] database use https://github.com/portsoc/staged-simple-message-board to learn how
+- [ ] create history using reference to https://github.com/portsoc/simple-one-page
 
 ## Key features
 
@@ -76,6 +78,12 @@ the response chatGPT gave me is what I have already tried, therefore this respon
 
 - we should define all attribues we need to use later within the constructor
   looking into the example provided by the university, to allow functions to be able to access `this.var_name` you must use `function_name.bind(object_name)` I believe this is because you are binding the object to the function so it can use the calls within its function.
+
+---
+
+I am having issues when using async connectedCallback, I have been utilizing setTimeout, to ensure that the entire connect back is finshed, but this solution is awful as not all elements are inilized meaing when we try to manipulate the comment is leads to odd behavoiur
+
+> hello with a webcomponenet which has a async onconnect call back how can i make sure that it complelets and all of its waits are finished before code can continue
 
 ---
 

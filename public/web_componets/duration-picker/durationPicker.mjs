@@ -1,4 +1,4 @@
-import { fetchTemplate } from './utilities.mjs';
+import { fetchTemplate } from '../utilities.mjs';
 
 export class durationPicker extends HTMLElement {
   constructor() {
@@ -7,8 +7,11 @@ export class durationPicker extends HTMLElement {
   }
   async connectedCallback() {
     this.shadow = this.attachShadow({ mode: 'open' });
-    await fetchTemplate(this.shadow, '../templates/durationTimer.html');
-    this.inputList = this.shadow.querySelectorAll('.duration_input');
+    await fetchTemplate(
+      this.shadow,
+      '../../web_componets/duration-picker/durationTimer.html',
+    );
+    this.inputList = await this.shadow.querySelectorAll('.duration_input');
     this.setDuration(this.seconds);
   }
   getDuration() {

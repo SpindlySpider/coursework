@@ -1,4 +1,4 @@
-import { fetchTemplate, getActivtyFromID } from './utilities.mjs';
+import { fetchTemplate, getActivtyFromID } from '../utilities.mjs';
 
 export default class TimerComponent extends HTMLElement {
   constructor() {

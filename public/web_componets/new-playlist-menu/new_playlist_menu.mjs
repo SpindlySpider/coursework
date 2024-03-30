@@ -1,64 +1,63 @@
 import {
+  fetchTemplate,
   getActivtyFromID,
   getAllCustomActivites,
   getUUID,
   savePlaylist,
-} from './utilities.mjs';
-import { bottomSheetMenu } from './bottom_sheet_menu.mjs';
-import { displayPlaylistPage } from '../script/playlist_page.mjs';
+} from '../utilities.mjs';
+import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
+import { displayPlaylistPage } from '/../../script/playlist_page.mjs';
 
 export class newPlaylistMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
   constructor() {
     // must do all of the selections within the constructor
     super();
-    this.donebutton = this.shadow.querySelector('#doneButton');
-    this.addButton = this.shadow.querySelector('#bottomsheet-add');
-    this.createEmptyPlaylist = document.createElement('button');
-    this.backButton = document.createElement('button');
-    this.importPlaylist = document.createElement('button');
-    this.cancel = document.createElement('button');
-    this.nameInput = document.createElement('input');
     this.activityItems = [];
+    this.nameInput = document.createElement('input');
+  }
+
+  async connectedCallback() {
+    this.shadow = this.attachShadow({ mode: 'open' });
+    await fetchTemplate(
+      this.shadow,
+      '../../web_componets/bottom-sheet/bottomsheet.html',
+    );
+    this.content = this.shadow.querySelector('#bottomsheet-content');
+    this.bottomSheetPrepareHandles();
+    this.doneButton = this.shadow.querySelector('#bottomsheet-done');
+    this.addButton = this.shadow.querySelector('#bottomsheet-add');
+    this.backButton = this.shadow.querySelector('#bottomsheet-back');
+    this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
+
+    this.createEmptyPlaylist = document.createElement('button');
+    this.importPlaylist = document.createElement('button');
+
+    this.cancel.style.display = 'flex';
 
     this.createEmptyPlaylist.id = 'create-empty-playlist';
     this.importPlaylist.id = 'import-playlist';
-    this.backButton.id = 'back-button';
-    this.cancel.id = 'cancel';
     this.nameInput.id = 'playlistTitle';
 
     this.createEmptyPlaylist.textContent = 'create empty playlist';
     this.importPlaylist.textContent = 'import playlist';
     this.createEmptyPlaylist.type = 'button';
-    this.backButton.type = 'button';
-    this.cancel.type = 'button';
     this.importPlaylist.type = 'button';
-    this.cancel.textContent = 'done';
     this.doneButton.textContent = 'save';
-    this.backButton.textContent = 'back';
 
     this.createEmptyPlaylist.classList.add('bottomsheet-content-item');
     this.importPlaylist.classList.add('bottomsheet-content-item');
-    this.cancel.classList.add('bottomsheet-header-item');
-    this.cancel.classList.add('bottomsheet-header-button');
-    this.backButton.classList.add('bottomsheet-header-item');
-    this.backButton.classList.add('bottomsheet-header-button');
     this.nameInput.classList.add('bottomsheet-content-item');
     this.nameInput.style.display = 'none';
     this.backButton.style.display = 'none';
-    this.header.insertBefore(this.cancel, this.addButton);
-    this.header.append(this.backButton);
     this.content.append(this.createEmptyPlaylist);
     this.content.append(this.importPlaylist);
     this.content.append(this.nameInput);
-  }
-
-  connectedCallback() {
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.textContent = 'add activity';
-    // this.doneButton = this.doneButton.cloneNode(true);
+
     this.addButton.addEventListener(
       'click',
       this.customActivitesSelection.bind(this),
@@ -91,8 +90,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.doneButton.style.display = 'none';
     this.addButton.style.display = 'none';
     this.backButton.style.display = 'flex';
-    // this.doneButton.replaceWith(this.doneButton.cloneNode(true));
-    //prevents excess event listners
     this.setTitle('add activity');
 
     const customActivties = getAllCustomActivites();

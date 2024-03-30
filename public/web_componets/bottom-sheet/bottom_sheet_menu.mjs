@@ -1,26 +1,30 @@
-import { bottomSheetTemplate } from '../templates/bottom_sheet.mjs';
+import { fetchTemplate } from '../utilities.mjs';
+
 export class bottomSheetMenu extends HTMLElement {
   constructor() {
     // must do all of the selections within the constructor
     super();
-    this.shadow = this.attachShadow({ mode: 'open' });
-    this.shadow.innerHTML = bottomSheetTemplate.innerHTML;
+  }
+  bottomSheetPrepareHandles() {
+    // this is so that sub classes can set up query selectors
+    this.content = this.shadow.querySelector('#bottomsheet-content');
     this.container = this.shadow.querySelector('#bottomsheet-container');
     this.header = this.shadow.querySelector('.bottomsheet-header-buttons');
     this.customTitle = this.shadow.querySelector('#bottomsheet-header-title');
-    this.content = this.shadow.querySelector('#bottomsheet-content');
     this.doneButton = this.shadow.querySelector('#bottomsheet-done');
-    // this.content.style.paddingBottom = '0vh';
-    this.content.style.height = '0vh';
+    this.addButton = this.shadow.querySelector('#bottomsheet-add');
   }
 
-  connectedCallback() {
-    // this.donebutton.addEventListener('click', this.saveNewActivty.bind(this));
-    // this.pullupAnimation.bind(this);
-    // set up event listners here
+  async connectedCallback() {
+    this.shadow = this.attachShadow({ mode: 'open' });
+    await fetchTemplate(
+      this.shadow,
+      '../../web_componets/bottom-sheet/bottomsheet.html',
+    );
+    this.bottomSheetPrepareHandles();
+    this.content.style.height = '0vh';
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.doneButton.addEventListener('click', this.destorySelf.bind(this));
-    // setTimeout(this.pullupAnimation, 100, 75);
   }
 
   destorySelf() {
