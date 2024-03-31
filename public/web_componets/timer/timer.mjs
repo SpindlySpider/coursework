@@ -9,7 +9,7 @@ export default class TimerComponent extends HTMLElement {
 
   async connectedCallback() {
     this.shadow = this.attachShadow({ mode: 'open' });
-    await fetchTemplate(this.shadow, '../templates/timer.html');
+    await fetchTemplate(this.shadow, '../../web_componets/timer/timer.html');
 
     this.titleText = this.shadow.querySelector('#title');
     this.clock = this.shadow.querySelector('#clock');

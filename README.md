@@ -13,17 +13,17 @@
 - make a equipment selector
 - add photo selector too
 - create a web componenet for storing items in a column fashion
-- [ x ] core functionality
-- [ x ] add storage of new events
+- [x] core functionality
+- [x] add storage of new events
 - [ ] create custom description field
   - [ ] not editable untill edit button pressed
 - [ ] create custom add photo for customising the excerize
 - [ ] add css to make it look functional
 - [ ] push the new data to the server to store it in a mysqllite database
 - [ ] difficulty rating for custom exercises
-- [ x ] maybe make a server and client within the public folder to store code and serve
+- [x] maybe make a server and client within the public folder to store code and serve
 - [ ] utilities get activity and get playlist functions can be combined into one
-- [ x ] implement timer
+- [x] implement timer
 - [ ] clean up code
 - [ ] database use https://github.com/portsoc/staged-simple-message-board to learn how
 - [ ] create history using reference to https://github.com/portsoc/simple-one-page
@@ -84,6 +84,10 @@ the response chatGPT gave me is what I have already tried, therefore this respon
 I am having issues when using async connectedCallback, I have been utilizing setTimeout, to ensure that the entire connect back is finshed, but this solution is awful as not all elements are inilized meaing when we try to manipulate the comment is leads to odd behavoiur
 
 > hello with a webcomponenet which has a async onconnect call back how can i make sure that it complelets and all of its waits are finished before code can continue
+
+chatgpt is not correctly understanding my issue, it is suggesting that using a initilise async within the connectedCallback. This does not solve my problem as the issue is not with connectedCallback being excuted, rather the connectedCallback not being complete in external code leading to attributes not being avalaible.
+
+one method I can think to fix this is having an asyncronise function which acts as the on connectedCallback, which can be invoked through a method call externally. we can use a variable called initilised, to check wether we need to append to the DOM or wether the method has already been invoked externally or from the connectedCallback.
 
 ---
 

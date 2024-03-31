@@ -4,6 +4,7 @@ const el = {};
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
 }
+
 export function displayPlaylistPage() {
   console.log('playlist');
   el.main.textContent = '';
@@ -51,16 +52,18 @@ function startTimer(entry) {
   console.log(workoutItems);
   console.log(timer.timerList);
 }
+
 async function edit_playlist(entry) {
   console.log(`edit ${entry.dataset.id}`);
   let editMenu = document.createElement('new-playlist-menu');
+  await editMenu.attachTemplate();
   el.main.append(editMenu);
   const playlist = await getPlaylist(entry.dataset.id);
   // since the on connect call back is async it ensure all of it is connected
   editMenu.activityItems = playlist.items;
   editMenu.nameInput.value = playlist.title;
   editMenu.UUID = entry.dataset.id;
-  editMenu.setTitle(`edit ${playlist.title}`);
   editMenu.playlistCreationTool();
+  editMenu.setTitle(`edit ${playlist.title}`);
 }
 prepareHandles();

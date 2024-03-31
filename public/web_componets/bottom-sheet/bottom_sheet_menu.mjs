@@ -4,6 +4,7 @@ export class bottomSheetMenu extends HTMLElement {
   constructor() {
     // must do all of the selections within the constructor
     super();
+    this.initilized = false;
   }
   bottomSheetPrepareHandles() {
     // this is so that sub classes can set up query selectors
@@ -14,8 +15,11 @@ export class bottomSheetMenu extends HTMLElement {
     this.doneButton = this.shadow.querySelector('#bottomsheet-done');
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
   }
-
-  async connectedCallback() {
+  async attachTemplate() {
+    // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
+    if (this.initilized) {
+      return;
+    }
     this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
@@ -25,6 +29,15 @@ export class bottomSheetMenu extends HTMLElement {
     this.content.style.height = '0vh';
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.doneButton.addEventListener('click', this.destorySelf.bind(this));
+    this.initilized = true;
+  }
+
+  async connectedCallback() {
+    if (this.initilized) {
+      return;
+    }
+    await this.attachTemplate();
+    this.initilized = true;
   }
 
   destorySelf() {

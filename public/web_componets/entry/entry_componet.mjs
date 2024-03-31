@@ -13,17 +13,17 @@ export class Entry extends HTMLElement {
     this.addEventListener('click', this.eventOptionsBottomSheet.bind(this));
   }
 
-  eventOptionsBottomSheet() {
+  async eventOptionsBottomSheet() {
     // creates a event options pop up
-    console.log(this.entryID);
     const activity = getActivtyFromID(this.entryID);
     let menu = document.createElement('edit-menu');
+    menu.seconds = activity.duration;
+    await menu.attachTemplate();
     this.parentNode.append(menu);
-
     menu.entryID = this.entryID;
     menu.nameInput.value = activity.title;
+    menu.setTitle(`edit ${activity.title}`);
     menu.descriptionInput.value = activity.description;
-    menu.seconds = activity.duration;
   }
 }
 

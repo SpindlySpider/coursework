@@ -15,21 +15,62 @@ export class newPlaylistMenu extends bottomSheetMenu {
     super();
     this.activityItems = [];
     this.nameInput = document.createElement('input');
+    this.initilized = false;
+  }
+  async connectedCallback() {
+    if (this.initilized) {
+      return;
+    }
+    await this.attachTemplate();
+    this.initilized = true;
+  }
+  prepareHandles() {
+    this.addButton.style.display = 'none';
+    this.doneButton.style.display = 'none';
+    this.addButton.textContent = 'add activity';
+    this.backButton = this.shadow.querySelector('#bottomsheet-back');
+    this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
   }
 
-  async connectedCallback() {
+  async attachTemplate() {
+    // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
+    if (this.initilized) {
+      return;
+    }
     this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
       '../../web_componets/bottom-sheet/bottomsheet.html',
     );
-    this.content = this.shadow.querySelector('#bottomsheet-content');
     this.bottomSheetPrepareHandles();
-    this.doneButton = this.shadow.querySelector('#bottomsheet-done');
-    this.addButton = this.shadow.querySelector('#bottomsheet-add');
-    this.backButton = this.shadow.querySelector('#bottomsheet-back');
-    this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
+    this.prepareHandles();
+    this.createButtons();
+    this.setupEventListeners();
+    this.setTitle('new playlist');
+    setTimeout(this.pullupAnimation.bind(this), 25, 75);
+    this.initilized = true;
+  }
 
+  setupEventListeners() {
+    this.addButton.addEventListener(
+      'click',
+      this.customActivitesSelection.bind(this),
+    );
+    this.backButton.addEventListener(
+      'click',
+      this.playlistCreationTool.bind(this),
+    );
+    this.createEmptyPlaylist.addEventListener(
+      'click',
+      this.playlistCreationTool.bind(this),
+    );
+    this.cancel.addEventListener('click', this.destorySelf.bind(this));
+    this.doneButton.addEventListener(
+      'click',
+      this.saveNewPlaylist.bind(this, this.UUID),
+    );
+  }
+  createButtons() {
     this.createEmptyPlaylist = document.createElement('button');
     this.importPlaylist = document.createElement('button');
 
@@ -53,30 +94,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.content.append(this.createEmptyPlaylist);
     this.content.append(this.importPlaylist);
     this.content.append(this.nameInput);
-    setTimeout(this.pullupAnimation.bind(this), 25, 75);
-    this.addButton.style.display = 'none';
-    this.doneButton.style.display = 'none';
-    this.addButton.textContent = 'add activity';
-
-    this.addButton.addEventListener(
-      'click',
-      this.customActivitesSelection.bind(this),
-    );
-    this.backButton.addEventListener(
-      'click',
-      this.playlistCreationTool.bind(this),
-    );
-    this.createEmptyPlaylist.addEventListener(
-      'click',
-      this.playlistCreationTool.bind(this),
-    );
-    this.cancel.addEventListener('click', this.destorySelf.bind(this));
-    this.doneButton.addEventListener(
-      'click',
-      this.saveNewPlaylist.bind(this, this.UUID),
-    );
-    this.setTitle('new playlist');
   }
+
   addEntryToList(entry) {
     console.log(`add ${entry.dataset.id}`);
     this.activityItems.push(entry.dataset.id);
