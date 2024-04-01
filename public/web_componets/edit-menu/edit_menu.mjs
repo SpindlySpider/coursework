@@ -1,5 +1,10 @@
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
-import { fetchTemplate, saveActivty } from '../utilities.mjs';
+import {
+  ACTIVTIES_KEY,
+  deleteFromLocal,
+  fetchTemplate,
+  saveActivty,
+} from '../utilities.mjs';
 export class editMenu extends newActivtyMenu {
   // also if any of the attributes change then we need to update local storage + server cache
   constructor() {
@@ -14,6 +19,7 @@ export class editMenu extends newActivtyMenu {
     this.descriptionInput.value = '';
     this.photoInput.value = '';
     this.backButton.style.display = 'flex';
+    this.doneButton.textContent = 'save';
     this.backButton.textContent = 'delete';
     this.addButton.textContent = 'cancel';
   }
@@ -32,15 +38,18 @@ export class editMenu extends newActivtyMenu {
     this.setTitle(`edit ${this.nameInput.value}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
+    this.setupEventListners();
     this.timeInput.setDuration(this.seconds);
     this.initilized = true;
     setTimeout(this.pullupAnimation.bind(this), 25, 90);
   }
 
   setupEventListners() {
-    this.backButton.addEventListener('click', deleteEntry.bind(this));
+    this.backButton.addEventListener('click', this.deleteEntry.bind(this));
   }
-  deleteEntry() {}
+  deleteEntry() {
+    deleteFromLocal(this.entryID, ACTIVTIES_KEY);
+  }
   async connectedCallback() {
     if (this.initilized) {
       return;

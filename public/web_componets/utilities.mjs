@@ -1,6 +1,6 @@
 const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
-const ACTIVTIES_KEY = 'activites';
-const PLAYLIST_KEY = 'playlist';
+export const ACTIVTIES_KEY = 'activites';
+export const PLAYLIST_KEY = 'playlist';
 export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
   // duration should be in ms
@@ -25,6 +25,15 @@ export function saveActivty(UUID, title, description, duration) {
   // create JSON object to store
   // must implment error checking
   localStorage.activites = JSON.stringify(cachedActivites);
+}
+export function deleteFromLocal(UUID, KEY) {
+  if (localStorage[KEY] != null) {
+    let tempStore = JSON.parse(localStorage[KEY]);
+    delete tempStore[UUID];
+    localStorage[KEY] = JSON.stringify(tempStore);
+  } else {
+    //event doesnt exist
+  }
 }
 
 export function getActivtyFromID(UUID) {
