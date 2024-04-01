@@ -3,10 +3,10 @@ import { getActivtyFromID, getPlaylist } from '../web_componets/utilities.mjs';
 const el = {};
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
+  el.navbar = document.querySelector('#navbar');
 }
 
 export function displayPlaylistPage() {
-  console.log('playlist');
   el.main.textContent = '';
   const menu = document.createElement('ul');
   const customActivties = document.createElement('h1');
@@ -17,9 +17,10 @@ export function displayPlaylistPage() {
   for (let item of Object.keys(JSON.parse(localStorage['playlist']))) {
     //extract out the playlist feature to error check
     const container = document.createElement('li');
+    container.classList.add('category-item');
     container.style.display = 'flex';
     container.style.flexDirection = 'row';
-    const entry = document.createElement('p');
+    const entry = document.createElement('h2');
     const play = document.createElement('button');
     entry.textContent = localPlaylists[item].title;
     play.textContent = 'start';

@@ -14,9 +14,13 @@ function displayNewPlaylistMenu() {
 }
 function displayNewEntryOptions() {
   if (document.querySelector('#activtyList') == null) {
+    const background = document.createElement('main');
+    background.classList.add('popup-background');
+    background.id = 'background';
+
     const activtyList = document.createElement('ul');
     activtyList.id = 'activtyList';
-    activtyList.classList.add('right-floating-notification');
+    activtyList.classList.add('create-popup');
     const newActivty = document.createElement('li');
     newActivty.id = 'newActivtyPopup';
     newActivty.textContent = 'create new activity';
@@ -27,15 +31,21 @@ function displayNewEntryOptions() {
     newPlaylist.style.transform;
 
     const container = document.querySelector('#app-container');
-    container.append(activtyList);
+
+    container.append(background);
+    background.append(activtyList);
     activtyList.append(newActivty);
     activtyList.append(newPlaylist);
+
     document
       .querySelector('#newActivtyPopup')
       .addEventListener('click', displayNewActivityMenu);
     document
       .querySelector('#newPlaylistPopup')
       .addEventListener('click', displayNewPlaylistMenu);
+    document.querySelector('#background').addEventListener('click', () => {
+      document.querySelector('#background').remove();
+    });
   } else {
     // document.querySelector('#newActivtyPopup').remove();
     document.querySelector('#activtyList').remove();

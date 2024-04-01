@@ -13,6 +13,8 @@ export class editMenu extends newActivtyMenu {
     this.nameInput.value = '';
     this.descriptionInput.value = '';
     this.photoInput.value = '';
+    this.backButton.style.display = 'flex';
+    this.backButton.textContent = 'delete';
     this.addButton.textContent = 'cancel';
   }
   async attachTemplate() {
@@ -32,9 +34,13 @@ export class editMenu extends newActivtyMenu {
     this.editMenuPrepareHandles();
     this.timeInput.setDuration(this.seconds);
     this.initilized = true;
-    setTimeout(this.pullupAnimation.bind(this), 25, 75);
+    setTimeout(this.pullupAnimation.bind(this), 25, 90);
   }
 
+  setupEventListners() {
+    this.backButton.addEventListener('click', deleteEntry.bind(this));
+  }
+  deleteEntry() {}
   async connectedCallback() {
     if (this.initilized) {
       return;

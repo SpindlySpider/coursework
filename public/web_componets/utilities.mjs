@@ -51,6 +51,9 @@ export async function getUUID() {
 }
 
 export function getAllCustomActivites() {
+  if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
+    return null;
+  }
   const customActivites = JSON.parse(localStorage[ACTIVTIES_KEY]);
   return customActivites;
   // returns a list of activtites

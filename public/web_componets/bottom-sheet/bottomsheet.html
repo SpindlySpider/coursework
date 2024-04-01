@@ -1,6 +1,15 @@
 <!doctype html>
 <template>
   <style>
+    :root {
+      --background-color: #000000;
+      --highlight-color: #262626;
+      --font-color: white;
+      --border-color: #262626;
+    }
+    * {
+      font-family: Syne, sans-serif;
+    }
     #bottomsheet-container {
       bottom: 0;
       left: 0;
@@ -12,22 +21,25 @@
       align-items: center;
       justify-content: center;
       padding-top: 4px;
-      background-color: grey;
+      background-color: #000000;
+      border-top: 2px solid #262626;
       position: absolute;
       bottom: 0;
-      paddingBottom: 0vh;
-      border-radius: 30px 30px 0 0;
-
+      border-radius: 20px 20px 0 0;
     }
 
-    .bottom-sheet-container-hidden{
-      display:none;
-      padding-bottom:0vh;
+    .bottom-sheet-container-hidden {
+      display: none;
+      padding-bottom: 0vh;
     }
+
     #bottomsheet-header {
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+    p {
+      color: var(--font-color);
     }
     #drag-bar {
       width: 5vw;
@@ -38,14 +50,17 @@
       margin: 10px;
       margin-top: 1vh;
     }
+
     .empty-space {
       flex: 1;
     }
+
     #bottomsheet-header-title {
       display: flex;
       align-self: flex-start;
       justify-self: flex-start;
     }
+
     .bottomsheet-header-buttons {
       font-size: 3em;
       display: flex;
@@ -53,30 +68,53 @@
       align-items: center;
       width: 100vw;
     }
+
     .bottomsheet-header-item {
       margin: 0 25px 0 10px;
       padding: 0px 30px 0px 30px;
     }
+
     .bottomsheet-content-item {
       display: flex;
       border-radius: 15px;
       text-align: center;
-      background-color: yellow;
       font-size: 2em;
       margin: 10px 0 10px 0;
-      // padding: 2vh 35vw 2vh 35vw;
+      padding: 0px 20vw;
       justify-content: center;
     }
+    activity-entry.bottomsheet-content-item:hover {
+      display: flex;
+      border-radius: 15px;
+      text-align: center;
+      transition: background-color 0.2s;
+      background-color: #262626;
+      font-size: 2em;
+      margin: 10px 0 10px 0;
+      padding: 0px 20vw;
+      justify-content: center;
+    }
+
     .bottomsheet-header-button {
       font-size: 40px;
     }
-    #bottomsheet-content{
-      /* transition:padding-bottom 300ms; */
-      transition:height 300ms;
-      overflow-y: scroll;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    button {
+      background-color: black;
+      border: 1px black;
+      color: white;
     }
+    button:hover {
+      background-color: #262626;
+      border: 1px #262626;
+    }
+
+    #bottomsheet-content {
+      transition: height 300ms;
+      overflow-y: scroll;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
     .bottomsheet-content-title {
       display: flex;
       text-align: center;
@@ -84,7 +122,8 @@
       padding-top: 2%;
       padding-bottom: 2%;
     }
-    .hidden{
+
+    .hidden {
       display: none;
     }
   </style>
@@ -129,5 +168,4 @@
     </header>
     <main id="bottomsheet-content"></main>
   </form>
-  `;
 </template>

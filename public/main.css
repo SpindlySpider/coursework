@@ -1,7 +1,8 @@
 :root {
-  --nav-bar-background-color: grey;
+  --nav-bar-background-color: #000000;
   --nav-bar-item-color: white;
   --activty-popup-background-color: red;
+  --main-content-background-color: #171717;
 }
 
 * {
@@ -21,11 +22,25 @@
   position: absolute;
   bottom: 0;
 }
+.border-active {
+  border-top: 2px solid #262626;
+}
 .vertical-item-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+#main-content {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-family: Syne, sans-serif;
+  flex-direction: column;
+  align-items: center;
+}
+body {
+  background-color: var(--main-content-background-color);
 }
 
 .navbar-item {
@@ -37,20 +52,32 @@
   margin: 10px;
   width: min(20vw, 10000px);
 }
+.category-item {
+  margin: 10px;
+}
+.category-item:hover {
+  transition: color 0.2s;
+  color: grey;
+}
 
-.right-floating-notification {
+.popup-background {
   display: flex;
   justify-content: center;
   align-items: center;
-  bottom: 8vh;
-  height: min(5vh, 500px);
   position: absolute;
-  background-color: var(--activty-popup-background-color);
-  width: min(40vw, 1000px);
-  right: 1vw;
-  left: auto;
-  top: auto;
   flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+.create-popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  flex-direction: column;
+  background-color: white;
+  width: 50vw;
+  height: 50vh;
 }
 .hidden {
   display: none;

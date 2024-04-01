@@ -14,6 +14,14 @@ export class bottomSheetMenu extends HTMLElement {
     this.customTitle = this.shadow.querySelector('#bottomsheet-header-title');
     this.doneButton = this.shadow.querySelector('#bottomsheet-done');
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
+    this.backButton = this.shadow.querySelector('#bottomsheet-back');
+    this.disableNavbarBorder();
+  }
+  disableNavbarBorder() {
+    document.querySelector('#navbar').classList.remove('border-active');
+  }
+  enableNavbarBorder() {
+    document.querySelector('#navbar').classList.add('border-active');
   }
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
@@ -44,6 +52,7 @@ export class bottomSheetMenu extends HTMLElement {
     this.content.style.height = '0vh';
     setTimeout(() => {
       this.remove();
+      this.enableNavbarBorder();
     }, 300);
   }
 
