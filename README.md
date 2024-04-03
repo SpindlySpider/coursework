@@ -27,10 +27,20 @@
 - [ ] clean up code
 - [ ] database use https://github.com/portsoc/staged-simple-message-board to learn how
 - [ ] create history using reference to https://github.com/portsoc/simple-one-page
+- [ ] navigation bar should only show name of categotry when it is pressed
+- [ ] implement tags and import and exporting entire tags
+- [ ] error handling/making sure user cannot import wrong data
+- [ ] number of exercieses
+- [ ] prevent multiple "new tabs" comming up when making new events
 
 ## Key features
 
 REMOVE ME: Introduce the key features, paying special attention to the non-code ones. Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.
+
+## drag and drop
+
+learning to make drag and drop using
+https://youtu.be/jfYWwQrtzzY
 
 ### new activities.
 

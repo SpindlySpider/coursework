@@ -39,15 +39,17 @@ export async function displayCategoryPage() {
   el.main.textContent = '';
 
   const customActivties = document.createElement('h2');
+  customActivties.classList.add('menu-title');
   customActivties.textContent = 'custom activties';
   customActivties.id = 'customActivtiesCategory';
   customActivties.classList.add('category-item');
-
+  customActivties.classList.add('menu-item');
   const title = document.createElement('h1');
   title.textContent = 'categories';
-  title.classList.add('bottomsheet-content-item');
+
   title.id = 'customActivtiesCategory';
 
+  title.classList.add('menu-title');
   const container = document.createElement('ul');
   container.style.display = 'flex';
   container.style.flexDirection = 'row';

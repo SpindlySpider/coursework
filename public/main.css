@@ -3,15 +3,27 @@
   --nav-bar-item-color: white;
   --activty-popup-background-color: red;
   --main-content-background-color: #171717;
+  --onclick-colour: red;
+}
+.dragging {
+  opacity: 0%;
 }
 
 * {
-  overflow-x: hidden;
+  overflow: hidden;
   padding: 0;
   margin: 0;
 }
 .navbar {
   display: flex;
+}
+.menu-title {
+  display: flex;
+  font-size: 14vw;
+}
+.menu-item {
+  display: flex;
+  font-size: 5vw;
 }
 
 .bottom-navbar {

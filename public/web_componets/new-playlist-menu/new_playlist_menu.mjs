@@ -74,12 +74,31 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.saveNewPlaylist.bind(this, this.UUID),
     );
     this.deleteButton.addEventListener('click', this.deletePlaylist.bind(this));
+
+    this.content.addEventListener('dragover', this.dragOverInsert.bind(this));
+    this.content.addEventListener('touchmove', this.dragOverInsert.bind(this));
+  }
+
+  dragOverInsert(event) {
+    let yPos = event.clientY;
+    if (event.type == 'touchmove') {
+      yPos = event.targetTouches[0].clientY;
+    }
+    event.preventDefault();
+    const elementAfter = this.getAfterElement(yPos);
+    const draggable = this.shadow.querySelector('.dragging');
+    if (elementAfter == null) {
+      this.content.appendChild(draggable);
+    } else {
+      this.content.insertBefore(draggable, elementAfter);
+    }
   }
   deletePlaylist() {
     deleteFromLocal(this.UUID, PLAYLIST_KEY);
     displayPlaylistPage();
     this.destorySelf();
   }
+
   createButtons() {
     this.createEmptyPlaylist = document.createElement('button');
     this.importPlaylist = document.createElement('button');
@@ -139,6 +158,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.textContent = customActivties[item].title;
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('activty-item');
+      entry.classList.add('clickable');
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
       this.content.append(entry);
     }
@@ -148,6 +168,25 @@ export class newPlaylistMenu extends bottomSheetMenu {
     for (let item of items) {
       item.remove();
     }
+  }
+
+  getAfterElement(y) {
+    let draggableItems = this.content.querySelectorAll(
+      '.draggable:not(.dragging)',
+    );
+    draggableItems = Array.from(draggableItems);
+    return draggableItems.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY },
+    ).element;
   }
 
   playlistCreationTool() {
@@ -179,9 +218,26 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.dataset.id = item;
       entry.textContent = customActivties[item].title;
       entry.classList.add('bottomsheet-content-item');
+      entry.classList.add('draggable');
+      entry.draggable = true;
       entry.classList.add('activty-item');
+      this.draggingEventListeners(entry);
       this.content.append(entry);
     }
+  }
+  draggingEventListeners(element) {
+    element.addEventListener('dragstart', () => {
+      element.classList.add('dragging');
+    });
+    element.addEventListener('touchstart', () => {
+      element.classList.add('dragging');
+    });
+    element.addEventListener('dragend', () => {
+      element.classList.remove('dragging');
+    });
+    element.addEventListener('touchend', () => {
+      element.classList.remove('dragging');
+    });
   }
   disconnectedCallback() {}
 
@@ -190,7 +246,11 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.UUID = await getUUID();
     }
     console.log('yay new playlist');
-    // should abtract this to a general store activties/ edit activites
+    this.activityItems = [
+      ...this.content.querySelectorAll('.activty-item'),
+    ].map((item) => {
+      return item.dataset.id;
+    }); // turning the visual order into the saved order of events
     const title = this.nameInput.value;
     savePlaylist(this.UUID, title, this.activityItems);
     displayPlaylistPage();

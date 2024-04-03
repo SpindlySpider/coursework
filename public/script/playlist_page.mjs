@@ -15,6 +15,7 @@ export function displayPlaylistPage() {
   el.main.textContent = '';
   const menu = document.createElement('ul');
   const customActivties = document.createElement('h1');
+  customActivties.classList.add('menu-title');
   customActivties.textContent = 'playlist page';
   el.main.appendChild(menu);
   menu.append(customActivties);
@@ -38,7 +39,7 @@ export function displayPlaylistPage() {
     const entry = document.createElement('h2');
     entry.textContent = localPlaylists[item].title;
     entry.dataset.id = item;
-    entry.classList.add('bottomsheet-content-item');
+    entry.classList.add('menu-item');
 
     entry.addEventListener('click', () => {
       edit_playlist(entry);

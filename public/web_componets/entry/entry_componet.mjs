@@ -22,7 +22,6 @@ export class Entry extends newActivtyMenu {
   }
 
   deleteEntry() {
-    console.log(this.entryID);
     deleteFromLocal(this.entryID, ACTIVTIES_KEY);
     this.destorySelf();
   }

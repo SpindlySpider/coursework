@@ -10,6 +10,18 @@
     * {
       font-family: Syne, sans-serif;
     }
+    .clickable:active {
+      transition: opacity 200ms;
+      color: blue;
+      opacity: 0%;
+    }
+    .draggable {
+      user-select: none;
+      cursor: grab;
+    }
+    .draggable:active {
+      cursor: grabbing;
+    }
     #bottomsheet-container {
       bottom: 0;
       left: 0;
@@ -62,23 +74,19 @@
     }
 
     .bottomsheet-header-buttons {
-      font-size: 3em;
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 100vw;
+      font-size: 5vw;
     }
 
     .bottomsheet-header-item {
-      margin: 0 25px 0 10px;
-      padding: 0px 30px 0px 30px;
+      margin: 1vw;
     }
 
     .bottomsheet-content-item {
       display: flex;
       border-radius: 15px;
       text-align: center;
-      font-size: 2em;
+      font-size: 4vw;
       margin: 10px 0 10px 0;
       padding: 0px 20vw;
       justify-content: center;
@@ -137,6 +145,13 @@
         </p>
         <div class="empty-space"></div>
         <button
+          id="bottomsheet-delete"
+          class="bottomsheet-header-item bottomsheet-header-button hidden"
+          type="button"
+        >
+          delete
+        </button>
+        <button
           id="bottomsheet-add"
           class="bottomsheet-header-item bottomsheet-header-button"
           type="button"
@@ -163,13 +178,6 @@
           type="button"
         >
           done
-        </button>
-        <button
-          id="bottomsheet-delete"
-          class="bottomsheet-header-item bottomsheet-header-button hidden"
-          type="button"
-        >
-          delete
         </button>
       </div>
     </header>
