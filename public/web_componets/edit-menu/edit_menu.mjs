@@ -49,6 +49,7 @@ export class editMenu extends newActivtyMenu {
   }
   deleteEntry() {
     deleteFromLocal(this.entryID, ACTIVTIES_KEY);
+    this.destorySelf();
   }
   async connectedCallback() {
     if (this.initilized) {

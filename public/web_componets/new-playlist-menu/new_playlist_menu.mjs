@@ -1,4 +1,7 @@
 import {
+  ACTIVTIES_KEY,
+  PLAYLIST_KEY,
+  deleteFromLocal,
   fetchTemplate,
   getActivtyFromID,
   getAllCustomActivites,
@@ -14,6 +17,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     // must do all of the selections within the constructor
     super();
     this.activityItems = [];
+    this.UUID;
     this.nameInput = document.createElement('input');
     this.initilized = false;
   }
@@ -69,6 +73,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
       'click',
       this.saveNewPlaylist.bind(this, this.UUID),
     );
+    this.deleteButton.addEventListener('click', this.deletePlaylist.bind(this));
+  }
+  deletePlaylist() {
+    deleteFromLocal(this.UUID, PLAYLIST_KEY);
+    displayPlaylistPage();
+    this.destorySelf();
   }
   createButtons() {
     this.createEmptyPlaylist = document.createElement('button');
@@ -108,10 +118,19 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.cancel.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.style.display = 'none';
+    this.deleteButton.style.display = 'none';
     this.backButton.style.display = 'flex';
     this.setTitle('add activity');
 
-    const customActivties = getAllCustomActivites();
+    const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
+    if (customActivties == null || Object.keys(customActivties).length == 0) {
+      let emptyMessage = document.createElement('p');
+      emptyMessage.textContent =
+        'press the + at the bottom to make new activties';
+      emptyMessage.classList.add('activty-item');
+      this.content.append(emptyMessage);
+      return;
+    }
 
     for (let item of Object.keys(customActivties)) {
       // make a web componenet for the event
@@ -138,6 +157,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.nameInput.style.display = 'flex';
     this.doneButton.style.display = 'flex';
     this.backButton.style.display = 'none';
+    this.deleteButton.style.display = 'flex';
     this.content.style.height = '0vh';
     this.setTitle('create new workout');
     this.addButton.style.display = 'flex';
@@ -145,7 +165,15 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
 
-    const customActivties = getAllCustomActivites();
+    const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
+
+    if (this.activityItems.length == 0) {
+      let emptyMessage = document.createElement('p');
+      emptyMessage.textContent = 'press add activity to add activties';
+      emptyMessage.classList.add('activty-item');
+      this.content.append(emptyMessage);
+      return;
+    }
     for (let item of this.activityItems) {
       const entry = document.createElement('li');
       entry.dataset.id = item;

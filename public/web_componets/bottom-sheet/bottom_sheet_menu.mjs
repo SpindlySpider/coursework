@@ -15,6 +15,7 @@ export class bottomSheetMenu extends HTMLElement {
     this.doneButton = this.shadow.querySelector('#bottomsheet-done');
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
+    this.deleteButton = this.shadow.querySelector('#bottomsheet-delete');
     this.disableNavbarBorder();
   }
   disableNavbarBorder() {

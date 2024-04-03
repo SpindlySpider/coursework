@@ -1,5 +1,10 @@
 import { newPlaylistMenu } from '../web_componets/new-playlist-menu/new_playlist_menu.mjs';
-import { getActivtyFromID, getPlaylist } from '../web_componets/utilities.mjs';
+import {
+  PLAYLIST_KEY,
+  getActivtyFromID,
+  getAllCustomActivites,
+  getPlaylist,
+} from '../web_componets/utilities.mjs';
 const el = {};
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
@@ -13,6 +18,16 @@ export function displayPlaylistPage() {
   customActivties.textContent = 'playlist page';
   el.main.appendChild(menu);
   menu.append(customActivties);
+
+  const playlists = getAllCustomActivites(PLAYLIST_KEY);
+  if (playlists == null || Object.keys(playlists).length == 0) {
+    let emptyMessage = document.createElement('p');
+    emptyMessage.textContent =
+      'press the + at the bottom to make a new playlist';
+    menu.append(emptyMessage);
+    return;
+  }
+
   const localPlaylists = JSON.parse(localStorage['playlist']);
   for (let item of Object.keys(JSON.parse(localStorage['playlist']))) {
     //extract out the playlist feature to error check
@@ -21,20 +36,25 @@ export function displayPlaylistPage() {
     container.style.display = 'flex';
     container.style.flexDirection = 'row';
     const entry = document.createElement('h2');
-    const play = document.createElement('button');
     entry.textContent = localPlaylists[item].title;
-    play.textContent = 'start';
     entry.dataset.id = item;
     entry.classList.add('bottomsheet-content-item');
+
     entry.addEventListener('click', () => {
       edit_playlist(entry);
     });
-    play.addEventListener('click', () => {
-      startTimer(entry);
-    });
+
     menu.append(container);
     container.append(entry);
-    container.append(play);
+
+    if (localPlaylists[item].items.length != 0) {
+      const play = document.createElement('button');
+      play.textContent = 'start';
+      container.append(play);
+      play.addEventListener('click', () => {
+        startTimer(entry);
+      });
+    }
   }
 }
 function startTimer(entry) {

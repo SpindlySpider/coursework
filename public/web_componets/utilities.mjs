@@ -29,6 +29,22 @@ export function saveActivty(UUID, title, description, duration) {
 export function deleteFromLocal(UUID, KEY) {
   if (localStorage[KEY] != null) {
     let tempStore = JSON.parse(localStorage[KEY]);
+    if (KEY == ACTIVTIES_KEY) {
+      // aslo delete this event from playlists that include it
+      let playlistStorage = JSON.parse(localStorage[PLAYLIST_KEY]);
+      for (let item of Object.keys(playlistStorage)) {
+        if (playlistStorage[item].items.includes(UUID)) {
+          console.log('includes', UUID);
+          playlistStorage[item].items = playlistStorage[item].items.filter(
+            (activity) => {
+              return activity != UUID;
+            },
+          );
+        }
+      }
+      console.log(playlistStorage);
+      localStorage[PLAYLIST_KEY] = JSON.stringify(playlistStorage);
+    }
     delete tempStore[UUID];
     localStorage[KEY] = JSON.stringify(tempStore);
   } else {
@@ -59,11 +75,11 @@ export async function getUUID() {
   return newUUID.uuid;
 }
 
-export function getAllCustomActivites() {
-  if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
+export function getAllCustomActivites(KEY) {
+  if (isLocalStorageEmpty(KEY)) {
     return null;
   }
-  const customActivites = JSON.parse(localStorage[ACTIVTIES_KEY]);
+  const customActivites = JSON.parse(localStorage[KEY]);
   return customActivites;
   // returns a list of activtites
 }

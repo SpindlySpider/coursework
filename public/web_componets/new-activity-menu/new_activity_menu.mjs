@@ -1,5 +1,9 @@
 import { saveActivty, getUUID, fetchTemplate } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
+import {
+  displayCategoryPage,
+  displayCustomCateogryPage,
+} from '../../script/category_page.mjs';
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -27,10 +31,12 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.content.append(this.timeInput);
     this.content.append(this.photoInput);
   }
+
   setupActivityEventListeners() {
     this.doneButton.addEventListener('click', this.saveNewActivty.bind(this));
     this.addButton.addEventListener('click', this.destorySelf.bind(this));
   }
+
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
     if (this.initilized) {
@@ -55,6 +61,15 @@ export class newActivtyMenu extends bottomSheetMenu {
     }
     await this.attachTemplate();
     this.initilized = true;
+  }
+  destorySelf() {
+    this.content.style.height = '0vh';
+    setTimeout(() => {
+      this.remove();
+      this.enableNavbarBorder();
+      displayCategoryPage();
+      displayCustomCateogryPage();
+    }, 300);
   }
 
   disconnectedCallback() {}

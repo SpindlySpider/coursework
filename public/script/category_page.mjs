@@ -1,4 +1,5 @@
 import { getAllCustomActivites } from '../../web_componets/utilities.mjs';
+import { ACTIVTIES_KEY } from '../web_componets/utilities.mjs';
 
 const el = {};
 
@@ -6,13 +7,17 @@ function prepareHandles() {
   el.main = document.querySelector('#main-content');
 }
 export async function displayCustomCateogryPage() {
+  if (document.querySelector('bottom-sheet-menu')) {
+    //already have a menu on display
+    return;
+  }
   const menu = document.createElement('bottom-sheet-menu');
-  const customActivties = getAllCustomActivites();
+  const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
   await menu.attachTemplate();
   menu.addButton.style.display = 'none';
   menu.setTitle('custom categories');
   el.main.append(menu);
-  if (customActivties == null) {
+  if (customActivties == null || Object.keys(customActivties).length == 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent =
       'press the + at the bottom to make new activties';
@@ -24,6 +29,7 @@ export async function displayCustomCateogryPage() {
     const entry = document.createElement('activity-entry');
     entry.customTitle = customActivties[item].title;
     entry.entryID = item;
+    await entry.attachTemplate();
     entry.classList.add('bottomsheet-content-item');
     menu.appendEntry(entry);
   }
@@ -49,6 +55,7 @@ export async function displayCategoryPage() {
   el.main.appendChild(title);
   el.main.append(container);
   container.appendChild(customActivties);
-  customActivties.addEventListener('click', displayCustomCateogryPage);
+  customActivties.addEventListener('click', displayCustomCateogryPage, {});
 }
+
 prepareHandles();
