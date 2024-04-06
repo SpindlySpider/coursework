@@ -23,16 +23,18 @@ function displayNewEntryOptions() {
     activtyList.classList.add('create-popup');
     const newActivty = document.createElement('li');
     newActivty.id = 'newActivtyPopup';
+    newActivty.classList.add('popup-item');
     newActivty.textContent = 'create new activity';
 
     const newPlaylist = document.createElement('li');
     newPlaylist.id = 'newPlaylistPopup';
+    newPlaylist.classList.add('popup-item');
     newPlaylist.textContent = 'create new playlist';
     newPlaylist.style.transform;
 
-    const container = document.querySelector('#app-container');
+    const container = document.querySelector('body');
 
-    container.append(background);
+    container.prepend(background);
     background.append(activtyList);
     activtyList.append(newActivty);
     activtyList.append(newPlaylist);

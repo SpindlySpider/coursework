@@ -4,6 +4,7 @@ import {
   fetchTemplate,
   getActivtyFromID,
   saveActivty,
+  formatedSeconds,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -15,6 +16,7 @@ export class Entry extends newActivtyMenu {
     super();
     this.entryID;
     this.customTitle;
+    this.description;
 
     this.editing = false;
     this.initilized = false;
@@ -40,6 +42,19 @@ export class Entry extends newActivtyMenu {
     await this.attachTemplate();
     this.initilized = true;
   }
+  thumbnailDescription() {
+    // formats a string such that it will add ... if the description is too long
+    const cutoffPoint = 13; // number of char
+    if (this.description.length > cutoffPoint) {
+      this.description = this.description.slice(0, cutoffPoint - 3) + '...';
+    }
+    const duration = formatedSeconds(this.seconds);
+    const hour = duration.hour == 0 ? '' : `${duration.hour}h`;
+    const mins = duration.minutes == 0 ? '' : `${duration.minutes}m`;
+    const secs = duration.seconds == 0 ? '' : `${duration.seconds}s`;
+    this.description = `${this.description} | ⏱︎ ${hour}${mins}${secs}`;
+    return this.description;
+  }
 
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
@@ -47,8 +62,16 @@ export class Entry extends newActivtyMenu {
       return;
     }
     this.shadow = this.attachShadow({ mode: 'open' });
-    this.shadow.append(document.createElement('p'));
-    this.shadow.querySelector('p').textContent = this.customTitle;
+    this.entryThumbnail = document.createElement('ul');
+
+    this.entryName = document.createElement('h3');
+    this.entryName.textContent = this.customTitle;
+    this.entryDescription = document.createElement('p');
+    this.entryDescription.style = 'margin:0;';
+    this.entryName.style = 'margin:0;';
+    this.entryDescription.textContent = this.thumbnailDescription();
+    this.shadow.append(this.entryThumbnail);
+    this.entryThumbnail.append(this.entryName, this.entryDescription);
     this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
       once: true,
     });

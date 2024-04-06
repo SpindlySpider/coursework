@@ -119,3 +119,9 @@ export function getPlaylist(UUID) {
     throw new Error('no activity matching ID within local storage');
   }
 }
+export function formatedSeconds(seconds) {
+  const hour = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds - hour * 3600) / 60);
+  seconds = seconds - (hour * 3600 + minutes * 60);
+  return { hour, minutes, seconds };
+}

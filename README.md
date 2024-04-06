@@ -31,7 +31,10 @@
 - [ ] implement tags and import and exporting entire tags
 - [ ] error handling/making sure user cannot import wrong data
 - [ ] number of exercieses
-- [ ] prevent multiple "new tabs" comming up when making new events
+- [x] prevent multiple "new tabs" comming up when making new events
+- [ ] when first opening app make it start on playlists, and make sure it can never reach a point of not having anything on the screen
+- [ ] have title, description and time as non editable untill pressed and it will swap out the text for the input
+- [ ] promodo timer like expereince of entire workout, you should be able to swtich between views
 
 ## Key features
 

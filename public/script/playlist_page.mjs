@@ -12,8 +12,22 @@ function prepareHandles() {
 }
 
 export function displayPlaylistPage() {
+  const lastNavSelected = document.querySelector('.nav-selected');
+  const navCategories = document.querySelector('#workout-playlist');
+  if (lastNavSelected != null) {
+    lastNavSelected.classList.remove('nav-selected');
+    lastNavSelected.classList.add('nav-unselected');
+  }
+  navCategories.classList.add('nav-selected');
+  navCategories.classList.remove('nav-unselected');
+  el.main.textContent = '';
+  if (document.querySelector('bottom-sheet-menu')) {
+    //already have a menu on display
+    return;
+  }
   el.main.textContent = '';
   const menu = document.createElement('ul');
+  menu.id = 'playlist-items';
   const customActivties = document.createElement('h1');
   customActivties.classList.add('menu-title');
   customActivties.textContent = 'playlist page';
@@ -25,6 +39,7 @@ export function displayPlaylistPage() {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent =
       'press the + at the bottom to make a new playlist';
+    emptyMessage.classList.add('menu-item');
     menu.append(emptyMessage);
     return;
   }

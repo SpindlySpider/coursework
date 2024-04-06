@@ -32,11 +32,7 @@
   defer
   type="module"
 ></script>
-<script
-  src="./web_componets/edit-menu/edit_menu.mjs"
-  defer
-  type="module"
-></script>
+
 <script
   src="./web_componets/timer/timer.mjs"
   async
@@ -46,10 +42,12 @@
 <div id="app-container">
   <main id="main-content"></main>
   <nav id="navbar" class="bottom-navbar border-active">
-    <li id="dashboard" class="navbar-item">dashboard Icon</li>
-    <li id="workout-playlist" class="navbar-item">playlist Icon</li>
-    <li id="new-entry" class="navbar-item">+</li>
-    <li id="catagories" class="navbar-item">category</li>
-    <li id="profile" class="navbar-item">profile</li>
+    <li id="dashboard" class="nav-unselected navbar-item">dashboard Icon</li>
+    <li id="workout-playlist" class="navbar-item nav-unselected">
+      playlist Icon
+    </li>
+    <li id="new-entry" class="navbar-item nav-unselected">+</li>
+    <li id="catagories" class="navbar-item nav-unselected">category</li>
+    <li id="profile" class="navbar-item nav-unselected">profile</li>
   </nav>
 </div>
