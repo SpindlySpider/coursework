@@ -58,11 +58,29 @@ CREATE TABLE ActivityTagRelation(
   PRIMARY KEY (activity_id,tags_id)
 );
 
+CREATE TABLE PlaylistActivityRelation(
+  playlist_id CHAR(36) NOT NULL,
+  activity_id CHAR(36) NOT NULL,
+  FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
+  FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
+  PRIMARY KEY (activity_id,playlist_id)
+);
+
 INSERT INTO Users (user_id, username) VALUES
 ( 'd7dcf380-33a3-4cb4-94c2-0323f18be441',"user1"),
 ('4028fb15-c6eb-4401-822e-c06da852fc66',"user2"),
 ("65f855e2-01c6-4f6a-8f63-7bd807e26517","user3");
 
+INSERT INTO Playlist (playlist_id,title,created_by) VALUES
+("c4bc911f-01d6-499f-8f17-8b973d44f7b8","playlist 1",'d7dcf380-33a3-4cb4-94c2-0323f18be441');
+
+INSERT INTO Activities (activity_id,title,description,duration,created_by)
+VALUES ("b91db615-17a0-4c34-acbe-e064a325e981","squat","squats",60,'d7dcf380-33a3-4cb4-94c2-0323f18be441'),
+("65620c6a-6a3c-420c-9257-8061760fb3e4","rest","rest",60,'d7dcf380-33a3-4cb4-94c2-0323f18be441');
+
+INSERT INTO PlaylistActivityRelation (activity_id,playlist_id) VALUES 
+("b91db615-17a0-4c34-acbe-e064a325e981",'c4bc911f-01d6-499f-8f17-8b973d44f7b8'),
+("65620c6a-6a3c-420c-9257-8061760fb3e4",'c4bc911f-01d6-499f-8f17-8b973d44f7b8');
 
 -- Down
 
