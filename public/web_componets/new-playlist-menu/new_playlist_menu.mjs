@@ -3,7 +3,6 @@ import {
   PLAYLIST_KEY,
   deleteFromLocal,
   fetchTemplate,
-  getActivtyFromID,
   getAllCustomActivites,
   getUUID,
   savePlaylist,
@@ -129,7 +128,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     console.log(`add ${entry.dataset.id}`);
     this.activityItems.push(entry.dataset.id);
   }
-  customActivitesSelection() {
+  async customActivitesSelection() {
     setTimeout(this.pullupAnimation.bind(this), 50, 90);
     this.cleanContent();
     console.log('add activity');
@@ -153,9 +152,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
     for (let item of Object.keys(customActivties)) {
       // make a web componenet for the event
-      const entry = document.createElement('li');
+      const entry = document.createElement('activity-entry');
+      entry.editable = false;
       entry.dataset.id = item;
       entry.textContent = customActivties[item].title;
+      entry.entryID = item;
+      await entry.attachTemplate();
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('activty-item');
       entry.classList.add('clickable');
@@ -214,15 +216,30 @@ export class newPlaylistMenu extends bottomSheetMenu {
       return;
     }
     for (let item of this.activityItems) {
-      const entry = document.createElement('li');
+      const entry = document.createElement('ul');
+      const name = document.createElement('h2');
+      const dragField = document.createElement('p');
+      const deleteButton = document.createElement('h4');
+      const desciption = document.createElement('p');
+      entry.style.justifyContent = 'space-between';
+      dragField.textContent = '⋮⋮';
+      desciption.style.alignSelf = 'flex-end';
+      deleteButton.textContent = '🗑️';
       entry.dataset.id = item;
-      entry.textContent = customActivties[item].title;
+      entry.style.display = 'flex';
+      entry.style.flexDirection = 'row';
+      name.textContent = customActivties[item].title;
+      desciption.textContent = customActivties[item].description;
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('draggable');
+      deleteButton.addEventListener('click', () => {
+        entry.remove();
+      });
       entry.draggable = true;
       entry.classList.add('activty-item');
       this.draggingEventListeners(entry);
       this.content.append(entry);
+      entry.append(name, desciption, deleteButton, dragField);
     }
   }
   draggingEventListeners(element) {
@@ -245,7 +262,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     if (this.UUID == undefined) {
       this.UUID = await getUUID();
     }
-    console.log('yay new playlist');
     this.activityItems = [
       ...this.content.querySelectorAll('.activty-item'),
     ].map((item) => {

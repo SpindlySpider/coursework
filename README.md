@@ -24,7 +24,7 @@
 - [x] maybe make a server and client within the public folder to store code and serve
 - [ ] utilities get activity and get playlist functions can be combined into one
 - [x] implement timer
-- [ ] clean up code
+- [ ] clean up code -- specifically entry componenet that has alot of mess
 - [ ] database use https://github.com/portsoc/staged-simple-message-board to learn how
 - [ ] create history using reference to https://github.com/portsoc/simple-one-page
 - [ ] navigation bar should only show name of categotry when it is pressed

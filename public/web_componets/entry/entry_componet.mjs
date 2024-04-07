@@ -5,6 +5,7 @@ import {
   getActivtyFromID,
   saveActivty,
   formatedSeconds,
+  getAllCustomActivites,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -19,6 +20,7 @@ export class Entry extends newActivtyMenu {
     this.description;
 
     this.editing = false;
+    this.editable = true; //used to make this entry editable
     this.initilized = false;
     this.seconds = 0;
   }
@@ -64,17 +66,24 @@ export class Entry extends newActivtyMenu {
     this.shadow = this.attachShadow({ mode: 'open' });
     this.entryThumbnail = document.createElement('ul');
 
+    this.entryJSON = getActivtyFromID(this.entryID);
     this.entryName = document.createElement('h3');
-    this.entryName.textContent = this.customTitle;
+    this.entryName.textContent = this.entryJSON.title;
+    this.seconds = this.entryJSON.duration;
+    this.description = this.entryJSON.description;
     this.entryDescription = document.createElement('p');
     this.entryDescription.style = 'margin:0;';
     this.entryName.style = 'margin:0;';
     this.entryDescription.textContent = this.thumbnailDescription();
     this.shadow.append(this.entryThumbnail);
     this.entryThumbnail.append(this.entryName, this.entryDescription);
-    this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
-      once: true,
-    });
+
+    if (this.editable) {
+      this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
+        once: true,
+      });
+    }
+
     this.initilized = true;
   }
 
@@ -95,7 +104,6 @@ export class Entry extends newActivtyMenu {
   async eventOptionsBottomSheet() {
     // creates a event options pop up
     // this.shadow = this.attachShadow({ mode: 'open' });
-    const activity = getActivtyFromID(this.entryID);
     await fetchTemplate(
       this.shadow,
       '../../web_componets/bottom-sheet/bottomsheet.html',
@@ -103,15 +111,13 @@ export class Entry extends newActivtyMenu {
     this.classList.remove('bottomsheet-content-item');
     this.bottomSheetPrepareHandles();
     await this.createActivtyInputs();
-    this.setTitle(`edit ${activity.title}`);
+    this.setTitle(`edit ${this.entryJSON.title}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
-    this.seconds = activity.duration;
     this.timeInput.setDuration(this.seconds);
     this.parentNode.append(this);
-    this.entryID = this.entryID;
-    this.nameInput.value = activity.title;
-    this.descriptionInput.value = activity.description;
+    this.nameInput.value = this.entryJSON.title;
+    this.descriptionInput.value = this.entryJSON.description;
     this.editing = true;
     this.setupEventListners();
     setTimeout(this.pullupAnimation.bind(this), 25, 90);

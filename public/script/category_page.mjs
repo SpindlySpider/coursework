@@ -27,9 +27,6 @@ export async function displayCustomCateogryPage() {
   for (let item of Object.keys(customActivties)) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
-    entry.customTitle = customActivties[item].title;
-    entry.description = customActivties[item].description;
-    entry.seconds = customActivties[item].duration;
     entry.entryID = item;
     await entry.attachTemplate();
     entry.classList.add('bottomsheet-content-item');

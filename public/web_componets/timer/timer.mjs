@@ -93,8 +93,8 @@ export default class TimerComponent extends HTMLElement {
         return;
       }
     }
-    this.seconds++;
     this.updateTimerDisplay();
+    this.seconds++;
   }
   startTimer() {
     if (!this.isTimerRunning) {
@@ -119,7 +119,7 @@ export default class TimerComponent extends HTMLElement {
   updateTimerDisplay() {
     this.upNext.textContent = 'next : end of routine';
     if (this.timerList.length - this.timerIndex > 1) {
-      this.upNext.textContent = `next : ${this.timerList[1].title}`;
+      this.upNext.textContent = `next : ${this.timerList[this.timerIndex + 1].title}`;
     }
 
     const formattedTime = this.getFormatedTimeFromSeconds(this.seconds);
