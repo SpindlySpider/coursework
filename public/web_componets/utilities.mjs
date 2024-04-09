@@ -2,16 +2,19 @@ const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const ACTIVTIES_KEY = 'activites';
 export const PLAYLIST_KEY = 'playlist';
 export const USER_KEY = 'account';
+
 export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
-  // duration should be in ms
-  const loggedIn = false; // implement later
-  if (loggedIn) {
-    // execute server authentication here? and send the event to the server
+  const online = true; // implement later
+  if (user() && online) {
+    // checks if the user is logged in to an account
+  } else {
+    // queue it for upload when you go online/sign in
+    // mark the activity as not server saved maybe
   }
   if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
     // create new JSON for local localStorage
-    localStorage.activites = JSON.stringify({});
+    localStorage[ACTIVTIES_KEY] = JSON.stringify({});
   }
   const newActivty = {
     title,
@@ -20,19 +23,15 @@ export function saveActivty(UUID, title, description, duration) {
   };
   const cachedActivites = JSON.parse(localStorage.activites);
   cachedActivites[UUID] = newActivty;
-  // save in local cache then send to the server
-  // must request UUID from server
-  // fall back if server is not reachable is service worker gerneates new UUID
-  // create JSON object to store
-  // must implment error checking
   localStorage.activites = JSON.stringify(cachedActivites);
 }
+
 export function deleteFromLocal(UUID, KEY) {
   if (localStorage[KEY] != null) {
-    let tempStore = JSON.parse(localStorage[KEY]);
-    if (KEY == ACTIVTIES_KEY) {
+    const tempStore = JSON.parse(localStorage[KEY]);
+    if (KEY === ACTIVTIES_KEY) {
       // aslo delete this event from playlists that include it
-      let playlistStorage = JSON.parse(localStorage[PLAYLIST_KEY]);
+      const playlistStorage = JSON.parse(localStorage[PLAYLIST_KEY]);
       for (let item of Object.keys(playlistStorage)) {
         if (playlistStorage[item].items.includes(UUID)) {
           console.log('includes', UUID);

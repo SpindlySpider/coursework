@@ -28,11 +28,7 @@ async function updateUser(req, res) {
     res.sendStatus(404);
   }
 }
-async function postUser(req, res) {
-  // creates data
-  await user.addUser(req.body.username);
-  res.sendStatus(500);
-}
+
 async function removeUser(req, res) {
   // delete data
   await user.deleteUser(req.params.id);
@@ -53,6 +49,7 @@ async function postUser(req, res) {
   res.status(200).send('success');
 }
 async function postUserActivities(req, res) {
+  console.log(req.params.id, req.body.activity_id);
   await user.postUserActivties(req.params.id, req.body.activity_id);
   res.status(200).send('success');
 }

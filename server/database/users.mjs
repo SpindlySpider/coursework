@@ -48,7 +48,7 @@ export async function deleteUser(id) {
 export async function removeUserPlaylist(id, playlistID) {
   const db = await databaseConnect;
   db.run(
-    'DELETE FROM UserPlaylistRelation WHERE user_id = ? , playlist_id = ?',
+    'DELETE FROM UserPlaylistRelation WHERE user_id = ? AND playlist_id = ?',
     id,
     playlistID,
   );

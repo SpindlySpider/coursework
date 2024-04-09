@@ -27,8 +27,8 @@ CREATE TABLE Activities(
 );
 
 CREATE TABLE UserActivityRelation (
-  activity_id CHAR(36) NOT NULL,
   user_id CHAR(36) NOT NULL,
+  activity_id CHAR(36) NOT NULL,
   FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
   PRIMARY KEY (user_id,activity_id)
