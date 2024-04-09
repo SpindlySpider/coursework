@@ -26,8 +26,23 @@ export async function updateUsername(UUID, username) {
   );
   if (statement.changes === 0) throw new Error('user not found');
 }
+export async function getUserPlaylist(UUID) {
+  const db = await databaseConnect;
+  return db.all(
+    'SELECT playlist_id FROM UserPlaylistRelation WHERE user_id = ?',
+    UUID,
+  );
+}
 
 export async function deleteUser(id) {
   const db = await databaseConnect;
   db.run('DELETE FROM users WHERE id = ?', id);
+}
+export async function removeUserPlaylist(id, playlistID) {
+  const db = await databaseConnect;
+  db.run(
+    'DELETE FROM UserPlaylistRelation WHERE user_id = ? , playlist_id = ?',
+    id,
+    playlistID,
+  );
 }

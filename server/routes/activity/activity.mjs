@@ -32,7 +32,12 @@ async function updateActivites(req, res) {
 }
 async function postActivity(req, res) {
   // creates data
-  await activity.newActivites(req.body.title, req.body.createdBy);
+  await activity.newActivites(
+    req.body.title,
+    res.body.description,
+    res.body.duration,
+    req.body.createdBy,
+  );
   res.sendStatus(500);
 }
 async function removeActivity(req, res) {

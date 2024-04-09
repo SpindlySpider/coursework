@@ -82,6 +82,8 @@ INSERT INTO PlaylistActivityRelation (activity_id,playlist_id) VALUES
 ("b91db615-17a0-4c34-acbe-e064a325e981",'c4bc911f-01d6-499f-8f17-8b973d44f7b8'),
 ("65620c6a-6a3c-420c-9257-8061760fb3e4",'c4bc911f-01d6-499f-8f17-8b973d44f7b8');
 
+INSERT INTO UserPlaylistRelation (user_id,playlist_id) VALUES
+("d7dcf380-33a3-4cb4-94c2-0323f18be441","c4bc911f-01d6-499f-8f17-8b973d44f7b8");
 -- Down
 
 DROP TABLE Activities;

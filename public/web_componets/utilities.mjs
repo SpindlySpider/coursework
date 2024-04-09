@@ -1,6 +1,7 @@
 const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const ACTIVTIES_KEY = 'activites';
 export const PLAYLIST_KEY = 'playlist';
+export const USER_KEY = 'account';
 export function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
   // duration should be in ms
@@ -125,3 +126,17 @@ export function formatedSeconds(seconds) {
   seconds = seconds - (hour * 3600 + minutes * 60);
   return { hour, minutes, seconds };
 }
+export function changeSelectedNavbar(navButtonSelector) {
+  const lastNavSelected = document.querySelector('.nav-selected');
+  const navCategories = document.querySelector(navButtonSelector);
+  const main = document.querySelector('#main-content');
+  if (lastNavSelected != null) {
+    lastNavSelected.classList.remove('nav-selected');
+    lastNavSelected.classList.add('nav-unselected');
+  }
+  navCategories.classList.add('nav-selected');
+  navCategories.classList.remove('nav-unselected');
+  main.textContent = '';
+}
+
+export const user = () => localStorage.getItem(USER_KEY) ?? null;

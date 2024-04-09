@@ -1,5 +1,8 @@
 import { getAllCustomActivites } from '../../web_componets/utilities.mjs';
-import { ACTIVTIES_KEY } from '../web_componets/utilities.mjs';
+import {
+  ACTIVTIES_KEY,
+  changeSelectedNavbar,
+} from '../web_componets/utilities.mjs';
 
 const el = {};
 
@@ -35,16 +38,7 @@ export async function displayCustomCateogryPage() {
 }
 
 export async function displayCategoryPage() {
-  const lastNavSelected = document.querySelector('.nav-selected');
-  const navCategories = document.querySelector('#catagories');
-  if (lastNavSelected != null) {
-    lastNavSelected.classList.remove('nav-selected');
-    lastNavSelected.classList.add('nav-unselected');
-  }
-  navCategories.classList.add('nav-selected');
-  navCategories.classList.remove('nav-unselected');
-  el.main.textContent = '';
-
+  changeSelectedNavbar('#catagories');
   const customActivties = document.createElement('h2');
   customActivties.classList.add('menu-title');
   customActivties.textContent = 'custom activties';

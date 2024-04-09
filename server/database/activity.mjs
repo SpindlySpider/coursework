@@ -8,15 +8,20 @@ export async function getActivites() {
 
 export async function getActivitiesFromID(UUID) {
   const db = await databaseConnect;
-  return db.all('SELECT title FROM Activities WHERE activity_id = ?', UUID);
+  return db.all(
+    'SELECT title ,description,duration,created_by FROM Activities WHERE activity_id = ?',
+    UUID,
+  );
 }
 
-export async function newActivites(title, createdByID) {
+export async function newActivites(title, description, duration, createdByID) {
   const db = await databaseConnect;
   const UUID = generateUUID();
-  await db.run('INSERT INTO Activities VALUES (?,?,?)', [
+  await db.run('INSERT INTO Activities VALUES (?,?,?,?)', [
     UUID,
     title,
+    description,
+    duration,
     createdByID,
   ]);
 }

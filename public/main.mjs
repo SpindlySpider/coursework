@@ -1,5 +1,6 @@
 import { displayCategoryPage } from './script/category_page.mjs';
 import { displayPlaylistPage } from './script/playlist_page.mjs';
+import { displayProfiles } from './script/profile_page.mjs';
 function displayNewActivityMenu() {
   document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');
@@ -30,7 +31,6 @@ function displayNewEntryOptions() {
     newPlaylist.id = 'newPlaylistPopup';
     newPlaylist.classList.add('popup-item');
     newPlaylist.textContent = 'create new playlist';
-    newPlaylist.style.transform;
 
     const container = document.querySelector('body');
 
@@ -63,3 +63,4 @@ document
 document
   .querySelector('#workout-playlist')
   .addEventListener('click', displayPlaylistPage);
+document.querySelector('#profile').addEventListener('click', displayProfiles);

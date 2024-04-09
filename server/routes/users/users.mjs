@@ -14,6 +14,10 @@ async function getUser(req, res) {
   const username = await user.getUserFromID(req.params.id);
   res.send({ data: username });
 }
+async function getUserPlaylists(req, res) {
+  const playlists = await user.getUserPlaylist(req.params.id);
+  res.send({ data: playlists });
+}
 
 async function updateUser(req, res) {
   // update data
@@ -34,9 +38,15 @@ async function removeUser(req, res) {
   await user.deleteUser(req.params.id);
   res.sendStatus(200);
 }
+async function removePlaylist(req, res) {
+  await user.deleteUser(req.params.id, req.params.playlist_id);
+  res.sendStatus(200);
+}
 
 router.get('/', sendUsersList);
 router.get('/:id', getUser);
+router.get('/:id/playlists', getUserPlaylists);
 router.put('/:id', express.json(), updateUser);
 router.post('/', postUser);
 router.delete('/:id', removeUser);
+router.delete('/:id/:playlist_id', removePlaylist);

@@ -1,9 +1,12 @@
 import { newPlaylistMenu } from '../web_componets/new-playlist-menu/new_playlist_menu.mjs';
 import {
   PLAYLIST_KEY,
+  USER_KEY,
+  changeSelectedNavbar,
   getActivtyFromID,
   getAllCustomActivites,
   getPlaylist,
+  user,
 } from '../web_componets/utilities.mjs';
 const el = {};
 function prepareHandles() {
@@ -11,21 +14,12 @@ function prepareHandles() {
   el.navbar = document.querySelector('#navbar');
 }
 
-export function displayPlaylistPage() {
-  const lastNavSelected = document.querySelector('.nav-selected');
-  const navCategories = document.querySelector('#workout-playlist');
-  if (lastNavSelected != null) {
-    lastNavSelected.classList.remove('nav-selected');
-    lastNavSelected.classList.add('nav-unselected');
-  }
-  navCategories.classList.add('nav-selected');
-  navCategories.classList.remove('nav-unselected');
-  el.main.textContent = '';
+export async function displayPlaylistPage() {
+  changeSelectedNavbar('#workout-playlist');
   if (document.querySelector('bottom-sheet-menu')) {
     //already have a menu on display
     return;
   }
-  el.main.textContent = '';
   const menu = document.createElement('ul');
   menu.id = 'playlist-items';
   const customActivties = document.createElement('h1');
@@ -34,7 +28,7 @@ export function displayPlaylistPage() {
   el.main.appendChild(menu);
   menu.append(customActivties);
 
-  const playlists = getAllCustomActivites(PLAYLIST_KEY);
+  let playlists = getAllCustomActivites(PLAYLIST_KEY);
   if (playlists == null || Object.keys(playlists).length == 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent =
@@ -46,7 +40,7 @@ export function displayPlaylistPage() {
 
   const localPlaylists = JSON.parse(localStorage['playlist']);
   for (let item of Object.keys(JSON.parse(localStorage['playlist']))) {
-    //extract out the playlist feature to error check
+    // extract out the playlist feature to error check
     const container = document.createElement('li');
     container.classList.add('category-item');
     container.style.display = 'flex';
@@ -63,7 +57,7 @@ export function displayPlaylistPage() {
     menu.append(container);
     container.append(entry);
 
-    if (localPlaylists[item].items.length != 0) {
+    if (localPlaylists[item].items.length !== 0) {
       const play = document.createElement('button');
       play.textContent = 'start';
       container.append(play);
@@ -71,6 +65,35 @@ export function displayPlaylistPage() {
         startTimer(entry);
       });
     }
+  }
+  // ------------------------
+  playlists = await fetch(`/users/${user()}/playlists`).then((res) => {
+    return res.json();
+  });
+  console.log(playlists.data);
+  for (let item of playlists.data) {
+    // extract out the playlist feature to error check
+    const playlistDetails = await fetch(`playlist/${item.playlist_id}`).then(
+      (res) => {
+        return res.json();
+      },
+    );
+    console.log(playlistDetails, item);
+    const container = document.createElement('li');
+    container.classList.add('category-item');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'row';
+    const entry = document.createElement('h2');
+    entry.textContent = playlistDetails.title[0].title;
+    entry.dataset.id = item;
+    entry.classList.add('menu-item');
+
+    entry.addEventListener('click', () => {
+      edit_playlist(entry);
+    });
+
+    menu.append(container);
+    container.append(entry);
   }
 }
 function startTimer(entry) {
