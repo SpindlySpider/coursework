@@ -33,6 +33,13 @@ export async function getUserPlaylist(UUID) {
     UUID,
   );
 }
+export async function getUserActivties(UUID) {
+  const db = await databaseConnect;
+  return db.all(
+    'SELECT activity_id FROM UserActivityRelation WHERE user_id = ?',
+    UUID,
+  );
+}
 
 export async function deleteUser(id) {
   const db = await databaseConnect;
@@ -45,4 +52,19 @@ export async function removeUserPlaylist(id, playlistID) {
     id,
     playlistID,
   );
+}
+
+export async function postUserActivties(userID, activityID) {
+  const db = await databaseConnect;
+  await db.run('INSERT INTO UserActivityRelation VALUES (?,?)', [
+    userID,
+    activityID,
+  ]);
+}
+export async function postUserPlaylist(userID, playlistID) {
+  const db = await databaseConnect;
+  await db.run('INSERT INTO UserPlaylistRelation VALUES (?,?)', [
+    userID,
+    playlistID,
+  ]);
 }

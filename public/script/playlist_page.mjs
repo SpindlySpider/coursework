@@ -17,7 +17,7 @@ function prepareHandles() {
 export async function displayPlaylistPage() {
   changeSelectedNavbar('#workout-playlist');
   if (document.querySelector('bottom-sheet-menu')) {
-    //already have a menu on display
+    // already have a menu on display
     return;
   }
   const menu = document.createElement('ul');
@@ -100,9 +100,9 @@ function startTimer(entry) {
   const main = document.querySelector('#main-content');
   main.textContent = '';
 
-  let timer = document.createElement('timer-component');
+  const timer = document.createElement('timer-component');
   const playlist = getPlaylist(entry.dataset.id);
-  let workoutItems = [];
+  const workoutItems = [];
   for (let id of playlist.items) {
     workoutItems.push(getActivtyFromID(id));
   }

@@ -14,10 +14,15 @@ export async function getActivitiesFromID(UUID) {
   );
 }
 
-export async function newActivites(title, description, duration, createdByID) {
+export async function newActivites(
+  UUID,
+  title,
+  description,
+  duration,
+  createdByID,
+) {
   const db = await databaseConnect;
-  const UUID = generateUUID();
-  await db.run('INSERT INTO Activities VALUES (?,?,?,?)', [
+  await db.run('INSERT INTO Activities VALUES (?,?,?,?,?)', [
     UUID,
     title,
     description,

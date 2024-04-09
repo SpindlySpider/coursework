@@ -20,9 +20,10 @@ export class Entry extends newActivtyMenu {
     this.description;
 
     this.editing = false;
-    this.editable = true; //used to make this entry editable
+    this.editable = true; // used to make this entry editable
     this.initilized = false;
     this.seconds = 0;
+    this.entryJSON = {};
   }
 
   deleteEntry() {
@@ -37,6 +38,7 @@ export class Entry extends newActivtyMenu {
     displayCategoryPage();
     displayCustomCateogryPage();
   }
+
   async connectedCallback() {
     if (this.editing || this.initilized) {
       return;
@@ -44,16 +46,17 @@ export class Entry extends newActivtyMenu {
     await this.attachTemplate();
     this.initilized = true;
   }
+
   thumbnailDescription() {
     // formats a string such that it will add ... if the description is too long
     const cutoffPoint = 13; // number of char
-    if (this.description.length > cutoffPoint) {
+    if (this.entryJSON.description.length > cutoffPoint) {
       this.description = this.description.slice(0, cutoffPoint - 3) + '...';
     }
     const duration = formatedSeconds(this.seconds);
-    const hour = duration.hour == 0 ? '' : `${duration.hour}h`;
-    const mins = duration.minutes == 0 ? '' : `${duration.minutes}m`;
-    const secs = duration.seconds == 0 ? '' : `${duration.seconds}s`;
+    const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
+    const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
+    const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
     this.description = `${this.description} | ⏱︎ ${hour}${mins}${secs}`;
     return this.description;
   }
@@ -65,8 +68,7 @@ export class Entry extends newActivtyMenu {
     }
     this.shadow = this.attachShadow({ mode: 'open' });
     this.entryThumbnail = document.createElement('ul');
-
-    this.entryJSON = getActivtyFromID(this.entryID);
+    this.entryJSON = await getActivtyFromID(this.entryID);
     this.entryName = document.createElement('h3');
     this.entryName.textContent = this.entryJSON.title;
     this.seconds = this.entryJSON.duration;
@@ -122,6 +124,7 @@ export class Entry extends newActivtyMenu {
     this.setupEventListners();
     setTimeout(this.pullupAnimation.bind(this), 25, 90);
   }
+
   saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;

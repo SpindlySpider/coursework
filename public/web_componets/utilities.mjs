@@ -49,21 +49,64 @@ export function deleteFromLocal(UUID, KEY) {
     delete tempStore[UUID];
     localStorage[KEY] = JSON.stringify(tempStore);
   } else {
-    //event doesnt exist
+    // event doesnt exist
   }
 }
 
-export function getActivtyFromID(UUID) {
-  const loggedIn = false; // implement later
-  if (loggedIn) {
-    // execute server authentication here? and get event from server
+export async function getActivtyFromID(UUID) {
+  const online = true; // implement later
+  if (user() && online) {
+    // checks if the user is logged in to an account
+    const response = await fetch(`activities/${UUID}`);
+    if (response.ok) {
+      let activity = await response.json();
+      if (activity.data[0] !== undefined) {
+        // if the activity is on the server
+        activity = activity.data[0];
+        const activityJSON = {
+          title: activity.title,
+          description: activity.description,
+          duration: activity.duration,
+        };
+        // save the activity locally
+        saveActivty(
+          UUID,
+          activityJSON.title,
+          activityJSON.description,
+          activityJSON.duration,
+        );
+        return activityJSON;
+      }
+    }
   }
+  // fall back to local storage if you cant find it on server
   if (isLocalStorageEmpty(ACTIVTIES_KEY)) {
     // create new JSON for local localStorage
     throw new Error('local storage is empty');
   }
-  const cachedActivites = JSON.parse(localStorage.activites);
+  const cachedActivites = JSON.parse(localStorage[ACTIVTIES_KEY]);
   try {
+    // send the activity to the server
+    if (online) {
+      const payload = {
+        UUID,
+        title: cachedActivites[UUID].title,
+        description: cachedActivites[UUID].description,
+        duration: cachedActivites[UUID].duration,
+        createdBy: user(),
+      };
+      await fetch('activities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      await fetch(`users/${user()}/activities`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ activity_id: UUID }),
+      });
+      // do a post request to userACTIVITYRelation to add it to the users accoutn
+    }
     return cachedActivites[UUID];
   } catch (e) {
     throw new Error('no activity matching ID within local storage');

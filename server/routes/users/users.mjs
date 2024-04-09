@@ -42,11 +42,27 @@ async function removePlaylist(req, res) {
   await user.deleteUser(req.params.id, req.params.playlist_id);
   res.sendStatus(200);
 }
+async function getUserActivities(req, res) {
+  const activities = await user.getUserActivties(req.params.id);
+  res.send({ data: activities });
+}
+
+async function postUser(req, res) {
+  // creates data
+  await user.addUser(req.body.username);
+  res.status(200).send('success');
+}
+async function postUserActivities(req, res) {
+  await user.postUserActivties(req.params.id, req.body.activity_id);
+  res.status(200).send('success');
+}
 
 router.get('/', sendUsersList);
 router.get('/:id', getUser);
 router.get('/:id/playlists', getUserPlaylists);
+router.get('/:id/activities', getUserActivities);
 router.put('/:id', express.json(), updateUser);
 router.post('/', postUser);
+router.post('/:id/activities', express.json(), postUserActivities);
 router.delete('/:id', removeUser);
 router.delete('/:id/:playlist_id', removePlaylist);

@@ -32,10 +32,20 @@ async function updateActivites(req, res) {
 }
 async function postActivity(req, res) {
   // creates data
+  // const body = JSON.parse();
+  let UUID = crypto.randomUUID();
+  let description = '';
+  if (req.body.UUID) {
+    UUID = req.body.UUID;
+  }
+  if (req.body.description) {
+    description = req.body.description;
+  }
   await activity.newActivites(
+    UUID,
     req.body.title,
-    res.body.description,
-    res.body.duration,
+    description,
+    req.body.duration,
     req.body.createdBy,
   );
   res.sendStatus(500);
@@ -49,5 +59,5 @@ async function removeActivity(req, res) {
 router.get('/', getActivites);
 router.get('/:id', getActivity);
 router.put('/:id', express.json(), updateActivites);
-router.post('/', postActivity);
+router.post('/', express.json(), postActivity);
 router.delete('/:id', removeActivity);
