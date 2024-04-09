@@ -20,6 +20,6 @@ export async function uniqueID(tableName, idName, UUID) {
   // checks if an ID is unique
   const db = await databaseConnect;
   const selectStatement = `SELECT * FROM ${tableName} WHERE ${idName} = "${UUID}" `;
-  return db.all(selectStatement).length === 0;
-  // return db.all('SELECT * FROM ? WHERE ? = ? ', tableName, idName, `"${UUID}"`);
+  const selection = await db.all(selectStatement);
+  return selection.length === 0;
 }

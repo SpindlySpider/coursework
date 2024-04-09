@@ -56,11 +56,12 @@ export async function removeUserPlaylist(id, playlistID) {
 
 export async function postUserActivties(userID, activityID) {
   const db = await databaseConnect;
-  const unique = db.all(
+
+  const unique = await db.all(
     'SELECT * FROM UserActivityRelation WHERE user_id = ? AND activity_id = ?',
-    userID,
-    activityID,
+    [userID, activityID],
   );
+  console.log('post user activitty', unique);
 
   if (unique.length !== 0) {
     return;

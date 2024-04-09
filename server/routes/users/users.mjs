@@ -49,7 +49,7 @@ async function postUser(req, res) {
   res.status(200).send('success');
 }
 async function postUserActivities(req, res) {
-  console.log(req.params.id, req.body.activity_id);
+  // console.log(req.params.id, req.body.activity_id);
   await user.postUserActivties(req.params.id, req.body.activity_id);
   res.status(200).send('success');
 }

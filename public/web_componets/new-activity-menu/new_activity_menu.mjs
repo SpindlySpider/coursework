@@ -11,6 +11,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     // must do all of the selections within the constructor
     super();
   }
+
   async createActivtyInputs() {
     this.nameInput = document.createElement('input');
     this.descriptionInput = document.createElement('input');
@@ -62,6 +63,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     await this.attachTemplate();
     this.initilized = true;
   }
+
   destorySelf() {
     this.content.style.height = '0vh';
     setTimeout(() => {
@@ -80,8 +82,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     const description = this.descriptionInput.value;
     const duration = this.timeInput.getDuration();
     const UUID = await getUUID();
-    console.log(UUID);
-    saveActivty(UUID, title, description, duration);
+    await saveActivty(UUID, title, description, duration);
     this.destorySelf();
   }
 }

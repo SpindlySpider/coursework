@@ -1,5 +1,5 @@
 import { generateUUID } from '../server_utilities.js';
-import { databaseConnect } from './database_utlilites.mjs';
+import { databaseConnect, uniqueID } from './database_utlilites.mjs';
 // used for accessing user releated fields in the db
 export async function getActivites() {
   const db = await databaseConnect;
@@ -33,6 +33,12 @@ export async function newActivites(
 
 export async function deleteActivity(UUID) {
   const db = await databaseConnect;
+  await db.run('DELETE FROM UserActivityRelation WHERE activity_id = ?', UUID);
+  await db.run(
+    'DELETE FROM PlaylistActivityRelation WHERE activity_id = ?',
+    UUID,
+  );
+  await db.run('DELETE FROM ActivityTagRelation WHERE activity_id = ?', UUID);
   await db.run('DELETE FROM Activities WHERE activity_id = ?', UUID);
 }
 
@@ -44,6 +50,9 @@ export async function updateActivity(
   createdBy,
 ) {
   const db = await databaseConnect;
+  // if (!(await uniqueID('Activities', 'activity_id', UUID))) {
+  //   return;
+  // }
   const statement = await db.run(
     'UPDATE Activities SET title = ?, description = ? , duration = ?, created_by = ? WHERE activity_id = ?',
     title,

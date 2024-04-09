@@ -1,5 +1,7 @@
 import { newPlaylistMenu } from '../web_componets/new-playlist-menu/new_playlist_menu.mjs';
 import {
+  ACTIVTIES_KEY,
+  PLAYLIST_KEY,
   USER_KEY,
   changeSelectedNavbar,
   user,
@@ -50,6 +52,8 @@ export async function displayProfiles() {
 
 async function signOut() {
   localStorage[USER_KEY] = '';
+  localStorage[ACTIVTIES_KEY] = '{}';
+  localStorage[PLAYLIST_KEY] = '{}';
   await displayProfiles();
 }
 

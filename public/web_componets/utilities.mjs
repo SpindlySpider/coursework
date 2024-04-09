@@ -15,12 +15,17 @@ export async function saveActivty(UUID, title, description, duration) {
       duration,
       createdBy: user(),
     };
-    await fetch('activities', {
+    console.log(payload);
+
+    const activityResponse = await fetch('activities/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    await fetch(`users/${user()}/activities`, {
+
+    console.log('running next');
+
+    const attachUserResponse = await fetch(`users/${user()}/activities`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ activity_id: UUID }),
@@ -43,7 +48,7 @@ export async function saveActivty(UUID, title, description, duration) {
   localStorage.activites = JSON.stringify(cachedActivites);
 }
 
-export function deleteFromLocal(UUID, KEY) {
+export async function deleteFromLocal(UUID, KEY) {
   if (localStorage[KEY] != null) {
     const tempStore = JSON.parse(localStorage[KEY]);
     if (KEY === ACTIVTIES_KEY) {
@@ -54,7 +59,7 @@ export function deleteFromLocal(UUID, KEY) {
           console.log('includes', UUID);
           playlistStorage[item].items = playlistStorage[item].items.filter(
             (activity) => {
-              return activity != UUID;
+              return activity !== UUID;
             },
           );
         }
@@ -64,6 +69,9 @@ export function deleteFromLocal(UUID, KEY) {
     }
     delete tempStore[UUID];
     localStorage[KEY] = JSON.stringify(tempStore);
+    await fetch(`activities/${UUID}`, {
+      method: 'DELETE',
+    });
   } else {
     // event doesnt exist
   }
@@ -85,7 +93,7 @@ export async function getActivtyFromID(UUID) {
           duration: activity.duration,
         };
         // save the activity locally
-        saveActivty(
+        await saveActivty(
           UUID,
           activityJSON.title,
           activityJSON.description,
@@ -116,6 +124,7 @@ export async function getActivtyFromID(UUID) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+
       await fetch(`users/${user()}/activities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
