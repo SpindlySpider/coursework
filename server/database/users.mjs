@@ -56,6 +56,15 @@ export async function removeUserPlaylist(id, playlistID) {
 
 export async function postUserActivties(userID, activityID) {
   const db = await databaseConnect;
+  const unique = db.all(
+    'SELECT * FROM UserActivityRelation WHERE user_id = ? AND activity_id = ?',
+    userID,
+    activityID,
+  );
+
+  if (unique.length !== 0) {
+    return;
+  }
   await db.run('INSERT INTO UserActivityRelation VALUES (?,?)', [
     userID,
     activityID,

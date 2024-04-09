@@ -1,6 +1,7 @@
 // created with the help of this video https://www.youtube.com/watch?v=0Hu27PoloYw
 import express from 'express';
 import * as activity from '../../database/activity.mjs';
+import { uniqueID } from '../../database/database_utlilites.mjs';
 export const router = express.Router();
 
 async function getActivites(req, res) {
@@ -30,10 +31,12 @@ async function updateActivites(req, res) {
     res.sendStatus(404);
   }
 }
+
 async function postActivity(req, res) {
   // creates data
   // const body = JSON.parse();
   let UUID = crypto.randomUUID();
+  // find a way to check if a id is already taken
   let description = '';
   if (req.body.UUID) {
     UUID = req.body.UUID;
@@ -41,14 +44,29 @@ async function postActivity(req, res) {
   if (req.body.description) {
     description = req.body.description;
   }
-  await activity.newActivites(
-    UUID,
-    req.body.title,
-    description,
-    req.body.duration,
-    req.body.createdBy,
-  );
-  res.sendStatus(500);
+  console.log(await uniqueID('Activities', 'activity_id', UUID));
+  if (await uniqueID('Activities', 'activity_id', UUID)) {
+    // if you are trying to save a activity with a UUID already in db
+    await activity.newActivites(
+      UUID,
+      req.body.title,
+      description,
+      req.body.duration,
+      req.body.createdBy,
+    );
+  } else {
+    // this is a new event so construct a new event
+
+    await activity.updateActivity(
+      UUID,
+      req.body.title,
+      description,
+      req.body.duration,
+      req.body.createdBy,
+    );
+
+    res.sendStatus(200);
+  }
 }
 async function removeActivity(req, res) {
   // delete data

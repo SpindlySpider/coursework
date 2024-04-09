@@ -14,3 +14,12 @@ export async function initilize() {
   // this must be called first
 }
 export const databaseConnect = initilize();
+
+export async function uniqueID(tableName, idName, UUID) {
+  // only use this server side
+  // checks if an ID is unique
+  const db = await databaseConnect;
+  const selectStatement = `SELECT * FROM ${tableName} WHERE ${idName} = "${UUID}" `;
+  return db.all(selectStatement).length === 0;
+  // return db.all('SELECT * FROM ? WHERE ? = ? ', tableName, idName, `"${UUID}"`);
+}

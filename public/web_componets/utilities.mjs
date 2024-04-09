@@ -3,11 +3,28 @@ export const ACTIVTIES_KEY = 'activites';
 export const PLAYLIST_KEY = 'playlist';
 export const USER_KEY = 'account';
 
-export function saveActivty(UUID, title, description, duration) {
+export async function saveActivty(UUID, title, description, duration) {
   // can be used to save over an entry, or add a new one to local db
   const online = true; // implement later
   if (user() && online) {
     // checks if the user is logged in to an account
+    const payload = {
+      UUID,
+      title,
+      description,
+      duration,
+      createdBy: user(),
+    };
+    await fetch('activities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    await fetch(`users/${user()}/activities`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activity_id: UUID }),
+    });
   } else {
     // queue it for upload when you go online/sign in
     // mark the activity as not server saved maybe
