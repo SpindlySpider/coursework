@@ -19,13 +19,14 @@
   - [ ] not editable untill edit button pressed
 - [ ] create custom add photo for customising the excerize
 - [ ] add css to make it look functional
-- [ ] push the new data to the server to store it in a mysqllite database
+- [x] push the new data to the server to store it in a mysqllite database
 - [ ] difficulty rating for custom exercises
+  - [ ] have server made rests which have long rest, short rest, no rest
+  - [ ] difficulty is when the rests is longer -> shorter
 - [x] maybe make a server and client within the public folder to store code and serve
-- [ ] utilities get activity and get playlist functions can be combined into one
 - [x] implement timer
 - [ ] clean up code -- specifically entry componenet that has alot of mess
-- [ ] database use https://github.com/portsoc/staged-simple-message-board to learn how
+- [x] database use https://github.com/portsoc/staged-simple-message-board to learn how
 - [ ] create history using reference to https://github.com/portsoc/simple-one-page
 - [ ] navigation bar should only show name of categotry when it is pressed
 - [ ] implement tags and import and exporting entire tags
@@ -36,6 +37,10 @@
 - [ ] have title, description and time as non editable untill pressed and it will swap out the text for the input
 - [ ] promodo timer like expereince of entire workout, you should be able to swtich between views
 - [ ] need to make sure that playlist and activities read from local storage if server is offline
+- [ ] PWA
+- [ ] tags
+- [ ] import export
+- [ ] readable body svg https://youtu.be/6C-GYwxdZd4 , https://youtu.be/WMqB8sVOCtk
 
 ## Key features
 
