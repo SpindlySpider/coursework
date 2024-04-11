@@ -1,0 +1,39 @@
+<template>
+  <style>
+    ul {
+      display: flex;
+      border: 1px solid black;
+      padding: 7px;
+    }
+    ul li {
+      list-style: none;
+      border: 1px solid black;
+      padding: 2px;
+      margin: 2px;
+      display: flex;
+      flex-direction: row;
+      font-size: 5vw;
+    }
+    p {
+      margin: 0px;
+      padding: 0px;
+    }
+    input {
+      flex: 1;
+      outline: none;
+      border: 1px solid white;
+      padding: 2px;
+      margin: 2px;
+      font-size: 5vw;
+      width: 10vw;
+    }
+    #tagBox {
+      display: flex;
+    }
+  </style>
+  <div id="tagBox">
+    <ul id="itemList">
+      <input id="newTagInput" type="text" />
+    </ul>
+  </div>
+</template>
