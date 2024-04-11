@@ -1,3 +1,4 @@
+import { displayPlaylistPage } from '../../script/playlist_page.mjs';
 import { fetchTemplate, getActivtyFromID } from '../utilities.mjs';
 
 export default class TimerComponent extends HTMLElement {
@@ -8,6 +9,7 @@ export default class TimerComponent extends HTMLElement {
     this.initilized = false;
     this.timerIndex = 0;
   }
+
   playlistMenu() {
     this.radius = 100;
     this.circumference = 2 * this.radius * Math.PI;
@@ -20,6 +22,7 @@ export default class TimerComponent extends HTMLElement {
     this.clock.style.strokeDasharray = this.circumference;
     this.clockContainer.classList.add('hidden');
   }
+
   prepareHandle() {
     this.titleText = this.shadow.querySelector('#title');
     this.clock = this.shadow.querySelector('#clock');
@@ -31,11 +34,13 @@ export default class TimerComponent extends HTMLElement {
     this.clockContainer = this.shadow.querySelector('#clockContainer');
     this.playlistMenu();
   }
+
   setupEventListener() {
     this.start.addEventListener('click', this.startTimer.bind(this));
     this.stop.addEventListener('click', this.stopTimer.bind(this));
     this.close.addEventListener('click', this.destorySelf.bind(this));
   }
+
   async attachTemplate() {
     if (this.initilized) {
       return;
@@ -56,12 +61,14 @@ export default class TimerComponent extends HTMLElement {
   }
 
   destorySelf() {
+    displayPlaylistPage();
     this.remove();
   }
 
   getFormatedTimeFromSeconds(seconds) {
     return new Date(seconds * 1000).toISOString().slice(11, 19);
   }
+
   stopTimer() {
     this.upNext.classList.add('hidden');
     this.stop.classList.add('hidden');
@@ -74,7 +81,9 @@ export default class TimerComponent extends HTMLElement {
     this.time.classList.add('hidden');
     this.close.classList.remove('hidden');
     this.clockContainer.classList.add('hidden');
+    displayPlaylistPage();
   }
+
   incrementTimer() {
     if (
       this.getFormatedTimeFromSeconds(
@@ -96,6 +105,7 @@ export default class TimerComponent extends HTMLElement {
     this.updateTimerDisplay();
     this.seconds++;
   }
+
   startTimer() {
     if (!this.isTimerRunning) {
       this.intervalID = setInterval(this.incrementTimer.bind(this), 1000);
@@ -128,6 +138,7 @@ export default class TimerComponent extends HTMLElement {
       (this.seconds / this.timerList[this.timerIndex].duration) * 100;
     this.setProgress(percent);
   }
+
   setProgress(percent) {
     this.clock.style.strokeDashoffset =
       this.circumference - (percent / 100) * this.circumference;

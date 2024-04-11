@@ -36,9 +36,7 @@ export async function displayPlaylistPage() {
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
     const playlistDetails = await fetch(`playlist/${item.playlist_id}`).then(
-      (res) => {
-        return res.json();
-      },
+      (res) => res.json(),
     );
     console.log(playlistDetails, item);
     const container = document.createElement('li');
@@ -56,20 +54,35 @@ export async function displayPlaylistPage() {
 
     menu.append(container);
     container.append(entry);
+
+    if (playlistDetails.activites.length !== 0) {
+      const play = document.createElement('button');
+      play.textContent = 'start';
+      container.append(play);
+      play.addEventListener('click', async () => {
+        await startTimer(entry);
+      });
+    }
   }
 }
-function startTimer(entry) {
+async function startTimer(entry) {
   const main = document.querySelector('#main-content');
   main.textContent = '';
 
   const timer = document.createElement('timer-component');
-  const playlist = getPlaylist(entry.dataset.id);
+  const playlist = await getPlaylist(entry.dataset.id);
+  // const playlist = await fetch(`playlist/${entry.dataset.id}`).then((res) =>
+  //   res.json(),
+  // );
+  // console.log(playlist.activites);
+  console.log(playlist);
+
   const workoutItems = [];
   for (let id of playlist.items) {
-    workoutItems.push(getActivtyFromID(id));
+    workoutItems.push(await getActivtyFromID(id));
   }
   timer.timerList = workoutItems;
-  timer.customTile = playlist.title;
+  timer.customTile = playlist.title.title;
   main.append(timer);
   console.log(workoutItems);
   console.log(timer.timerList);

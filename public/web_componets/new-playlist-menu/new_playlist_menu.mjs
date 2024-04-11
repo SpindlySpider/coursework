@@ -50,13 +50,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.bottomSheetPrepareHandles();
     this.prepareHandles();
     this.createButtons();
-    this.setupEventListeners();
+    await this.setupEventListeners();
     this.setTitle('new playlist');
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.initilized = true;
   }
 
-  setupEventListeners() {
+  async setupEventListeners() {
     this.addButton.addEventListener(
       'click',
       this.customActivitesSelection.bind(this),
@@ -94,9 +94,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }
   }
 
-  deletePlaylist() {
-    deleteFromLocal(this.UUID, PLAYLIST_KEY);
-    displayPlaylistPage();
+  async deletePlaylist() {
+    await deleteFromLocal(this.UUID, PLAYLIST_KEY);
+    await displayPlaylistPage();
     this.destorySelf();
   }
 
@@ -273,13 +273,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
     ].map((item) => {
       return item.dataset.id;
     }); // turning the visual order into the saved order of events
-    console.log(this.activityItems);
     if (this.activityItems[0] === undefined) {
       this.activityItems = [];
     }
     const title = this.nameInput.value;
-    savePlaylist(this.UUID, title, this.activityItems);
-    displayPlaylistPage();
+    await savePlaylist(this.UUID, title, this.activityItems);
+    await displayPlaylistPage();
     this.destorySelf();
   }
 }
