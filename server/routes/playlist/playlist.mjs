@@ -1,6 +1,7 @@
 // created with the help of this video https://www.youtube.com/watch?v=0Hu27PoloYw
 import express from 'express';
 import * as playlist from '../../database/playlist.mjs';
+import { uniqueID } from '../../database/database_utlilites.mjs';
 export const router = express.Router();
 
 async function getPlaylists(req, res) {
@@ -17,7 +18,11 @@ async function getPlaylist(req, res) {
 }
 
 async function addActivity(req, res) {
-  await playlist.addActivityPlaylist(req.params.id, req.params.activityID);
+  await playlist.addActivityPlaylist(
+    req.params.id,
+    req.params.activityID,
+    req.body.orderNumber,
+  );
   res.status(200).send('success');
 }
 async function removeActivity(req, res) {
@@ -27,9 +32,45 @@ async function removeActivity(req, res) {
 
 async function createPlaylist(req, res) {
   // creates data
-  await playlist.newPlaylist(req.body.title, req.body.userID);
+  let UUID = crypto.randomUUID();
+  // find a way to check if a id is already taken
+  if (req.body.UUID) {
+    UUID = req.body.UUID;
+  }
+  console.log(req.body);
+  if (await uniqueID('Playlist', 'playlist_id', UUID)) {
+    await playlist.newPlaylist(
+      UUID,
+      req.body.title,
+      req.body.items,
+      req.body.createdBy,
+    );
+  } else {
+    await playlist.updatePlaylist(
+      UUID,
+      req.body.title,
+      req.body.items,
+      req.body.createdBy,
+    );
+  }
+
   res.status(200).send('success');
 }
+async function updatePlaylistItems(req, res) {
+  // find a way to check if a id is already taken
+  const UUID = req.body.UUID;
+  if (req.body.UUID) {
+    UUID = req.body.UUID;
+  }
+  await playlist.updatePlaylist(
+    UUID,
+    req.body.title,
+    req.body.items,
+    req.body.createdBy,
+  );
+  res.status(200).send('success');
+}
+
 async function deletePlaylist(req, res) {
   // delete data
   await playlist.deletePlaylist(req.params.id);
@@ -39,6 +80,7 @@ async function deletePlaylist(req, res) {
 router.get('/', getPlaylists);
 router.get('/:id', getPlaylist);
 router.put('/:playlistID/:activityID', express.json(), addActivity);
-router.post('/:id', createPlaylist);
+router.post('/', express.json(), createPlaylist);
+router.put('/:playlistID', express.json(), updatePlaylistItems);
 router.delete('/:playlistID/:activityID', express.json(), removeActivity);
 router.delete('/:id', deletePlaylist);

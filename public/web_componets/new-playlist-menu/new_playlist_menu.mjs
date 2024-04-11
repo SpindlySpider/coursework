@@ -20,6 +20,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.nameInput = document.createElement('input');
     this.initilized = false;
   }
+
   async connectedCallback() {
     if (this.initilized) {
       return;
@@ -27,6 +28,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     await this.attachTemplate();
     this.initilized = true;
   }
+
   prepareHandles() {
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
@@ -73,7 +75,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.saveNewPlaylist.bind(this, this.UUID),
     );
     this.deleteButton.addEventListener('click', this.deletePlaylist.bind(this));
-
     this.content.addEventListener('dragover', this.dragOverInsert.bind(this));
     this.content.addEventListener('touchmove', this.dragOverInsert.bind(this));
   }
@@ -92,6 +93,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.content.insertBefore(draggable, elementAfter);
     }
   }
+
   deletePlaylist() {
     deleteFromLocal(this.UUID, PLAYLIST_KEY);
     displayPlaylistPage();
@@ -128,6 +130,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     console.log(`add ${entry.dataset.id}`);
     this.activityItems.push(entry.dataset.id);
   }
+
   async customActivitesSelection() {
     setTimeout(this.pullupAnimation.bind(this), 50, 90);
     this.cleanContent();
@@ -165,6 +168,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.content.append(entry);
     }
   }
+
   cleanContent() {
     let items = this.content.querySelectorAll('.activty-item');
     for (let item of items) {
@@ -242,6 +246,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.append(name, desciption, deleteButton, dragField);
     }
   }
+
   draggingEventListeners(element) {
     element.addEventListener('dragstart', () => {
       element.classList.add('dragging');
@@ -256,6 +261,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       element.classList.remove('dragging');
     });
   }
+
   disconnectedCallback() {}
 
   async saveNewPlaylist() {
@@ -267,6 +273,10 @@ export class newPlaylistMenu extends bottomSheetMenu {
     ].map((item) => {
       return item.dataset.id;
     }); // turning the visual order into the saved order of events
+    console.log(this.activityItems);
+    if (this.activityItems[0] === undefined) {
+      this.activityItems = [];
+    }
     const title = this.nameInput.value;
     savePlaylist(this.UUID, title, this.activityItems);
     displayPlaylistPage();

@@ -3,10 +3,16 @@ export const ACTIVTIES_KEY = 'activites';
 export const PLAYLIST_KEY = 'playlist';
 export const USER_KEY = 'account';
 
-export async function saveActivty(UUID, title, description, duration) {
+export async function saveActivty(
+  UUID,
+  title,
+  description,
+  duration,
+  fromServer,
+) {
   // can be used to save over an entry, or add a new one to local db
   const online = true; // implement later
-  if (user() && online) {
+  if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
     const payload = {
       UUID,
@@ -66,12 +72,16 @@ export async function deleteFromLocal(UUID, KEY) {
       }
       console.log(playlistStorage);
       localStorage[PLAYLIST_KEY] = JSON.stringify(playlistStorage);
+      await fetch(`activities/${UUID}`, {
+        method: 'DELETE',
+      });
+    } else if (KEY === PLAYLIST_KEY) {
+      await fetch(`playlist/${UUID}`, {
+        method: 'DELETE',
+      });
     }
     delete tempStore[UUID];
     localStorage[KEY] = JSON.stringify(tempStore);
-    await fetch(`activities/${UUID}`, {
-      method: 'DELETE',
-    });
   } else {
     // event doesnt exist
   }
@@ -98,6 +108,7 @@ export async function getActivtyFromID(UUID) {
           activityJSON.title,
           activityJSON.description,
           activityJSON.duration,
+          true,
         );
         return activityJSON;
       }
@@ -158,7 +169,35 @@ export async function fetchTemplate(shadow, templateURL) {
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));
 }
-export function savePlaylist(UUID, title, items) {
+export async function savePlaylist(UUID, title, items, fromServer) {
+  const online = true; // implement later
+  if (user() && online && !fromServer) {
+    // checks if the user is logged in to an account
+    const payload = {
+      UUID,
+      title,
+      items,
+      createdBy: user(),
+    };
+    console.log('playload', payload);
+
+    const playlistResponse = await fetch('playlist/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    console.log('running next');
+
+    const attachUserResponse = await fetch(`users/${user()}/playlists`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playlist_id: UUID }),
+    });
+  } else {
+    // queue it for upload when you go online/sign in
+    // mark the activity as not server saved maybe
+  }
   if (isLocalStorageEmpty(PLAYLIST_KEY)) {
     // create new JSON for local localStorage
     localStorage[PLAYLIST_KEY] = JSON.stringify({});
@@ -172,10 +211,31 @@ export function savePlaylist(UUID, title, items) {
   localStorage[PLAYLIST_KEY] = JSON.stringify(cachedPlaylists);
 }
 
-export function getPlaylist(UUID) {
-  const loggedIn = false; // implement later
-  if (loggedIn) {
-    // execute server authentication here? and get event from server
+export async function getPlaylist(UUID) {
+  const online = true; // implement later
+  if (user() && online) {
+    // checks if the user is logged in to an account
+    const response = await fetch(`playlist/${UUID}`);
+    if (response.ok) {
+      const playlist = await response.json();
+      if (playlist.title[0] !== undefined) {
+        // if the activity is on the server
+        console.log(playlist);
+        // create playlist JSON HERE
+        // SQL playlist always makes sure its in ascending order
+        const itemsArray = playlist.activites.map((item) => item.activity_id);
+        console.log(itemsArray);
+        const playlistJSON = {
+          title: playlist.title[0],
+          items: itemsArray,
+        };
+
+        // save/update the playlist locally
+        await savePlaylist(UUID, playlistJSON.title, playlistJSON.items, true);
+
+        return playlistJSON;
+      }
+    }
   }
   if (isLocalStorageEmpty(PLAYLIST_KEY)) {
     // create new JSON for local localStorage
@@ -205,6 +265,15 @@ export function changeSelectedNavbar(navButtonSelector) {
   navCategories.classList.add('nav-selected');
   navCategories.classList.remove('nav-unselected');
   main.textContent = '';
+}
+
+export async function popuplateLocal() {
+  const activities = await fetch(`users/${user()}/activities`).then((res) => {
+    return res.json();
+  });
+  for (let item of activities.data) {
+    await getActivtyFromID(item.activity_id);
+  } // popuplates local storage with upto date sever infromation
 }
 
 export const user = () => localStorage.getItem(USER_KEY) ?? null;

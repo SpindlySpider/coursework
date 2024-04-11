@@ -23,3 +23,12 @@ export async function uniqueID(tableName, idName, UUID) {
   const selection = await db.all(selectStatement);
   return selection.length === 0;
 }
+
+export async function uniqueOrderNumber(playlistID, orderNumber) {
+  // only use this server side
+  // checks if an order number is already assigned
+  const db = await databaseConnect;
+  const selectStatement = `SELECT * FROM PlaylistActivityRelation WHERE playlist_id = "${playlistID}" AND orderNumber = ${orderNumber} `;
+  const selection = await db.all(selectStatement);
+  return selection.length === 0;
+}

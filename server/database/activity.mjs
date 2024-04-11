@@ -50,9 +50,6 @@ export async function updateActivity(
   createdBy,
 ) {
   const db = await databaseConnect;
-  // if (!(await uniqueID('Activities', 'activity_id', UUID))) {
-  //   return;
-  // }
   const statement = await db.run(
     'UPDATE Activities SET title = ?, description = ? , duration = ?, created_by = ? WHERE activity_id = ?',
     title,

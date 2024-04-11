@@ -4,6 +4,7 @@ import {
   PLAYLIST_KEY,
   USER_KEY,
   changeSelectedNavbar,
+  popuplateLocal,
   user,
 } from '../web_componets/utilities.mjs';
 const el = {};
@@ -59,6 +60,7 @@ async function signOut() {
 
 async function signIn(accountKey) {
   localStorage[USER_KEY] = accountKey;
+  await popuplateLocal();
   await displayProfiles();
 }
 prepareHandles();

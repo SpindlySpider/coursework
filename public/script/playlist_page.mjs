@@ -28,49 +28,11 @@ export async function displayPlaylistPage() {
   el.main.appendChild(menu);
   menu.append(customActivties);
 
-  let playlists = getAllCustomActivites(PLAYLIST_KEY);
-  if (playlists == null || Object.keys(playlists).length == 0) {
-    let emptyMessage = document.createElement('p');
-    emptyMessage.textContent =
-      'press the + at the bottom to make a new playlist';
-    emptyMessage.classList.add('menu-item');
-    menu.append(emptyMessage);
-    return;
-  }
-
-  const localPlaylists = JSON.parse(localStorage['playlist']);
-  for (let item of Object.keys(JSON.parse(localStorage['playlist']))) {
-    // extract out the playlist feature to error check
-    const container = document.createElement('li');
-    container.classList.add('category-item');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'row';
-    const entry = document.createElement('h2');
-    entry.textContent = localPlaylists[item].title;
-    entry.dataset.id = item;
-    entry.classList.add('menu-item');
-
-    entry.addEventListener('click', () => {
-      edit_playlist(entry);
-    });
-
-    menu.append(container);
-    container.append(entry);
-
-    if (localPlaylists[item].items.length !== 0) {
-      const play = document.createElement('button');
-      play.textContent = 'start';
-      container.append(play);
-      play.addEventListener('click', () => {
-        startTimer(entry);
-      });
-    }
-  }
-  // ------------------------
-  playlists = await fetch(`/users/${user()}/playlists`).then((res) => {
+  // need to see from local storage incase your offline
+  const playlists = await fetch(`/users/${user()}/playlists`).then((res) => {
     return res.json();
   });
-  console.log(playlists.data);
+  console.log(playlists);
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
     const playlistDetails = await fetch(`playlist/${item.playlist_id}`).then(
@@ -85,11 +47,11 @@ export async function displayPlaylistPage() {
     container.style.flexDirection = 'row';
     const entry = document.createElement('h2');
     entry.textContent = playlistDetails.title[0].title;
-    entry.dataset.id = item;
+    entry.dataset.id = item.playlist_id;
     entry.classList.add('menu-item');
 
-    entry.addEventListener('click', () => {
-      edit_playlist(entry);
+    entry.addEventListener('click', async () => {
+      await editPlaylist(entry);
     });
 
     menu.append(container);
@@ -113,17 +75,18 @@ function startTimer(entry) {
   console.log(timer.timerList);
 }
 
-async function edit_playlist(entry) {
+async function editPlaylist(entry) {
   console.log(`edit ${entry.dataset.id}`);
   let editMenu = document.createElement('new-playlist-menu');
   await editMenu.attachTemplate();
   el.main.append(editMenu);
   const playlist = await getPlaylist(entry.dataset.id);
   // since the on connect call back is async it ensure all of it is connected
+  console.log('playlist', playlist.title.title);
   editMenu.activityItems = playlist.items;
-  editMenu.nameInput.value = playlist.title;
+  editMenu.nameInput.value = playlist.title.title;
   editMenu.UUID = entry.dataset.id;
   editMenu.playlistCreationTool();
-  editMenu.setTitle(`edit ${playlist.title}`);
+  editMenu.setTitle(`edit ${playlist.title.title}`);
 }
 prepareHandles();

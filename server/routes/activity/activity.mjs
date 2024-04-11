@@ -43,19 +43,9 @@ async function postActivity(req, res) {
   if (req.body.description) {
     description = req.body.description;
   }
-
-  console.log(await uniqueID('Activities', 'activity_id', UUID));
-
   if (await uniqueID('Activities', 'activity_id', UUID)) {
     // if you are trying to save a activity with a UUID already in db
     console.log('new');
-    console.log(
-      UUID,
-      req.body.title,
-      description,
-      req.body.duration,
-      req.body.createdBy,
-    );
     await activity.newActivites(
       UUID,
       req.body.title,
@@ -66,13 +56,6 @@ async function postActivity(req, res) {
   } else {
     // this is a new event so construct a new event
     console.log('update');
-    console.log(
-      UUID,
-      req.body.title,
-      description,
-      req.body.duration,
-      req.body.createdBy,
-    );
     await activity.updateActivity(
       UUID,
       req.body.title,

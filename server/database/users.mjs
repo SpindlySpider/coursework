@@ -61,7 +61,6 @@ export async function postUserActivties(userID, activityID) {
     'SELECT * FROM UserActivityRelation WHERE user_id = ? AND activity_id = ?',
     [userID, activityID],
   );
-  console.log('post user activitty', unique);
 
   if (unique.length !== 0) {
     return;
@@ -73,8 +72,24 @@ export async function postUserActivties(userID, activityID) {
 }
 export async function postUserPlaylist(userID, playlistID) {
   const db = await databaseConnect;
+
+  const unique = await db.all(
+    'SELECT * FROM UserPlaylistRelation WHERE user_id = ? AND playlist_id = ?',
+    [userID, playlistID],
+  );
+
+  if (unique.length !== 0) {
+    return;
+  }
   await db.run('INSERT INTO UserPlaylistRelation VALUES (?,?)', [
     userID,
     playlistID,
   ]);
+}
+export async function deleteUserPlaylist(playlistID) {
+  const db = await databaseConnect;
+  await db.run(
+    'DELETE FROM UserPlaylistRelation WHERE playlist_id = ?',
+    playlistID,
+  );
 }

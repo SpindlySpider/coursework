@@ -53,6 +53,11 @@ async function postUserActivities(req, res) {
   await user.postUserActivties(req.params.id, req.body.activity_id);
   res.status(200).send('success');
 }
+async function postUserPlaylists(req, res) {
+  // console.log(req.params.id, req.body.activity_id);
+  await user.postUserPlaylist(req.params.id, req.body.playlist_id);
+  res.status(200).send('success');
+}
 
 router.get('/', sendUsersList);
 router.get('/:id', getUser);
@@ -61,5 +66,6 @@ router.get('/:id/activities', getUserActivities);
 router.put('/:id', express.json(), updateUser);
 router.post('/', postUser);
 router.post('/:id/activities', express.json(), postUserActivities);
+router.post('/:id/playlists', express.json(), postUserPlaylists);
 router.delete('/:id', removeUser);
 router.delete('/:id/:playlist_id', removePlaylist);
