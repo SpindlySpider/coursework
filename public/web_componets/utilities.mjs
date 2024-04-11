@@ -2,6 +2,7 @@ const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const ACTIVTIES_KEY = 'activites';
 export const PLAYLIST_KEY = 'playlist';
 export const USER_KEY = 'account';
+export const TAG_KEY = 'tag';
 
 export async function saveActivty(
   UUID,

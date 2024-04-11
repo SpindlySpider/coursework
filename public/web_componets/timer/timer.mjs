@@ -57,7 +57,6 @@ export default class TimerComponent extends HTMLElement {
       return;
     }
     await this.attachTemplate();
-    this.initilized = true;
   }
 
   destorySelf() {

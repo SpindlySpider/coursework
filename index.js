@@ -10,7 +10,10 @@ app.get('/', (request, response) => {
   app.use(express.static('public'));
   response.sendFile(`${import.meta.dirname}/public`);
 });
-
+app.get('/tags', (req, res) => {
+  app.use(express.static('public'));
+  res.sendFile(`${import.meta.dirname}/public/tags.html`);
+});
 app.use('/users', userRouter);
 app.use('/playlist', playlistRouter);
 app.use('/activities', activtiyRouter);
