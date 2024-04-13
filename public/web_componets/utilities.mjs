@@ -22,16 +22,12 @@ export async function saveActivty(
       duration,
       createdBy: user(),
     };
-    console.log(payload);
-
+    console.log('palyload', payload);
     const activityResponse = await fetch('activities/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-
-    console.log('running next');
-
     const attachUserResponse = await fetch(`users/${user()}/activities`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -112,6 +108,7 @@ export async function getActivtyFromID(UUID) {
           true,
         );
         return activityJSON;
+        cachedTags;
       }
     }
   }
@@ -276,5 +273,52 @@ export async function popuplateLocal() {
     await getActivtyFromID(item.activity_id);
   } // popuplates local storage with upto date sever infromation
 }
+export async function saveTag(UUID, KEY, tagName, fromServer) {
+  const online = true; // implement later
+  const saveDestination = KEY === ACTIVTIES_KEY ? 'activity' : 'playlist';
+  if (user() && online && !fromServer) {
+    // checks if the user is logged in to an account
+    const payload = { tag_name: tagName };
+    const response = await fetch(`tags/${UUID}/${saveDestination}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  }
+  if (isLocalStorageEmpty(TAG_KEY)) {
+    // create new JSON for local localStorage
+    localStorage[TAG_KEY] = JSON.stringify({});
+  }
+  const cachedTags = JSON.parse(localStorage[TAG_KEY]);
+  if (cachedTags[tagName] === undefined) {
+    const newTag = {
+      [ACTIVTIES_KEY]: [],
+      [PLAYLIST_KEY]: [],
+    };
+    cachedTags[tagName] = newTag;
+  }
+  cachedTags[tagName][KEY].push(UUID);
+  localStorage[TAG_KEY] = JSON.stringify(cachedTags);
+  // save it locally here
+}
 
+export function cleanLocalTag(UUID, KEY) {
+  // removes this UUID from all instances of tags
+  const cleanDestination = KEY === ACTIVTIES_KEY ? ACTIVTIES_KEY : PLAYLIST_KEY;
+  if (isLocalStorageEmpty(TAG_KEY)) {
+    // create new JSON for local localStorage
+    localStorage[TAG_KEY] = JSON.stringify({});
+    return;
+  }
+  const cachedTags = JSON.parse(localStorage[TAG_KEY]);
+  for (let tag of Object.keys(cachedTags)) {
+    console.log('key', tag);
+    console.log('local', cachedTags[tag][cleanDestination]);
+    cachedTags[tag][cleanDestination] = cachedTags[tag][
+      cleanDestination
+    ].filter((item) => item !== UUID);
+  }
+  localStorage[TAG_KEY] = JSON.stringify(cachedTags);
+  // save it locally here
+}
 export const user = () => localStorage.getItem(USER_KEY) ?? null;

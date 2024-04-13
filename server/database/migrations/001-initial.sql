@@ -6,8 +6,7 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE Tags(
-  tags_id CHAR(36) PRIMARY KEY,
-  name TEXT NOT NULL
+  tag_name TEXT PRIMARY KEY
 );
 
 CREATE TABLE Playlist(
@@ -44,18 +43,18 @@ CREATE TABLE UserPlaylistRelation(
 
 CREATE TABLE PlaylistTagRelation(
   playlist_id CHAR(36) NOT NULL,
-  tags_id CHAR(36) NOT NULL,
+  tag_name TEXT NOT NULL,
   FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
-  FOREIGN KEY (tags_id) REFERENCES Tags(tags_id),
-  PRIMARY KEY (playlist_id,tags_id)
+  FOREIGN KEY (tag_name) REFERENCES Tags(tag_name),
+  PRIMARY KEY (tag_name,playlist_id)
 );
 
 CREATE TABLE ActivityTagRelation(
   activity_id CHAR(36) NOT NULL,
-  tags_id CHAR(36) NOT NULL,
+  tag_name TEXT NOT NULL,
   FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
-  FOREIGN KEY (tags_id) REFERENCES Tags(tags_id),
-  PRIMARY KEY (activity_id,tags_id)
+  FOREIGN KEY (tag_name) REFERENCES Tags(tag_name),
+  PRIMARY KEY (tag_name,activity_id)
 );
 
 CREATE TABLE PlaylistActivityRelation(

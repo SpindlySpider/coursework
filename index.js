@@ -1,6 +1,7 @@
 import { router as userRouter } from './server/routes/users/users.mjs';
 import { router as playlistRouter } from './server/routes/playlist/playlist.mjs';
 import { router as activtiyRouter } from './server/routes/activity/activity.mjs';
+import { router as tagRouter } from './server/routes/tags/tags.mjs';
 import { generateUUID } from './server/server_utilities.js';
 import express from 'express';
 const app = express();
@@ -10,10 +11,7 @@ app.get('/', (request, response) => {
   app.use(express.static('public'));
   response.sendFile(`${import.meta.dirname}/public`);
 });
-app.get('/tags', (req, res) => {
-  app.use(express.static('public'));
-  res.sendFile(`${import.meta.dirname}/public/tags.html`);
-});
+app.use('/tags', tagRouter);
 app.use('/users', userRouter);
 app.use('/playlist', playlistRouter);
 app.use('/activities', activtiyRouter);

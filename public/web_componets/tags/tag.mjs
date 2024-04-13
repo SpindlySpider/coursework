@@ -8,6 +8,9 @@ class TagComponent extends HTMLElement {
   }
 
   async attachTemplate() {
+    if (this.initilized) {
+      return;
+    }
     // setting up DOM
     this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(this.shadow, './tags/tag.html');
@@ -31,12 +34,14 @@ class TagComponent extends HTMLElement {
       return;
     }
     await this.attachTemplate();
+    this.initilized = true;
   }
 
   handleTagAdd(e) {
     if (e.key === 'Enter') {
       this.addTag(this.inputField.value);
       this.itemList.prepend(this.inputField);
+      this.inputField.focus();
     }
   }
 

@@ -6,6 +6,8 @@ import {
   saveActivty,
   formatedSeconds,
   getAllCustomActivites,
+  saveTag,
+  cleanLocalTag,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -44,7 +46,6 @@ export class Entry extends newActivtyMenu {
       return;
     }
     await this.attachTemplate();
-    this.initilized = true;
   }
 
   thumbnailDescription() {
@@ -68,6 +69,7 @@ export class Entry extends newActivtyMenu {
     }
     this.shadow = this.attachShadow({ mode: 'open' });
     this.entryThumbnail = document.createElement('ul');
+    console.log('entry:', this.entryID);
     this.entryJSON = await getActivtyFromID(this.entryID);
     this.entryName = document.createElement('h3');
     this.entryName.textContent = this.entryJSON.title;
@@ -116,6 +118,7 @@ export class Entry extends newActivtyMenu {
     this.setTitle(`edit ${this.entryJSON.title}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
+    // await this.tags.attachTemplate();
     this.timeInput.setDuration(this.seconds);
     this.parentNode.append(this);
     this.nameInput.value = this.entryJSON.title;
@@ -125,16 +128,18 @@ export class Entry extends newActivtyMenu {
     setTimeout(this.pullupAnimation.bind(this), 25, 90);
   }
 
-  saveNewActivty() {
+  async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
     const description = this.descriptionInput.value;
     const duration = this.timeInput.getDuration();
     const UUID = this.entryID;
-    saveActivty(UUID, title, description, duration);
-
+    await saveActivty(UUID, title, description, duration, false);
+    cleanLocalTag(UUID, ACTIVTIES_KEY);
+    for (let tag of this.tags.getTags()) {
+      await saveTag(UUID, ACTIVTIES_KEY, tag, false);
+    }
     document.querySelector('#main-content').textContent = '';
-
     this.destorySelf();
   }
 }
