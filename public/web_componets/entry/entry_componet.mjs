@@ -6,8 +6,10 @@ import {
   saveActivty,
   formatedSeconds,
   getAllCustomActivites,
-  saveTag,
+  saveTags,
   cleanLocalTag,
+  getTags,
+  TAG_KEY,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -104,10 +106,14 @@ export class Entry extends newActivtyMenu {
     this.backButton.textContent = 'delete';
     this.addButton.textContent = 'cancel';
   }
+  async getTags(){
+    cleanLocalTag(this.entryID,ACTIVTIES_KEY)
+    const tags = await getTags(this.entryID,ACTIVTIES_KEY)
+    this.tags.setTags(tags)
+  }
 
   async eventOptionsBottomSheet() {
     // creates a event options pop up
-    // this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
       '../../web_componets/bottom-sheet/bottomsheet.html',
@@ -118,8 +124,8 @@ export class Entry extends newActivtyMenu {
     this.setTitle(`edit ${this.entryJSON.title}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
-    // await this.tags.attachTemplate();
     this.timeInput.setDuration(this.seconds);
+    await this.getTags()
     this.parentNode.append(this);
     this.nameInput.value = this.entryJSON.title;
     this.descriptionInput.value = this.entryJSON.description;
@@ -136,9 +142,7 @@ export class Entry extends newActivtyMenu {
     const UUID = this.entryID;
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
-    for (let tag of this.tags.getTags()) {
-      await saveTag(UUID, ACTIVTIES_KEY, tag, false);
-    }
+    await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     document.querySelector('#main-content').textContent = '';
     this.destorySelf();
   }

@@ -2,7 +2,7 @@ import {
   saveActivty,
   getUUID,
   fetchTemplate,
-  saveTag,
+  saveTags,
   ACTIVTIES_KEY,
   cleanLocalTag,
 } from '../utilities.mjs';
@@ -106,7 +106,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     }, 300);
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() { }
 
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
@@ -117,9 +117,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     console.log(UUID, title, description, duration);
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
-    for (let tag of this.tags.getTags()) {
-      await saveTag(UUID, ACTIVTIES_KEY, tag, false);
-    }
+    await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     this.destorySelf();
   }
 }
