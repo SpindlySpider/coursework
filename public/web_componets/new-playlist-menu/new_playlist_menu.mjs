@@ -32,7 +32,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   prepareHandles() {
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
-    this.addButton.textContent = 'add activity';
+    this.addButton.textContent = '+exercise';
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
   }
@@ -132,7 +132,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   async customActivitesSelection() {
-    setTimeout(this.pullupAnimation.bind(this), 50, 90);
+    setTimeout(this.pullupAnimation.bind(this), 50, 78);
     this.cleanContent();
     console.log('add activity');
     this.nameInput.style.display = 'none';

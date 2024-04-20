@@ -1,13 +1,20 @@
 <!doctype html>
 <template>
   <style>
+    *{
+      --text-colour:black;
+      --background-colour:white;
+    }
     input {
       outline: none;
-      border: 1px solid white;
+      border: 0.5vw solid var(--text-colour);
+      color: var(--text-colour);
+      background-color: var(--background-colour);
       text-align: center;
       box-sizing: border-box;
       font-size: 1.4em;
       width: 2em;
+      border-radius: 5vw;
     }
 
     #content {
@@ -17,35 +24,16 @@
 
     p {
       right: 0;
+      color: var(--text-colour);
+      font-size: 6vw;
     }
   </style>
   <div id="content">
-    <input
-      type="number"
-      id="hour"
-      value="00"
-      class="duration_input"
-      min="0"
-      max="10"
-    />
+    <input type="number" id="hour" value="00" class="duration_input" min="0" max="10" />
     <p>:h</p>
-    <input
-      type="number"
-      id="minute"
-      value="00"
-      class="duration_input"
-      min="00"
-      max="59"
-    />
+    <input type="number" id="minute" value="00" class="duration_input" min="00" max="59" />
     <p>:m</p>
-    <input
-      type="number"
-      id="seconds"
-      value="00"
-      class="duration_input"
-      min="00"
-      max="59"
-    />
+    <input type="number" id="seconds" value="00" class="duration_input" min="00" max="59" />
     <p>:s</p>
   </div>
 </template>

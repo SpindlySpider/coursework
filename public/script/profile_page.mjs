@@ -4,6 +4,7 @@ import {
   PLAYLIST_KEY,
   USER_KEY,
   changeSelectedNavbar,
+  createButton,
   popuplateLocal,
   user,
 } from '../web_componets/utilities.mjs';
@@ -19,28 +20,30 @@ export async function displayProfiles() {
   const users = await fetch('users/').then((res) => {
     return res.json();
   });
+  const para = document.createElement("h1")
+  para.classList.add("menu-title")
+  para.textContent = "users"
+  el.main.append(para);
 
   if (user()) {
     console.log(user());
     const account = await fetch(`users/${user()}`).then((res) => {
       return res.json();
     });
-    console.log(account);
-    console.log(account.data[0].username);
     const text = document.createElement('h1');
-    const signInbutton = document.createElement('button');
-    signInbutton.textContent = 'sign out';
+    const signOutbutton = createButton('sign out');
+    text.classList.add("menu-title")
     text.textContent = `hello ${account.data[0].username}`;
-    signInbutton.addEventListener('click', signOut);
+    signOutbutton.addEventListener('click', signOut);
+    signOutbutton.style.width = "34vw"
     el.main.append(text);
-    el.main.append(signInbutton);
+    el.main.append(signOutbutton);
     return;
   }
-  console.log(users);
   for (let user of users.data) {
     const userPara = document.createElement('li');
-    const signInbutton = document.createElement('button');
-    signInbutton.textContent = 'login';
+    userPara.classList.add("menu-item")
+    const signInbutton = createButton('login');
     userPara.textContent = user.username;
     userPara.dataset.id = user.user_id;
     signInbutton.addEventListener('click', () => {

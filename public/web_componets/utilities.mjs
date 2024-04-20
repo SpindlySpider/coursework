@@ -4,6 +4,22 @@ export const PLAYLIST_KEY = 'playlist';
 export const USER_KEY = 'account';
 export const TAG_KEY = 'tag';
 
+
+
+export function createButton(name) {
+  const button = document.createElement('button');
+  button.textContent = name;
+  button.style.alignSelf = "center";
+  button.style.fontSize = "5vw";
+  button.style.backgroundColor = "var(--button-colour)";
+  button.style.padding = "1vw";
+  button.style.border = "1px none";
+  button.style.borderRadius = "2vw";
+  button.style.margin = "2vw"
+  button.style.width = "14vw"
+  return button
+}
+
 export async function saveActivty(
   UUID,
   title,

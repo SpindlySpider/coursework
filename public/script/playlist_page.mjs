@@ -3,6 +3,7 @@ import {
   PLAYLIST_KEY,
   USER_KEY,
   changeSelectedNavbar,
+  createButton,
   getActivtyFromID,
   getAllCustomActivites,
   getPlaylist,
@@ -13,6 +14,7 @@ function prepareHandles() {
   el.main = document.querySelector('#main-content');
   el.navbar = document.querySelector('#navbar');
 }
+
 
 export async function displayPlaylistPage() {
   changeSelectedNavbar('#workout-playlist');
@@ -40,24 +42,25 @@ export async function displayPlaylistPage() {
     );
     console.log(playlistDetails, item);
     const container = document.createElement('li');
-    container.classList.add('category-item');
     container.style.display = 'flex';
+    container.style.overflowWrap = "anywhere"
     container.style.flexDirection = 'row';
+    container.style.width = '90vw';
     const entry = document.createElement('h2');
     entry.textContent = playlistDetails.title[0].title;
+    entry.style.width = "75%";
     entry.dataset.id = item.playlist_id;
     entry.classList.add('menu-item');
-
-    entry.addEventListener('click', async () => {
-      await editPlaylist(entry);
-    });
+    const edit = createButton("edit");
 
     menu.append(container);
     container.append(entry);
-
+    container.append(edit);
+    edit.addEventListener('click', async () => {
+      await editPlaylist(entry);
+    });
     if (playlistDetails.activites.length !== 0) {
-      const play = document.createElement('button');
-      play.textContent = 'start';
+      const play = createButton("start");
       container.append(play);
       play.addEventListener('click', async () => {
         await startTimer(entry);

@@ -3,8 +3,10 @@
   --nav-bar-item-color: grey;
   --nav-bar-item-selected: white;
   --activty-popup-background-color: red;
-  --main-content-background-color: #171717;
+  --main-content-background-color: white;
+  --text-colour:black;
   --onclick-colour: red;
+  --button-colour: #589aff;
 }
 .dragging {
   opacity: 0%;
@@ -20,7 +22,8 @@
 }
 .menu-title {
   display: flex;
-  font-size: 14vw;
+  font-size: 18vw;
+  text-align: center;
 }
 .nav-selected {
   background-color: var(--nav-bar-item-selected);
@@ -30,7 +33,7 @@
 }
 .menu-item {
   display: flex;
-  font-size: 5vw;
+  font-size: 10vw;
 }
 
 #playlist-items {
@@ -58,7 +61,7 @@
 #main-content {
   display: flex;
   justify-content: center;
-  color: white;
+  color: var(--text-colour);
   font-family: Syne, sans-serif;
   flex-direction: column;
   align-items: center;
@@ -78,6 +81,9 @@ body {
 }
 .category-item {
   margin: 10px;
+  justify-content: center;
+  background-color: var(--button-colour);
+  border-radius: 2vw;
 }
 .category-item:hover {
   transition: color 0.2s;
@@ -93,6 +99,7 @@ body {
   z-index: 9999;
   width: 100vw;
   height: 100vh;
+  background-color: #000000b2;
 }
 .create-popup {
   display: flex;
@@ -109,6 +116,7 @@ body {
   padding: 5vw;
   background-color: white;
   margin: 2vh;
+  border-radius: 4vw;
 }
 .hidden {
   display: none;

@@ -18,12 +18,15 @@ export class bottomSheetMenu extends HTMLElement {
     this.deleteButton = this.shadow.querySelector('#bottomsheet-delete');
     this.disableNavbarBorder();
   }
+
   disableNavbarBorder() {
     document.querySelector('#navbar').classList.remove('border-active');
   }
+
   enableNavbarBorder() {
     document.querySelector('#navbar').classList.add('border-active');
   }
+
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
     if (this.initilized) {
@@ -71,8 +74,9 @@ export class bottomSheetMenu extends HTMLElement {
   }
 
   setTitle(str) {
-    // console.log('i listen');
     this.customTitle.textContent = str;
   }
+
+
 }
 customElements.define('bottom-sheet-menu', bottomSheetMenu);
