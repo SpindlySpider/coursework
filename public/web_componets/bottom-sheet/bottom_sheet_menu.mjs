@@ -6,6 +6,7 @@ export class bottomSheetMenu extends HTMLElement {
     super();
     this.initilized = false;
   }
+
   bottomSheetPrepareHandles() {
     // this is so that sub classes can set up query selectors
     this.content = this.shadow.querySelector('#bottomsheet-content');

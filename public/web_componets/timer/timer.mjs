@@ -1,5 +1,5 @@
 import { displayPlaylistPage } from '../../script/playlist_page.mjs';
-import { fetchTemplate, getActivtyFromID } from '../utilities.mjs';
+import { fetchTemplate } from '../utilities.mjs';
 
 export default class TimerComponent extends HTMLElement {
   constructor() {
@@ -87,7 +87,7 @@ export default class TimerComponent extends HTMLElement {
     if (
       this.getFormatedTimeFromSeconds(
         this.timerList[this.timerIndex].duration,
-      ) == this.getFormatedTimeFromSeconds(this.seconds)
+      ) === this.getFormatedTimeFromSeconds(this.seconds)
     ) {
       if (this.timerList.length - this.timerIndex > 1) {
         // switch over to next activity

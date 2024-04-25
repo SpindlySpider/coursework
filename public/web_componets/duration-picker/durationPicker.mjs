@@ -6,6 +6,7 @@ export class durationPicker extends HTMLElement {
     this.seconds = 0;
     this.initilized = false;
   }
+
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
     if (this.initilized) {
@@ -38,6 +39,7 @@ export class durationPicker extends HTMLElement {
     }
     return this.seconds;
   }
+
   setDuration(seconds) {
     this.inputList[0].value = Math.floor(seconds / 3600);
     this.inputList[1].value = Math.floor((seconds / 60) % 60);

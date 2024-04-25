@@ -5,11 +5,9 @@ import {
   getActivtyFromID,
   saveActivty,
   formatedSeconds,
-  getAllCustomActivites,
   saveTags,
   cleanLocalTag,
   getTags,
-  TAG_KEY,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -19,10 +17,6 @@ import {
 export class Entry extends newActivtyMenu {
   constructor() {
     super();
-    this.entryID;
-    this.customTitle;
-    this.description;
-
     this.editing = false;
     this.editable = true; // used to make this entry editable
     this.initilized = false;
@@ -106,10 +100,11 @@ export class Entry extends newActivtyMenu {
     this.backButton.textContent = 'delete';
     this.addButton.textContent = 'cancel';
   }
-  async getTags(){
-    cleanLocalTag(this.entryID,ACTIVTIES_KEY)
-    const tags = await getTags(this.entryID,ACTIVTIES_KEY)
-    this.tags.setTags(tags)
+
+  async getTags() {
+    cleanLocalTag(this.entryID, ACTIVTIES_KEY);
+    const tags = await getTags(this.entryID, ACTIVTIES_KEY);
+    this.tags.setTags(tags);
   }
 
   async eventOptionsBottomSheet() {
@@ -125,7 +120,7 @@ export class Entry extends newActivtyMenu {
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
     this.timeInput.setDuration(this.seconds);
-    await this.getTags()
+    await this.getTags();
     this.parentNode.append(this);
     this.nameInput.value = this.entryJSON.title;
     this.descriptionInput.value = this.entryJSON.description;

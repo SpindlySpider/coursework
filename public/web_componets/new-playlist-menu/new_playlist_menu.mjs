@@ -16,7 +16,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     // must do all of the selections within the constructor
     super();
     this.activityItems = [];
-    this.UUID;
     this.nameInput = document.createElement('input');
     this.initilized = false;
   }
@@ -32,7 +31,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   prepareHandles() {
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
-    this.addButton.textContent = '+exercise';
+    this.addButton.textContent = '➕exercise';
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
   }
@@ -50,13 +49,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.bottomSheetPrepareHandles();
     this.prepareHandles();
     this.createButtons();
-    await this.setupEventListeners();
+    this.setupEventListeners();
     this.setTitle('new playlist');
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.initilized = true;
   }
 
-  async setupEventListeners() {
+  setupEventListeners() {
     this.addButton.addEventListener(
       'click',
       this.customActivitesSelection.bind(this),
@@ -81,14 +80,22 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   dragOverInsert(event) {
     let yPos = event.clientY;
-    if (event.type == 'touchmove') {
+    if (event.type === 'touchmove') {
       yPos = event.targetTouches[0].clientY;
     }
     event.preventDefault();
     const elementAfter = this.getAfterElement(yPos);
     const draggable = this.shadow.querySelector('.dragging');
+    if(draggable ==null){
+      throw Error("not dragging anything")
+    }
     if (elementAfter == null) {
+      if(this.deleteButton.style.display === "flex"){
+      this.content.insertBefore(draggable, this.deleteButton);
+      }
+      else{
       this.content.appendChild(draggable);
+      }
     } else {
       this.content.insertBefore(draggable, elementAfter);
     }
@@ -111,6 +118,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.nameInput.id = 'playlistTitle';
 
     this.createEmptyPlaylist.textContent = 'create empty playlist';
+    this.deleteButton.textContent = "delete playlist"
     this.importPlaylist.textContent = 'import playlist';
     this.createEmptyPlaylist.type = 'button';
     this.importPlaylist.type = 'button';
@@ -119,6 +127,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.createEmptyPlaylist.classList.add('bottomsheet-content-item');
     this.importPlaylist.classList.add('bottomsheet-content-item');
     this.nameInput.classList.add('bottomsheet-content-item');
+    this.deleteButton.style.backgroundColor = "red"
+    this.deleteButton.style.alignSelf = "flex-end"
     this.nameInput.style.display = 'none';
     this.backButton.style.display = 'none';
     this.content.append(this.createEmptyPlaylist);
@@ -145,7 +155,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     if (customActivties == null || Object.keys(customActivties).length == 0) {
-      let emptyMessage = document.createElement('p');
+      const emptyMessage = document.createElement('p');
       emptyMessage.textContent =
         'press the + at the bottom to make new activties';
       emptyMessage.classList.add('activty-item');
@@ -170,7 +180,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   cleanContent() {
-    let items = this.content.querySelectorAll('.activty-item');
+    const items = this.content.querySelectorAll('.activty-item');
     for (let item of items) {
       item.remove();
     }
@@ -186,7 +196,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
         if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
+          return { offset, element: child };
         } else {
           return closest;
         }
@@ -197,7 +207,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   playlistCreationTool() {
     setTimeout(this.pullupAnimation.bind(this), 50, 75);
-    console.log('donbe');
     this.cleanContent();
     this.nameInput.style.display = 'flex';
     this.doneButton.style.display = 'flex';
@@ -213,9 +222,10 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
 
     if (this.activityItems.length == 0) {
-      let emptyMessage = document.createElement('p');
+      const emptyMessage = document.createElement('p');
       emptyMessage.textContent = 'press add activity to add activties';
       emptyMessage.classList.add('activty-item');
+      this.deleteButton.style.display = 'none';
       this.content.append(emptyMessage);
       return;
     }
@@ -228,6 +238,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.style.justifyContent = 'space-between';
       dragField.textContent = '⋮⋮';
       desciption.style.alignSelf = 'flex-end';
+      desciption.style.overflowWrap = 'anywhere';
       deleteButton.textContent = '🗑️';
       entry.dataset.id = item;
       entry.style.display = 'flex';
@@ -245,6 +256,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.content.append(entry);
       entry.append(name, desciption, deleteButton, dragField);
     }
+    this.content.append(this.deleteButton)
   }
 
   draggingEventListeners(element) {
@@ -262,10 +274,10 @@ export class newPlaylistMenu extends bottomSheetMenu {
     });
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() { }
 
   async saveNewPlaylist() {
-    if (this.UUID == undefined) {
+    if (this.UUID === undefined) {
       this.UUID = await getUUID();
     }
     this.activityItems = [
