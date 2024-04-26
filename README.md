@@ -121,6 +121,13 @@ The response was proved useless because the prompt wasn't specific enough about 
 > how can I integrate QRST here?
 > The suggestion worked with minor modification.
 
+
+### Prompts to understand how to keep code good quaility
+this is a sequence of prompts I have used to try to understand the best way I can go about keeping code clean 
+
+> what is the best way of keeping my code clean when i am defning html elements within jacvascript?
+
+
 ### Prompts to develop GHIJ (exmaple)
 
 For the GHIJ feature I ...

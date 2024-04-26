@@ -3,6 +3,7 @@ import {
   PLAYLIST_KEY,
   deleteFromLocal,
   fetchTemplate,
+  formatedSeconds,
   getAllCustomActivites,
   getUUID,
   savePlaylist,
@@ -34,6 +35,18 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.addButton.textContent = '➕exercise';
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
+    this.extraDetails = document.createElement("div")
+    this.excerciseList = document.createElement("div")
+    this.optionsList = document.createElement("div")
+    this.excerciseList.id = "exercise-list"
+    this.optionsList.id = "options-list"
+    this.excerciseList.style = this.optionsList.style = `border: 0.5vw solid gray; padding: 0; box-shadow: 0px 0.5vw 13px 0.5vw #534747; border-radius: 3vw; margin-bottom: 1vh ;display:none; flex-direction: column;`
+
+    this.playlistDurationText = document.createElement("p");
+    this.playlistDurationText.style.fontSize = "3.5vw"
+    this.playlistDurationText.id = "totalDuration"
+    this.header.parentNode.append(this.extraDetails);
+    this.extraDetails.append(this.playlistDurationText);
   }
 
   async attachTemplate() {
@@ -74,8 +87,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.saveNewPlaylist.bind(this, this.UUID),
     );
     this.deleteButton.addEventListener('click', this.deletePlaylist.bind(this));
-    this.content.addEventListener('dragover', this.dragOverInsert.bind(this));
-    this.content.addEventListener('touchmove', this.dragOverInsert.bind(this));
+    this.excerciseList.addEventListener('dragover', this.dragOverInsert.bind(this));
+    this.excerciseList.addEventListener('touchmove', this.dragOverInsert.bind(this));
   }
 
   dragOverInsert(event) {
@@ -86,18 +99,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
     event.preventDefault();
     const elementAfter = this.getAfterElement(yPos);
     const draggable = this.shadow.querySelector('.dragging');
-    if(draggable ==null){
+    if (draggable == null) {
       throw Error("not dragging anything")
     }
     if (elementAfter == null) {
-      if(this.deleteButton.style.display === "flex"){
-      this.content.insertBefore(draggable, this.deleteButton);
-      }
-      else{
-      this.content.appendChild(draggable);
-      }
+      this.excerciseList.appendChild(draggable);
     } else {
-      this.content.insertBefore(draggable, elementAfter);
+      this.excerciseList.insertBefore(draggable, elementAfter);
     }
   }
 
@@ -129,11 +137,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.nameInput.classList.add('bottomsheet-content-item');
     this.deleteButton.style.backgroundColor = "red"
     this.deleteButton.style.alignSelf = "flex-end"
-    this.nameInput.style.display = 'none';
-    this.backButton.style.display = 'none';
-    this.content.append(this.createEmptyPlaylist);
-    this.content.append(this.importPlaylist);
-    this.content.append(this.nameInput);
+    this.nameInput.style.display = this.backButton.style.display = 'none';
+    this.content.append(this.createEmptyPlaylist, this.importPlaylist, this.nameInput);
+    this.content.append(this.excerciseList, this.optionsList)
   }
 
   addEntryToList(entry) {
@@ -143,13 +149,16 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   async customActivitesSelection() {
     setTimeout(this.pullupAnimation.bind(this), 50, 78);
+    this.playlistDurationText = this.shadow.querySelector("#totalDuration")
     this.cleanContent();
+    this.excerciseList.style.display = "flex"
     console.log('add activity');
     this.nameInput.style.display = 'none';
     this.cancel.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.style.display = 'none';
     this.deleteButton.style.display = 'none';
+    this.playlistDurationText.style.display = "none";
     this.backButton.style.display = 'flex';
     this.setTitle('add activity');
 
@@ -175,19 +184,19 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.classList.add('activty-item');
       entry.classList.add('clickable');
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
-      this.content.append(entry);
+      this.excerciseList.append(entry);
     }
   }
 
   cleanContent() {
-    const items = this.content.querySelectorAll('.activty-item');
+    const items = this.excerciseList.querySelectorAll('.activty-item');
     for (let item of items) {
       item.remove();
     }
   }
 
   getAfterElement(y) {
-    let draggableItems = this.content.querySelectorAll(
+    let draggableItems = this.excerciseList.querySelectorAll(
       '.draggable:not(.dragging)',
     );
     draggableItems = Array.from(draggableItems);
@@ -205,17 +214,71 @@ export class newPlaylistMenu extends bottomSheetMenu {
     ).element;
   }
 
+  createContainer(id) {
+    const container = document.createElement("li")
+    container.style.justifyContent = "space-between"
+    container.id = id
+    return container
+  }
+
+  setupPlaylistOptions() {
+    function createTimeInput(title) {
+      const label = document.createElement("p")
+      const input = document.createElement("input")
+      label.textContent = title
+      input.type = "time"
+      input.step = "600"
+      input.value = "00:00:00"
+      input.style.fontSize = "5vw"
+      return { label, input }
+    }
+    const items = []
+    //number of sets
+    const setContainer = this.createContainer("setContainer")
+    const setInput = document.createElement("input")
+    const setLabel = document.createElement("p")
+    setInput.type = "number"
+    setInput.style.fontSize = "5vw"
+    setInput.placeholder = "num"
+    setInput.style.width = "12vw"
+    setLabel.textContent = "number of sets"
+    setContainer.append(setLabel,setInput)
+    items.push(setContainer)
+    // rests between exercies and the formated text
+    const restTimerContainer = this.createContainer("restTimerContainer")
+    const restTimer = createTimeInput("rest between exercises")
+    this.restTimerLabel = restTimer.label
+    this.restTimer = restTimer.input
+    restTimerContainer.append(this.restTimerLabel, this.restTimer)
+    items.push(restTimerContainer)
+    // rests between sets
+    const setRestContainer = this.createContainer("setRestContainer")
+    const setRest = createTimeInput("rest between sets")
+    this.setRestLabel = setRest.label
+    this.setRestTimer = setRest.input
+    setRestContainer.append(this.setRestLabel, this.setRestTimer)
+    items.push(setRestContainer)
+    // audio option 
+    // vibrate 
+    // difficulty
+    for (let item of items) {
+      item.classList.add("bottomsheet-content-item")
+      this.optionsList.append(item)
+    }
+  }
+
   playlistCreationTool() {
     setTimeout(this.pullupAnimation.bind(this), 50, 75);
     this.cleanContent();
-    this.nameInput.style.display = 'flex';
-    this.doneButton.style.display = 'flex';
+
+    this.duration = 0;
+    const enableList = [this.nameInput, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
+    for (let item of enableList) {
+      item.style.display = "flex"
+    }
     this.backButton.style.display = 'none';
-    this.deleteButton.style.display = 'flex';
     this.content.style.height = '0vh';
     this.setTitle('create new workout');
-    this.addButton.style.display = 'flex';
-    this.cancel.style.display = 'flex';
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
 
@@ -227,6 +290,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       emptyMessage.classList.add('activty-item');
       this.deleteButton.style.display = 'none';
       this.content.append(emptyMessage);
+      this.excerciseList.style.display = this.optionsList.style.display = "none"
       return;
     }
     for (let item of this.activityItems) {
@@ -239,24 +303,46 @@ export class newPlaylistMenu extends bottomSheetMenu {
       dragField.textContent = '⋮⋮';
       desciption.style.alignSelf = 'flex-end';
       desciption.style.overflowWrap = 'anywhere';
+      this.playlistDurationText = document.createElement("p");
       deleteButton.textContent = '🗑️';
       entry.dataset.id = item;
       entry.style.display = 'flex';
       entry.style.flexDirection = 'row';
       name.textContent = customActivties[item].title;
       desciption.textContent = customActivties[item].description;
+      this.duration += customActivties[item].duration
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('draggable');
       deleteButton.addEventListener('click', () => {
+        this.duration -= customActivties[item].duration
+        this.updatePlaylistDuration()
         entry.remove();
+
       });
       entry.draggable = true;
       entry.classList.add('activty-item');
       this.draggingEventListeners(entry);
-      this.content.append(entry);
+      this.excerciseList.append(entry);
       entry.append(name, desciption, deleteButton, dragField);
     }
+    this.updatePlaylistDuration();
+    this.setupPlaylistOptions();
     this.content.append(this.deleteButton)
+  }
+
+  updatePlaylistDuration() {
+    const text = this.shadow.querySelector("#totalDuration")
+    if (this.duration <= 0) {
+      text.textContent = ""
+      return
+    }
+    const duration = formatedSeconds(this.duration);
+    const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
+    const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
+    const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
+    text.textContent = ` total time :⏱︎ ${hour}${mins}${secs}`
+    console.log(this.playlistDurationText.textContent)
+    console.log(this.playlistDurationText)
   }
 
   draggingEventListeners(element) {

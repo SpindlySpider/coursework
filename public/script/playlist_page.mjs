@@ -1,11 +1,7 @@
-import { newPlaylistMenu } from '../web_componets/new-playlist-menu/new_playlist_menu.mjs';
 import {
-  PLAYLIST_KEY,
-  USER_KEY,
   changeSelectedNavbar,
   createButton,
   getActivtyFromID,
-  getAllCustomActivites,
   getPlaylist,
   user,
 } from '../web_componets/utilities.mjs';
@@ -46,6 +42,9 @@ export async function displayPlaylistPage() {
     container.style.overflowWrap = "anywhere"
     container.style.flexDirection = 'row';
     container.style.width = '90vw';
+    container.style.border = "0.5vw solid var(--border-colour)"
+    container.style.borderRadius = "1vw"
+    container.style.padding = "2vw"
     const entry = document.createElement('h2');
     entry.textContent = playlistDetails.title[0].title;
     entry.style.width = "75%";
