@@ -1,15 +1,15 @@
+import { randomInt, randomUUID } from "crypto";
+import EventEmitter from "events";
 import fs from "fs"
 import { stringify } from "querystring";
-export async function multibodyParser(req, res) {
+
+export async function multibodyParser(req, res,id,emitter) {
+  // handle emptry file here
   let requestString = stringify(req)
   requestString = requestString.replace(/\&/g, '\n')
   let bufferChunks = []
-  let receivedFirstChunk = false
   console.log(req.rawHeaders)
-  // const header = createHeadersFromRaw(req.rawHeaders)
-  // const bounaries = getBoundary(header)
   req.on("data", (chunk) => {
-    // console.log("chunk", chunk)
     bufferChunks.push(chunk)
   })
 
@@ -21,18 +21,22 @@ export async function multibodyParser(req, res) {
       currentIndex = buffer.indexOf("\n", currentIndex) + 1
     }
     console.log(currentIndex)
+    // split buffer into content and header
     let [header, content] = splitString(buffer, currentIndex);
     console.log(header.toString())
     const filename = header.toString().match(/filename="([a-zA-Z0-9\-]*)(.*)"/g)
     const extention = filename.toString().match(/(\.)(?!.*\.)\w*/g).toString();
-    // console.log(req.body.fileType)
+    // extract file extention
+    // logger(content, `chuck${extention}`)
+    //save file
 
-
-
-    // after the 4th line break
-    logger(content, `chuck${extention}`)
+    const URL = `${import.meta.dirname}/../../photos/${id}${extention}`
+    fs.writeFile(URL, content, () => { })
+    console.log("file upload",URL)
+    emitter.emit("upload-success",URL)
+    // fs.writeFile(`${import.meta.dirname}/${crypto.randomUUID()}${extention}`, content, () => { })
+    // res.status(200).send("saved image")
   })
-  logger(requestString, "logger.txt")
 }
 
 function splitString(string, index) {
@@ -41,35 +45,6 @@ function splitString(string, index) {
   return [substring1, substring2]
 }
 
-// function createHeadersFromRaw(rawHeaders) {
-//   let headerJSON = {}
-//   const keyList = []
-//   const attributeList = []
-//   // filter list into two things, headers and content
-//   for (let i = 0; i < rawHeaders.length; i++) {
-//     if (i % 2 === 0) {
-//       keyList.push(rawHeaders[i].toUpperCase())
-//     }
-//     else {
-//       attributeList.push(rawHeaders[i])
-//     }
-//   }
-//   for (let i = 0; i < rawHeaders.length / 2; i++) {
-//     headerJSON[keyList[i]] = attributeList[i]
-//   }
-//   return headerJSON
-// }
-//
-// function getBoundary(header) {
-//   const contentType = header["CONTENT-TYPE"]
-//   const bounaries = contentType.split("boundary=");
-//   console.log("bounding string", bounaries[1])
-//   return bounaries[1]
-//
-// }
-
 async function logger(string, filename) {
   fs.writeFile(`${import.meta.dirname}/${filename}`, string, () => { })
-  // fs.appendFile(`${import.meta.dirname}/logger.txt`, string, () => {
-
 }

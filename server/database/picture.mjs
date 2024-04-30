@@ -23,7 +23,7 @@ export async function uploadPicture(UUID, pictureURL, altText, activityID) {
 
 export async function getPictureFromID(UUID) {
   const db = await databaseConnect;
-  return db.all('SELECT url FROM pictures WHERE picture_id = ?', UUID);
+  return db.get('SELECT url FROM pictures WHERE picture_id = ?', UUID);
 }
 
 export async function getPicturesOfActivity(UUID){

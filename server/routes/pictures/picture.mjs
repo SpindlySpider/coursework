@@ -1,38 +1,39 @@
 import express from 'express';
 import * as picture from '../../database/picture.mjs';
-import { generateUUID } from '../../server_utilities.js';
+import EventEmitter from "events";
 import { multibodyParser } from './multibody_praser.mjs';
+import path from 'path';
 export const router = express.Router();
 
 async function sendActivityPictures(req, res) {
-  const picsIDs = picture.getPicturesOfActivity(req.params.id)
+  const picsIDs = await picture.getPicturesOfActivity(req.params.id)
+  // console.log(picsIDs)
   for (let picID of picsIDs) {
-    let pictureURL = picture.getPictureFromID(picID)
-    res.sendFile(pictureURL)
+    let pictureURL = await picture.getPictureFromID(picID.picture_id)
+    // router.use(express.static(`${import.meta.dirname}/../../photos`))
+    res.sendFile(path.resolve(pictureURL.url))
     console.log(import.meta.dirname)
   }
 }
 
 async function postPicture(req, res) {
   // MAKE SURE THAT YOU CAN ONLY UPLOAD JPG PNG AND THAT
-  // SEND THE FILETYPE
   // payload should be {altText, filetype, file}
-  // if (!req.files) {
-  //   res.status(400).send("no file")
-  //   console.log("recieved bad request")
-  //   return
-  // }
-  // const pictureID = generateUUID()
-  // const pictureURL = `${import.meta.dirname}/activity_pictures/${pictureID}${req.body.fileType}`
-  console.log(req.files)
-  multibodyParser(req, res)
-
-  res.send(200)
-  // req.file.mv()
-  // await picture.uploadPicture(pictureID,pictureURL,req.body.altText,req.params.id)
-
+  const emitter = new EventEmitter()
+  const id = crypto.randomUUID()
+  console.log("body", req)
+  await multibodyParser(req, res, id, emitter)
+  emitter.on("upload-success", (url) => {
+    picture.uploadPicture(id, url, req.params.altText, req.params.id)
+    res.status(200).send("file successfully uploaded")
+  })
+}
+async function deletePictureFromActivity(req,res){
+  
 }
 
 router.get('/activity/:id', sendActivityPictures);
-router.post('/:id', postPicture);
+router.post('/:id/:altText', postPicture);
+router.get("/pictures")
+router.delete("/:pictureID",deletePictureFromActivity)
 
