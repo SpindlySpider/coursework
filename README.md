@@ -7,6 +7,7 @@
 - multiple of the same activity title can exist, this is because users may want different versions of the activity, example : squats with differnt times
 
 
+
 - css varaibles are not defined in :root instead they are defined in the * selector, this is because :root varaibles are not avalaible inside template componenets and as such you are not able to define them for each web componenet there. defning them within gives avalaiblity to the entire webcomponenet DOM to use these CSS variables which allows for rapid chanignig of colours 
 
 ## TODO
@@ -46,6 +47,8 @@
 - [ ] readable body svg https://youtu.be/6C-GYwxdZd4 , https://youtu.be/WMqB8sVOCtk
 
 ## Key features
+
+- HOMEMADE IMAGE MULTIPARSER
 
 REMOVE ME: Introduce the key features, paying special attention to the non-code ones. Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.
 

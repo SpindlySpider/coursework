@@ -8,27 +8,37 @@ export async function multibodyParser(req, res) {
   console.log(req.rawHeaders)
   // const header = createHeadersFromRaw(req.rawHeaders)
   // const bounaries = getBoundary(header)
-
-
   req.on("data", (chunk) => {
-    console.log("chunk", chunk)
-    if (!receivedFirstChunk) {
-      receivedFirstChunk = true
-      console.log("got first chunck")
-      // get filetype info out here
-      // return
-    }
-    // console.log("chunk")
+    // console.log("chunk", chunk)
     bufferChunks.push(chunk)
   })
 
   req.on("end", () => {
     //store chunk
-    const buffer = Buffer.from(Buffer.concat(bufferChunks),"utf8")
+    let buffer = Buffer.from(Buffer.concat(bufferChunks), "utf8")
+    let currentIndex = 0
+    for (let i = 0; i < 4; i++) {
+      currentIndex = buffer.indexOf("\n", currentIndex) + 1
+    }
+    console.log(currentIndex)
+    let [header, content] = splitString(buffer, currentIndex);
+    console.log(header.toString())
+    const filename = header.toString().match(/filename="([a-zA-Z0-9\-]*)(.*)"/g)
+    const extention = filename.toString().match(/(\.)(?!.*\.)\w*/g).toString();
+    // console.log(req.body.fileType)
+
+
+
     // after the 4th line break
-    logger(buffer, "chunk.txt")
+    logger(content, `chuck${extention}`)
   })
   logger(requestString, "logger.txt")
+}
+
+function splitString(string, index) {
+  const substring1 = string.slice(0, index);
+  const substring2 = string.slice(index, string.length);
+  return [substring1, substring2]
 }
 
 // function createHeadersFromRaw(rawHeaders) {
