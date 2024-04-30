@@ -26,19 +26,24 @@ export async function getPictureFromID(UUID) {
   return db.get('SELECT url FROM pictures WHERE picture_id = ?', UUID);
 }
 
-export async function getPicturesOfActivity(UUID){
+export async function getPicturesOfActivity(UUID) {
   const db = await databaseConnect;
   return db.all('SELECT picture_id FROM PictureActivitiesRelation WHERE activity_id = ?', UUID);
 
 }
 
-export async function deletePicture(UUID) {
+export async function deletePictureFromActivity(pictureID,activityID) {
   const db = await databaseConnect;
+  console.log(await getPicturesOfActivity(activityID))
+  if (await getPicturesOfActivity(activityID).length === 0) {
+    // the picture isnt realated to any activity
+    await db.run(
+      'DELETE FROM Pictures WHERE picture_id = ?',
+      pictureID)
+    return 
+  }
   await db.run(
-    'DELETE FROM Pictures WHERE picture_id = ?',
-    UUID,)
-  await db.run(
-    'DELETE FROM PictureActivitiesRelation WHERE picture_id = ?',
-    UUID,)
+    'DELETE FROM PictureActivitiesRelation WHERE picture_id = ? AND activity_id = ? ' ,
+    pictureID,activityID)
 }
 

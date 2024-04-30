@@ -8,11 +8,23 @@ export const router = express.Router();
 async function sendActivityPictures(req, res) {
   const picsIDs = await picture.getPicturesOfActivity(req.params.id)
   // console.log(picsIDs)
+  const idList = []
   for (let picID of picsIDs) {
-    let pictureURL = await picture.getPictureFromID(picID.picture_id)
     // router.use(express.static(`${import.meta.dirname}/../../photos`))
-    res.sendFile(path.resolve(pictureURL.url))
-    console.log(import.meta.dirname)
+    // res.send(picID.picture_id)
+    idList.push(picID.picture_id)
+  }
+  res.status(200).send({ picture_ids: idList })
+}
+async function getPictureFromPicID(req, res) {
+  try {
+    let pictureURL = await picture.getPictureFromID(req.params.id)
+    res.set("pictureID", req.params.id)
+    await res.sendFile(path.resolve(pictureURL.url))
+
+  }
+  catch{
+    res.status(404).send("cannot find resource")
   }
 }
 
@@ -21,19 +33,21 @@ async function postPicture(req, res) {
   // payload should be {altText, filetype, file}
   const emitter = new EventEmitter()
   const id = crypto.randomUUID()
-  console.log("body", req)
   await multibodyParser(req, res, id, emitter)
   emitter.on("upload-success", (url) => {
     picture.uploadPicture(id, url, req.params.altText, req.params.id)
     res.status(200).send("file successfully uploaded")
   })
 }
-async function deletePictureFromActivity(req,res){
-  
+async function deletePictureFromActivity(req, res) {
+  await picture.deletePictureFromActivity(req.params.picture_id, req.params.activity_id)
+  res.status(200).send("picture deleted")
+
 }
 
 router.get('/activity/:id', sendActivityPictures);
+router.get('/:id', getPictureFromPicID);
 router.post('/:id/:altText', postPicture);
 router.get("/pictures")
-router.delete("/:pictureID",deletePictureFromActivity)
+router.delete("/:activity_id/:picture_id", deletePictureFromActivity)
 

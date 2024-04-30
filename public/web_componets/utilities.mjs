@@ -59,6 +59,19 @@ export async function saveActivty(
   localStorage.activites = JSON.stringify(cachedActivites);
 }
 
+export async function uploadPhoto(activityID,photoContent,altText){
+    const photoResponse = await fetch(`picture/${activityID}/${altText}`, {
+      method: 'POST',
+      body: photoContent,
+    });
+  if(photoResponse.ok){
+    return "success"
+  }
+  else{
+    return "error"
+  }
+}
+
 export async function deleteFromLocal(UUID, KEY) {
   if (localStorage[KEY] != null) {
     const tempStore = JSON.parse(localStorage[KEY]);

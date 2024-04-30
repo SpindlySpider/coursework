@@ -341,8 +341,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
     const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
     text.textContent = ` total time :⏱︎ ${hour}${mins}${secs}`
-    console.log(this.playlistDurationText.textContent)
-    console.log(this.playlistDurationText)
   }
 
   draggingEventListeners(element) {

@@ -5,6 +5,7 @@ import {
   saveTags,
   ACTIVTIES_KEY,
   cleanLocalTag,
+  uploadPhoto,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import {
@@ -35,6 +36,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.descriptionInput.id = 'descriptionInput';
     this.timeInput.id = 'timeInput';
     this.photoInput.id = 'addPhoto';
+    this.photoInput.type = "file"
     this.tags.id = 'tag';
     this.addButton.textContent = 'cancel';
 
@@ -118,6 +120,13 @@ export class newActivtyMenu extends bottomSheetMenu {
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
+    if (this.photoInput.files.length >= 0) {
+      for (let file of this.photoInput.files) {
+        const input = new FormData()
+        input.append("file",file)
+        await uploadPhoto(UUID,input)
+      }
+    }
     this.destorySelf();
   }
 }
