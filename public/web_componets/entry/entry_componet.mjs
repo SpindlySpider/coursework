@@ -8,6 +8,7 @@ import {
   saveTags,
   cleanLocalTag,
   getTags,
+  createButton,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -44,17 +45,20 @@ export class Entry extends newActivtyMenu {
     await this.attachTemplate();
   }
 
-  thumbnailDescription() {
-    // formats a string such that it will add ... if the description is too long
-    const cutoffPoint = 13; // number of char
-    if (this.entryJSON.description.length > cutoffPoint) {
-      this.description = this.description.slice(0, cutoffPoint - 3) + '...';
-    }
+  getFormatStringTime() {
     const duration = formatedSeconds(this.seconds);
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
     const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
-    this.description = `${this.description} | ⏱︎ ${hour}${mins}${secs}`;
+    return `⏱︎ ${hour}${mins}${secs}`;
+  }
+
+  thumbnailDescription() {
+    // formats a string such that it will add ... if the description is too long
+    const cutoffPoint = 50; // number of char
+    if (this.entryJSON.description.length > cutoffPoint) {
+      this.description = this.description.slice(0, cutoffPoint - 3) + '...';
+    }
     return this.description;
   }
 
@@ -65,18 +69,43 @@ export class Entry extends newActivtyMenu {
     }
     this.shadow = this.attachShadow({ mode: 'open' });
     this.entryThumbnail = document.createElement('ul');
-    console.log('entry:', this.entryID);
+    this.entryThumbnail.id = "entryThumbnail"
+    this.entryThumbnail.style = `display: flex; border: 0.5vw solid black; border-radius: 5vw;flex-direction:column;overflow-wrap: anywhere;`
+    // fetch pictures for this activity from the server here
     this.entryJSON = await getActivtyFromID(this.entryID);
+
     this.entryName = document.createElement('h3');
     this.entryName.textContent = this.entryJSON.title;
     this.seconds = this.entryJSON.duration;
     this.description = this.entryJSON.description;
     this.entryDescription = document.createElement('p');
     this.entryDescription.style = 'margin:0;';
-    this.entryName.style = 'margin:0;';
+    this.entryName.style = 'margin-bottom:0;';
     this.entryDescription.textContent = this.thumbnailDescription();
+    const container = document.createElement('ul');
+    container.style = `display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  height: 10vh;
+  text-align: center;
+  font-size: 8vw;`
+    this.durationDisplay = document.createElement('p');
+    this.editButton = createButton("edit");
+    this.editButton.style = `;
+    align-self: center;
+  font-size: 9vw;
+  background-color: var(--button-colour);
+  padding: 1vw;
+  border: 1px;
+  border-radius: 2vw;
+  margin: 2vw;
+  width: 26vw;`
+    this.durationDisplay.textContent = this.getFormatStringTime()
+    container.append(this.durationDisplay, this.editButton)
+
     this.shadow.append(this.entryThumbnail);
-    this.entryThumbnail.append(this.entryName, this.entryDescription);
+    this.entryThumbnail.append(this.entryName, this.entryDescription, container);
 
     if (this.editable) {
       this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {

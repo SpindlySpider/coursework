@@ -4,11 +4,17 @@
   --nav-bar-item-selected: white;
   --activty-popup-background-color: red;
   --main-content-background-color: white;
-  --text-colour:black;
+  --text-colour: black;
   --onclick-colour: red;
   --button-colour: #589aff;
-  --border-colour:gray;
+  --border-colour: gray;
 }
+
+#titleContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .dragging {
   opacity: 0%;
 }
@@ -18,23 +24,41 @@
   padding: 0;
   margin: 0;
 }
+
+button {
+  align-self: center;
+  font-size: 5vw;
+  background-color: var(--button-colour);
+  padding: 1vw;
+  border: 1px;
+  border-radius: 2vw;
+  margin: 2vw;
+  width: 14vw;
+}
+
+
 .navbar {
   display: flex;
 }
+
 .menu-title {
   display: flex;
   font-size: 18vw;
   text-align: center;
 }
+
 .nav-selected {
   background-color: var(--nav-bar-item-selected);
 }
+
 .nav-unselected {
   background-color: var(--nav-bar-item-color);
 }
+
 .menu-item {
   display: flex;
   font-size: 10vw;
+  justify-content: center;
 }
 
 #playlist-items {
@@ -42,6 +66,7 @@
   align-items: center;
   flex-direction: column;
 }
+
 .bottom-navbar {
   height: 9vh;
   width: 100vw;
@@ -50,15 +75,18 @@
   position: absolute;
   bottom: 0;
 }
+
 .border-active {
   border-top: 2px solid #262626;
 }
+
 .vertical-item-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 #main-content {
   display: flex;
   justify-content: center;
@@ -67,6 +95,7 @@
   flex-direction: column;
   align-items: center;
 }
+
 body {
   background-color: var(--main-content-background-color);
 }
@@ -80,12 +109,14 @@ body {
   margin: 10px;
   width: min(20vw, 10000px);
 }
+
 .category-item {
   margin: 10px;
   justify-content: center;
   background-color: var(--button-colour);
   border-radius: 2vw;
 }
+
 .category-item:hover {
   transition: color 0.2s;
   color: grey;
@@ -102,6 +133,7 @@ body {
   height: 100vh;
   background-color: #000000b2;
 }
+
 .create-popup {
   display: flex;
   justify-content: center;
@@ -112,6 +144,7 @@ body {
   width: 50vw;
   height: 50vh;
 }
+
 .popup-item {
   font-size: 5vw;
   padding: 5vw;
@@ -119,6 +152,7 @@ body {
   margin: 2vh;
   border-radius: 4vw;
 }
+
 .hidden {
   display: none;
 }

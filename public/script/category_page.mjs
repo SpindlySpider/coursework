@@ -7,49 +7,58 @@ import {
 
 const el = {};
 
+function cleanContent() {
+  el.content.textContent = ""
+}
+
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
+  el.content = el.main.querySelector("#categoryContainer")
+  el.title = el.main.querySelector("#customActivtiesCategory")
 }
+
+function setHeader(str) {
+  const title = el.main.querySelector("#customActivtiesCategory")
+  const headerList = el.main.querySelector("#titleContainer")
+  title.textContent = str
+  const backButton = document.createElement("button")
+  backButton.textContent = "back"
+  backButton.classList.add("bottomsheet-content-item")
+  backButton.addEventListener("click",displayCategoryPage)
+  headerList.append(backButton)
+
+}
+
 export async function displayCustomCateogryPage() {
-  if (document.querySelector('bottom-sheet-menu')) {
-    //already have a menu on display
-    return;
-  }
-  const menu = document.createElement('bottom-sheet-menu');
+  cleanContent()
+  setHeader("your exercises")
+
   const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
-  await menu.attachTemplate();
-  menu.addButton.style.display = 'none';
-  menu.setTitle('custom categories');
-  el.main.append(menu);
   if (customActivties == null || Object.keys(customActivties).length == 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent =
       'press the + at the bottom to make new activties';
-    menu.appendEntry(emptyMessage);
+    el.main.appendEntry(emptyMessage);
     return;
   }
   for (let item of Object.keys(customActivties)) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
     entry.entryID = item;
-    await entry.attachTemplate();
-    entry.classList.add('bottomsheet-content-item');
-    menu.appendEntry(entry);
+    entry.classList.add("menu-item")
+    el.content.append(entry);
   }
 }
 
+
+
 async function displayAllActivities() {
-  if (document.querySelector('bottom-sheet-menu')) {
-    // already have a menu on display
-    return;
-  }
   const menu = document.createElement('bottom-sheet-menu');
   const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
   await menu.attachTemplate();
   menu.addButton.style.display = 'none';
   menu.setTitle('all activities');
   el.main.append(menu);
-
   const activities = await fetch(`users/${user()}/activities`).then((res) => {
     return res.json();
   });
@@ -66,6 +75,10 @@ async function displayAllActivities() {
 
 export async function displayCategoryPage() {
   changeSelectedNavbar('#catagories');
+
+  const titleContainer = document.createElement('ul');
+  titleContainer.id = "titleContainer";
+
   const title = document.createElement('h1');
   title.textContent = 'categories';
   title.id = 'customActivtiesCategory';
@@ -73,7 +86,7 @@ export async function displayCategoryPage() {
 
   const customActivties = document.createElement('h2');
   customActivties.classList.add('menu-title');
-  customActivties.textContent = 'custom activties';
+  customActivties.textContent = 'your exercises';
   customActivties.id = 'customActivtiesCategory';
   customActivties.classList.add('category-item');
   customActivties.classList.add('menu-item');
@@ -82,16 +95,16 @@ export async function displayCategoryPage() {
   allActivties.classList.add('menu-title');
   allActivties.textContent = 'all activties';
   allActivties.id = 'all-activities';
-  allActivties.classList.add('category-item');
+  allActivties.classList.add('category-item', "menu-item");
   allActivties.classList.add('menu-item');
 
   const container = document.createElement('ul');
-  container.style.display = 'flex';
-  container.style.flexDirection = 'column';
-
-  el.main.appendChild(title);
-  el.main.append(container);
+  container.id = "categoryContainer"
+  container.style = `display: flex; flex-direction: column;overflow-y: scroll;height: 75vh;`
+  el.main.append(titleContainer, container);
   container.append(customActivties, allActivties);
+  titleContainer.append(title)
+  prepareHandles()
   customActivties.addEventListener('click', displayCustomCateogryPage, {});
   allActivties.addEventListener('click', displayAllActivities, {});
 }

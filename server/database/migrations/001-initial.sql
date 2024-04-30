@@ -16,6 +16,12 @@ CREATE TABLE Playlist(
   FOREIGN KEY (created_by) REFERENCES Users(user_id)
 );
 
+CREATE TABLE Pictures(
+  picture_id CHAR(36) PRIMARY KEY,
+  url TEXT NOT NULL,
+  alt_text TEXT
+);
+
 CREATE TABLE Activities(
   activity_id CHAR(36) PRIMARY KEY,
   title TEXT NOT NULL,
@@ -57,6 +63,14 @@ CREATE TABLE ActivityTagRelation(
   PRIMARY KEY (tag_name,activity_id)
 );
 
+CREATE TABLE PictureActivitiesRelation(
+  picture_id CHAR(36) NOT NULL,
+  activity_id CHAR(36) NOT NULL,
+  FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
+  FOREIGN KEY (picture_id) REFERENCES Picture(picture_id),
+  PRIMARY KEY (picture_id,activity_id)
+);
+
 CREATE TABLE PlaylistActivityRelation(
   playlist_id CHAR(36) NOT NULL,
   activity_id CHAR(36) NOT NULL,
@@ -88,6 +102,10 @@ INSERT INTO UserPlaylistRelation (user_id,playlist_id) VALUES
 INSERT INTO UserActivityRelation (user_id,activity_id) VALUES
 ("d7dcf380-33a3-4cb4-94c2-0323f18be441","b91db615-17a0-4c34-acbe-e064a325e981"),
 ("d7dcf380-33a3-4cb4-94c2-0323f18be441","65620c6a-6a3c-420c-9257-8061760fb3e4");
+
+
+
+
 -- Down
 
 DROP TABLE Activities;
