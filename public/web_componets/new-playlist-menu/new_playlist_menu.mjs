@@ -174,12 +174,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
     for (let item of Object.keys(customActivties)) {
       // make a web componenet for the event
-      const entry = document.createElement('activity-entry');
-      entry.editable = false;
+      const entry = document.createElement('ul');
+      const entryText = document.createElement('p');
       entry.dataset.id = item;
       entry.textContent = customActivties[item].title;
       entry.entryID = item;
-      await entry.attachTemplate();
+      // await entry.attachTemplate();
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('activty-item');
       entry.classList.add('clickable');

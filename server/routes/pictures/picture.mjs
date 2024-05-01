@@ -7,11 +7,8 @@ export const router = express.Router();
 
 async function sendActivityPictures(req, res) {
   const picsIDs = await picture.getPicturesOfActivity(req.params.id)
-  // console.log(picsIDs)
   const idList = []
   for (let picID of picsIDs) {
-    // router.use(express.static(`${import.meta.dirname}/../../photos`))
-    // res.send(picID.picture_id)
     idList.push(picID.picture_id)
   }
   res.status(200).send({ picture_ids: idList })

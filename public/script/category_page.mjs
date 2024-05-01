@@ -26,13 +26,11 @@ function setHeader(str) {
   backButton.classList.add("bottomsheet-content-item")
   backButton.addEventListener("click",displayCategoryPage)
   headerList.append(backButton)
-
 }
 
 export async function displayCustomCateogryPage() {
   cleanContent()
   setHeader("your exercises")
-
   const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
   if (customActivties == null || Object.keys(customActivties).length == 0) {
     let emptyMessage = document.createElement('p');
@@ -49,8 +47,6 @@ export async function displayCustomCateogryPage() {
     el.content.append(entry);
   }
 }
-
-
 
 async function displayAllActivities() {
   const menu = document.createElement('bottom-sheet-menu');

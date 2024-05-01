@@ -9,6 +9,9 @@ import {
   cleanLocalTag,
   getTags,
   createButton,
+  getPhotos,
+  getPhotoFromID,
+  uploadPhoto,
 } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
@@ -27,6 +30,9 @@ export class Entry extends newActivtyMenu {
 
   deleteEntry() {
     deleteFromLocal(this.entryID, ACTIVTIES_KEY);
+    for (let id of this.pictures) {
+      this.deletePicture(id);
+    }
     this.destorySelf();
   }
 
@@ -70,7 +76,9 @@ export class Entry extends newActivtyMenu {
     this.shadow = this.attachShadow({ mode: 'open' });
     this.entryThumbnail = document.createElement('ul');
     this.entryThumbnail.id = "entryThumbnail"
-    this.entryThumbnail.style = `display: flex; border: 0.5vw solid black; border-radius: 5vw;flex-direction:column;overflow-wrap: anywhere;`
+    this.entryThumbnail.style = `display: flex; border: 0.5vw solid black; border-radius: 5vw;flex-direction:column;overflow-wrap: anywhere;width: 75vw;padding: 2vh 2vw;justify-content: center;
+  align-content: center;
+  padding: 2vh 2vw;`
     // fetch pictures for this activity from the server here
     this.entryJSON = await getActivtyFromID(this.entryID);
 
@@ -79,8 +87,8 @@ export class Entry extends newActivtyMenu {
     this.seconds = this.entryJSON.duration;
     this.description = this.entryJSON.description;
     this.entryDescription = document.createElement('p');
-    this.entryDescription.style = 'margin:0;';
-    this.entryName.style = 'margin-bottom:0;';
+    this.entryDescription.style = 'margin:0;text-align: center;';
+    this.entryName.style = 'margin-bottom:0;text-align: center;';
     this.entryDescription.textContent = this.thumbnailDescription();
     const container = document.createElement('ul');
     container.style = `display: flex;
@@ -102,17 +110,22 @@ export class Entry extends newActivtyMenu {
   margin: 2vw;
   width: 26vw;`
     this.durationDisplay.textContent = this.getFormatStringTime()
+    const photoIDs = await getPhotos(this.entryID)
+    if (photoIDs.length > 0) {
+      const response = await getPhotoFromID(photoIDs[0])
+      let imageholder = document.createElement("img")
+      imageholder.src = response.url
+      imageholder.style = "object-fit: contain;"
+      this.entryThumbnail.append(imageholder)
+    }
     container.append(this.durationDisplay, this.editButton)
-
     this.shadow.append(this.entryThumbnail);
     this.entryThumbnail.append(this.entryName, this.entryDescription, container);
-
     if (this.editable) {
       this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
         once: true,
       });
     }
-
     this.initilized = true;
   }
 
@@ -156,6 +169,34 @@ export class Entry extends newActivtyMenu {
     this.editing = true;
     this.setupEventListners();
     setTimeout(this.pullupAnimation.bind(this), 25, 78);
+    this.pictures = await getPhotos(this.entryID)
+    await this.appendPictures()
+  }
+
+  async appendPictures() {
+    for (let id of this.pictures) {
+      // add a delete button to the images somewhere here
+      const imageHolder = document.createElement("div")
+      imageHolder.style = "display:flex; flex-direction:column; border: 1px solid black; border-radius: 5vw ; width : 75vw;"
+      const deleteButton = document.createElement("button")
+      deleteButton.type = "button"
+      deleteButton.textContent = "delete"
+      deleteButton.classList.add("bottomsheet-header-button")
+      let image = document.createElement("img")
+      image.style = "object-fit: contain;"
+      const response = await getPhotoFromID(id)
+      image.src = response.url
+      deleteButton.addEventListener("click", () => {
+        this.deletePicture(id);
+        imageHolder.remove()
+      })
+      imageHolder.append(image, deleteButton)
+      this.content.append(imageHolder)
+
+    }
+  }
+  async deletePicture(pictureID) {
+    await fetch(`picture/${this.entryID}/${pictureID}`, { method: "delete" })
   }
 
   async saveNewActivty() {
@@ -168,6 +209,13 @@ export class Entry extends newActivtyMenu {
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     document.querySelector('#main-content').textContent = '';
+    if (this.photoInput.files.length >= 0) {
+      for (let file of this.photoInput.files) {
+        const input = new FormData()
+        input.append("file", file)
+        await uploadPhoto(UUID, input)
+      }
+    }
     this.destorySelf();
   }
 }

@@ -15,7 +15,6 @@ import {
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
-
   constructor() {
     // must do all of the selections within the constructor
     super();
@@ -37,6 +36,8 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.timeInput.id = 'timeInput';
     this.photoInput.id = 'addPhoto';
     this.photoInput.type = "file"
+    this.photoInput.accept = "image/jpeg, image/png, image/jpg,image/gif"
+    this.photoInput.multiple = "multiple"
     this.tags.id = 'tag';
     this.addButton.textContent = 'cancel';
 
@@ -123,8 +124,8 @@ export class newActivtyMenu extends bottomSheetMenu {
     if (this.photoInput.files.length >= 0) {
       for (let file of this.photoInput.files) {
         const input = new FormData()
-        input.append("file",file)
-        await uploadPhoto(UUID,input)
+        input.append("file", file)
+        await uploadPhoto(UUID, input)
       }
     }
     this.destorySelf();
