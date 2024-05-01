@@ -1,13 +1,16 @@
 :root {
   --nav-bar-background-color: white;
   --nav-bar-item-color: white;
-  --nav-bar-item-selected: grey;
+  --nav-bar-item-selected: white;
   --activty-popup-background-color: red;
   --main-content-background-color: white;
   --text-colour: black;
   --onclick-colour: red;
   --button-colour: #589aff;
   --border-colour: gray;
+}
+.addButtonBackground{
+  background-color:var(--button-colour);
 }
 
 #titleContainer {
@@ -114,7 +117,7 @@ body {
   flex-direction: row;
   margin: 10px;
   flex-direction: column;
-  width: min(20vw, 10000px);
+  width: 18vw;
 }
 .navbar-text{
   font-size: 5vw;
