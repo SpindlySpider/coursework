@@ -2,52 +2,35 @@
 <title>HIIT</title>
 <link rel="stylesheet" href="main.css" />
 <script src="main.mjs" defer type="module"></script>
-<script
-  src="./web_componets/entry/entry_componet.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/bottom-sheet/bottom_sheet_menu.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/duration-picker/durationPicker.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/entry/entry_componet.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/new-playlist-menu/new_playlist_menu.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/new-activity-menu/new_activity_menu.mjs"
-  defer
-  type="module"
-></script>
-<script
-  src="./web_componets/timer/timer.mjs"
-  async
-  defer
-  type="module"
-></script>
+<script src="./web_componets/entry/entry_componet.mjs" defer type="module"></script>
+<script src="./web_componets/bottom-sheet/bottom_sheet_menu.mjs" defer type="module"></script>
+<script src="./web_componets/duration-picker/durationPicker.mjs" defer type="module"></script>
+<script src="./web_componets/entry/entry_componet.mjs" defer type="module"></script>
+<script src="./web_componets/new-playlist-menu/new_playlist_menu.mjs" defer type="module"></script>
+<script src="./web_componets/new-activity-menu/new_activity_menu.mjs" defer type="module"></script>
+<script src="./web_componets/timer/timer.mjs" async defer type="module"></script>
 <script src="./web_componets/tags/tag.mjs" async defer type="module"></script>
 <div id="app-container">
   <main id="main-content"></main>
   <nav id="navbar" class="bottom-navbar border-active">
-    <li id="dashboard" class="nav-unselected navbar-item">dashboard Icon</li>
-    <li id="workout-playlist" class="navbar-item nav-unselected">
-      playlist Icon
-    </li>
-    <li id="new-entry" class="navbar-item nav-unselected">+</li>
-    <li id="catagories" class="navbar-item nav-unselected">category</li>
-    <li id="profile" class="navbar-item nav-unselected">profile</li>
+    <ul id="dashboard" class="nav-unselected navbar-item">
+      dashboard
+    </ul>
+    <ul id="workout-playlist" class="navbar-item nav-unselected">
+      <img src="images/playlist_icon.png" class="navbar-icon icon">
+      <img src="images/playlist_icon_selected.png" class="navbar-icon hidden icon" >
+      <p class="hidden icon navbar-text">playlist</p>
+    </ul>
+    <ul id="new-entry" class="navbar-item nav-unselected">
+      +
+    </ul>
+    <ul id="catagories" class="navbar-item nav-unselected">
+      <img src="images/category icon.png" class="navbar-icon icon">
+      <img src="images/category icon selected.png" class="navbar-icon hidden icon" >
+      <p class="hidden icon navbar-text">categories</p>
+    </ul>
+    <ul id="profile" class="navbar-item nav-unselected">
+      profile
+    </ul>
   </nav>
 </div>

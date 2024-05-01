@@ -38,10 +38,10 @@ export class Entry extends newActivtyMenu {
 
   destorySelf() {
     this.content.style.height = '0vh';
-    this.remove();
     this.enableNavbarBorder();
     displayCategoryPage();
     displayCustomCateogryPage();
+    this.remove();
   }
 
   async connectedCallback() {

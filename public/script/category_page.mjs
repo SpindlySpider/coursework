@@ -24,22 +24,28 @@ function setHeader(str) {
   const backButton = document.createElement("button")
   backButton.textContent = "back"
   backButton.classList.add("bottomsheet-content-item")
-  backButton.addEventListener("click",displayCategoryPage)
+  backButton.addEventListener("click", displayCategoryPage)
   headerList.append(backButton)
 }
-
+function isActivitiesEmpty(exercises) {
+  if (exercises == null || Object.keys(exercises).length == 0) {
+    let emptyMessage = document.createElement('p');
+    emptyMessage.style = "font-size: 5vw;text-align: center;padding: 5vh;"
+    emptyMessage.textContent =
+      'press the + at the bottom to make new activties';
+    el.content.append(emptyMessage);
+    return true
+  }
+  return false
+}
 export async function displayCustomCateogryPage() {
   cleanContent()
   setHeader("your exercises")
-  const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
-  if (customActivties == null || Object.keys(customActivties).length == 0) {
-    let emptyMessage = document.createElement('p');
-    emptyMessage.textContent =
-      'press the + at the bottom to make new activties';
-    el.main.appendEntry(emptyMessage);
-    return;
+  const exercises = getAllCustomActivites(ACTIVTIES_KEY);
+  if(isActivitiesEmpty(exercises)){
+    return
   }
-  for (let item of Object.keys(customActivties)) {
+  for (let item of Object.keys(exercises)) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
     entry.entryID = item;
@@ -50,7 +56,10 @@ export async function displayCustomCateogryPage() {
 
 async function displayAllActivities() {
   const menu = document.createElement('bottom-sheet-menu');
-  const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
+  const exercises = getAllCustomActivites(ACTIVTIES_KEY);
+  if(isActivitiesEmpty(exercises)){
+    return
+  }
   await menu.attachTemplate();
   menu.addButton.style.display = 'none';
   menu.setTitle('all activities');

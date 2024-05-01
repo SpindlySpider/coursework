@@ -303,9 +303,18 @@ export function changeSelectedNavbar(navButtonSelector) {
   const navCategories = document.querySelector(navButtonSelector);
   const main = document.querySelector('#main-content');
   if (lastNavSelected != null) {
+    const icons = lastNavSelected.querySelectorAll(".icon")
+    for (let item of icons) {
+      item.classList.toggle("hidden")
+    }
     lastNavSelected.classList.remove('nav-selected');
     lastNavSelected.classList.add('nav-unselected');
   }
+  const icons = navCategories.querySelectorAll(".icon")
+  for (let item of icons) {
+    item.classList.toggle("hidden")
+  }
+
   navCategories.classList.add('nav-selected');
   navCategories.classList.remove('nav-unselected');
   main.textContent = '';
