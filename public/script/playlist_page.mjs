@@ -82,12 +82,20 @@ async function startTimer(entry) {
   if (playlist.sets < 1) {
     playlist.sets = 1
   }
+  let rest = { title: "rest", description: "rest between excerise", duration: playlist.exercise_rest_time }
+  if (playlist.exercise_rest_time < 1) {
+    rest = null
+  }
   for (let i = 0; i < playlist.sets; i++) {
     for (let id of playlist.items) {
       let item = await getActivtyFromID(id)
       item["UUID"] = id
       workoutItems.push(item);
-      workoutItems.push({ title: "rest", description: "rest between excerise", duration: playlist.exercise_rest_time, })
+      if (rest != null) {
+        // probbay a more efficent way of doing this as it checkes very time if rest is null
+
+        workoutItems.push(rest)
+      }
     }
     if (playlist.exercise_rest_time > 0) {
       // make sure that rest and rest are not next to each other

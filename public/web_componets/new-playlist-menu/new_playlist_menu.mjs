@@ -310,11 +310,11 @@ export class newPlaylistMenu extends bottomSheetMenu {
       const name = document.createElement('h2');
       const dragField = document.createElement('p');
       const deleteButton = document.createElement('h4');
-      const desciption = document.createElement('p');
+      const duration = document.createElement('p');
       entry.style.justifyContent = 'space-between';
       dragField.textContent = '⋮⋮';
-      desciption.style.alignSelf = 'flex-end';
-      desciption.style.overflowWrap = 'anywhere';
+      duration.style.alignSelf = 'flex-end';
+      duration.style.overflowWrap = 'anywhere';
       this.playlistDurationText = document.createElement("p");
       deleteButton.textContent = '🗑️';
       entry.dataset.id = item;
@@ -322,7 +322,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.style.flexDirection = 'row';
       console.log("custom acitviites id",item)
       name.textContent = customActivties[item].title;
-      desciption.textContent = customActivties[item].description;
+      duration.textContent =  this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('draggable');
@@ -340,23 +340,22 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.classList.add('activty-item');
       this.draggingEventListeners(entry);
       this.excerciseList.append(entry);
-      entry.append(name, desciption, deleteButton, dragField);
+      entry.append(name, duration, deleteButton, dragField);
     }
-    this.updatePlaylistDuration();
+    const text = this.shadow.querySelector("#totalDuration")
+    text.textContent =`excerise length :${this.updateplaylistduration(this.duration)}`;
     this.content.append(this.deleteButton)
   }
 
-  updatePlaylistDuration() {
-    const text = this.shadow.querySelector("#totalDuration")
-    if (this.duration <= 0) {
-      text.textContent = ""
-      return
+  updateplaylistduration(seconds) {
+    if (seconds<= 0) {
+      return ""
     }
-    const duration = formatedSeconds(this.duration);
+    const duration = formatedSeconds(seconds);
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
     const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
-    text.textContent = ` total time :⏱︎ ${hour}${mins}${secs}`
+    return `⏱︎ ${hour}${mins}${secs}`
   }
 
   draggingEventListeners(element) {
