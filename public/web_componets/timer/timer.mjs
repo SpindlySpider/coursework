@@ -8,11 +8,12 @@ export default class TimerComponent extends HTMLElement {
     this.customTile = 'workout';
     this.initilized = false;
     this.timerIndex = 0;
+    this.miliseconds = 0
   }
 
   playlistMenu() {
     this.radius = 100;
-    this.circumference = 2 * this.radius * Math.PI;
+    this.circumference = ((2) * (Math.PI) * (this.radius));
     this.seconds = 0;
     this.isTimerRunning = false;
     this.titleText.textContent = this.customTile;
@@ -30,7 +31,7 @@ export default class TimerComponent extends HTMLElement {
     const duration = formatedSeconds(seconds);
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
-    const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
+    const secs = duration.seconds === 0 ? '0s' : `${duration.seconds}s`;
     return `⏱︎ ${hour}${mins}${secs}`;
   }
 
@@ -61,6 +62,7 @@ export default class TimerComponent extends HTMLElement {
     this.close = this.shadow.querySelector('#close');
     this.upNext = this.shadow.querySelector('#up-next');
     this.clockContainer = this.shadow.querySelector('#clockContainer');
+    this.description = this.shadow.querySelector('#description');
     this.pictureContainer = this.shadow.querySelector("#picture-container")
     this.playlistMenu();
   }
@@ -115,18 +117,17 @@ export default class TimerComponent extends HTMLElement {
 
   async incrementTimer() {
     if (
-      this.getFormatedTimeFromSeconds(
-        this.timerList[this.timerIndex].duration,
-      ) === this.getFormatedTimeFromSeconds(this.seconds)
-    ) {
+      this.timerList[this.timerIndex].duration === this.seconds) {
       if (this.timerList.length - this.timerIndex > 1) {
         // switch over to next activity
         this.timerIndex++;
         this.titleText.textContent = this.timerList[this.timerIndex].title;
         // get change photos here
+        this.description.textContent = this.timerList[this.timerIndex].description
         this.removePictures()
         await this.appendPictures(this.timerList[this.timerIndex].UUID)
         this.seconds = 0;
+        this.miliseconds = 0
 
       } else {
         // end the timer
@@ -135,8 +136,13 @@ export default class TimerComponent extends HTMLElement {
         return;
       }
     }
+    // this.updateTimerDisplay();
+    if (this.miliseconds % 1000 === 0) {
+      this.seconds++;
+    }
+    this.miliseconds += 100
     this.updateTimerDisplay();
-    this.seconds++;
+    return
   }
 
   async appendPictures(UUID) {
@@ -164,16 +170,10 @@ export default class TimerComponent extends HTMLElement {
     this.pictureContainer.textContent = ""
   }
 
+
   async startTimer() {
-    if (this.timerIndex == 0) {
-      // first time running 
-      this.totalTime.style.display = "none"
-      this.removePictures()
-      await this.appendPictures(this.timerList[this.timerIndex].UUID)
-      // get first photos
-    }
     if (!this.isTimerRunning) {
-      this.intervalID = setInterval(this.incrementTimer.bind(this), 1000);
+      this.intervalID = setInterval(this.incrementTimer.bind(this), 100);
       this.updateTimerDisplay();
       this.time.classList.remove('hidden');
       this.upNext.classList.remove('hidden');
@@ -185,9 +185,17 @@ export default class TimerComponent extends HTMLElement {
       this.start.textContent = 'pause';
       this.stop.classList.remove('hidden');
     } else {
+      //paused
       this.start.textContent = 'start';
       clearInterval(this.intervalID);
       this.isTimerRunning = false;
+    }
+    if (this.timerIndex == 0) {
+      // first time running 
+      this.totalTime.style.display = "none"
+      this.removePictures()
+      await this.appendPictures(this.timerList[this.timerIndex].UUID)
+      // get first photos
     }
   }
 
@@ -196,11 +204,11 @@ export default class TimerComponent extends HTMLElement {
     if (this.timerList.length - this.timerIndex > 1) {
       this.upNext.textContent = `next : ${this.timerList[this.timerIndex + 1].title}`;
     }
-
-    const formattedTime = this.getFormatedTimeFromSeconds(this.seconds);
-    this.time.textContent = `${formattedTime} / ${this.getFormatedTimeFromSeconds(this.timerList[this.timerIndex].duration)}`;
+    const formattedTime = this.getFormatStringTime(this.seconds);
+    this.time.textContent = `${formattedTime} / ${this.getFormatStringTime(this.timerList[this.timerIndex].duration)}`;
     const percent =
-      (this.seconds / this.timerList[this.timerIndex].duration) * 100;
+      ((this.miliseconds / 1000) / this.timerList[this.timerIndex].duration) * 100;
+    console.log(percent)
     this.setProgress(percent);
   }
 

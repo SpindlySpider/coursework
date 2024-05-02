@@ -6,7 +6,7 @@
 
     #container {
       background-color: var(--main-content-background-color);
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       display: flex;
       font-size: 7vw;
@@ -46,7 +46,7 @@
       border-radius: 5vw;
       width: 87vw;
       padding: 2vw;
-      height: 32vh;
+      height: 45vw;
 
     }
   </style>
@@ -58,6 +58,7 @@
       <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
     </svg>
     <div id="time-display" class="row-direction"></div>
+    <h5 id="description"></h3>
     <div class="row-direction">
       <button id="start">start</button>
       <button id="stop">stop</button>
