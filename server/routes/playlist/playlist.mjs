@@ -14,7 +14,7 @@ async function getPlaylist(req, res) {
   // gets data
   const playlistTitle = await playlist.getPlaylistFromID(req.params.id);
   const activites = await playlist.getPlaylistActivities(req.params.id);
-  res.send({ title: playlistTitle, activites });
+  res.send({ playlistDetails: playlistTitle, activites });
 }
 
 async function addActivity(req, res) {
@@ -44,6 +44,9 @@ async function createPlaylist(req, res) {
       req.body.title,
       req.body.items,
       req.body.createdBy,
+      req.body.sets,
+      req.body.exercise_rest_time,
+      req.body.rest_sets_time
     );
   } else {
     await playlist.updatePlaylist(
@@ -51,6 +54,9 @@ async function createPlaylist(req, res) {
       req.body.title,
       req.body.items,
       req.body.createdBy,
+      req.body.sets,
+      req.body.exercise_rest_time,
+      req.body.rest_sets_time
     );
   }
 

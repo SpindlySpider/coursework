@@ -13,7 +13,11 @@ CREATE TABLE Playlist(
   playlist_id  CHAR(36) PRIMARY KEY,
   title TEXT NOT NULL,
   created_by CHAR(36) NOT NULL,
+  sets INTEGER NOT NULL,
+  exercise_rest_time INTEGER NOT NULL,
+  rest_sets_time INTEGER NOT NULL,
   FOREIGN KEY (created_by) REFERENCES Users(user_id)
+
 );
 
 CREATE TABLE Pictures(
@@ -85,8 +89,8 @@ INSERT INTO Users (user_id, username) VALUES
 ('4028fb15-c6eb-4401-822e-c06da852fc66',"user2"),
 ("65f855e2-01c6-4f6a-8f63-7bd807e26517","user3");
 
-INSERT INTO Playlist (playlist_id,title,created_by) VALUES
-("c4bc911f-01d6-499f-8f17-8b973d44f7b8","playlist 1",'d7dcf380-33a3-4cb4-94c2-0323f18be441');
+INSERT INTO Playlist (playlist_id,title,created_by,sets,exercise_rest_time,rest_sets_time) VALUES
+("c4bc911f-01d6-499f-8f17-8b973d44f7b8","playlist 1",'d7dcf380-33a3-4cb4-94c2-0323f18be441',2,10,20);
 
 INSERT INTO Activities (activity_id,title,description,duration,created_by)
 VALUES ("b91db615-17a0-4c34-acbe-e064a325e981","squat","squats",60,'d7dcf380-33a3-4cb4-94c2-0323f18be441'),

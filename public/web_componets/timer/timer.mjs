@@ -1,5 +1,5 @@
 import { displayPlaylistPage } from '../../script/playlist_page.mjs';
-import { fetchTemplate } from '../utilities.mjs';
+import { fetchTemplate, formatedSeconds, getPhotoFromID, getPhotos } from '../utilities.mjs';
 
 export default class TimerComponent extends HTMLElement {
   constructor() {
@@ -21,10 +21,39 @@ export default class TimerComponent extends HTMLElement {
     this.classList.add('popup-active');
     this.clock.style.strokeDasharray = this.circumference;
     this.clockContainer.classList.add('hidden');
+    this.totalTime = this.createText("total-time", `total time of playlist ${this.getFormatStringTime(this.getTotalTime())}`)
+    this.pictureContainer.style.display = "none"
+    this.container.append(this.totalTime)
+
   }
+  getFormatStringTime(seconds) {
+    const duration = formatedSeconds(seconds);
+    const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
+    const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
+    const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
+    return `⏱︎ ${hour}${mins}${secs}`;
+  }
+
+  getTotalTime() {
+    let totalDuration = 0;
+    for (let item of this.timerList) {
+      totalDuration += item.duration
+    }
+    return totalDuration
+  }
+
+  createText(id, str) {
+    const elem = document.createElement("p")
+    elem.textContent = str
+    elem.id = id
+    elem.style.fontSize = "5vw"
+    return elem
+  }
+
 
   prepareHandle() {
     this.titleText = this.shadow.querySelector('#title');
+    this.container = this.shadow.querySelector("#container")
     this.clock = this.shadow.querySelector('#clock');
     this.start = this.shadow.querySelector('#start');
     this.time = this.shadow.querySelector('#time-display');
@@ -32,6 +61,7 @@ export default class TimerComponent extends HTMLElement {
     this.close = this.shadow.querySelector('#close');
     this.upNext = this.shadow.querySelector('#up-next');
     this.clockContainer = this.shadow.querySelector('#clockContainer');
+    this.pictureContainer = this.shadow.querySelector("#picture-container")
     this.playlistMenu();
   }
 
@@ -83,7 +113,7 @@ export default class TimerComponent extends HTMLElement {
     displayPlaylistPage();
   }
 
-  incrementTimer() {
+  async incrementTimer() {
     if (
       this.getFormatedTimeFromSeconds(
         this.timerList[this.timerIndex].duration,
@@ -93,7 +123,11 @@ export default class TimerComponent extends HTMLElement {
         // switch over to next activity
         this.timerIndex++;
         this.titleText.textContent = this.timerList[this.timerIndex].title;
+        // get change photos here
+        this.removePictures()
+        await this.appendPictures(this.timerList[this.timerIndex].UUID)
         this.seconds = 0;
+
       } else {
         // end the timer
         this.stopTimer();
@@ -105,7 +139,39 @@ export default class TimerComponent extends HTMLElement {
     this.seconds++;
   }
 
-  startTimer() {
+  async appendPictures(UUID) {
+    this.pictureContainer.style.display = "flex"
+    const pictures = await getPhotos(UUID);
+    console.log("pictues", pictures)
+    if (pictures[0] != undefined) {
+      for (let id of pictures) {
+        // add a delete button to the images somewhere here
+        let image = document.createElement("img")
+        image.style = "object-fit: contain;height: 100%;"
+        const response = await getPhotoFromID(id)
+        image.src = response.url
+        this.pictureContainer.append(image)
+        // add next and prevouis image button here
+      }
+    }
+    else {
+
+      this.pictureContainer.style.display = "none"
+    }
+
+  }
+  removePictures() {
+    this.pictureContainer.textContent = ""
+  }
+
+  async startTimer() {
+    if (this.timerIndex == 0) {
+      // first time running 
+      this.totalTime.style.display = "none"
+      this.removePictures()
+      await this.appendPictures(this.timerList[this.timerIndex].UUID)
+      // get first photos
+    }
     if (!this.isTimerRunning) {
       this.intervalID = setInterval(this.incrementTimer.bind(this), 1000);
       this.updateTimerDisplay();
@@ -126,7 +192,7 @@ export default class TimerComponent extends HTMLElement {
   }
 
   updateTimerDisplay() {
-    this.upNext.textContent = 'next : end of routine';
+    this.upNext.textContent = 'next : end of workout';
     if (this.timerList.length - this.timerIndex > 1) {
       this.upNext.textContent = `next : ${this.timerList[this.timerIndex + 1].title}`;
     }

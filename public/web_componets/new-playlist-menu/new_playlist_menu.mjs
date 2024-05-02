@@ -7,6 +7,7 @@ import {
   getAllCustomActivites,
   getUUID,
   savePlaylist,
+  stringTimeToSeconds,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import { displayPlaylistPage } from '/../../script/playlist_page.mjs';
@@ -19,6 +20,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.activityItems = [];
     this.nameInput = document.createElement('input');
     this.initilized = false;
+    this.headerTitle = "create workout"
   }
 
   async connectedCallback() {
@@ -41,7 +43,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.excerciseList.id = "exercise-list"
     this.optionsList.id = "options-list"
     this.excerciseList.style = this.optionsList.style = `border: 0.5vw solid gray; padding: 0; box-shadow: 0px 0.5vw 13px 0.5vw #534747; border-radius: 3vw; margin-bottom: 1vh ;display:none; flex-direction: column;`
-
+    this.setupPlaylistOptions();
     this.playlistDurationText = document.createElement("p");
     this.playlistDurationText.style.fontSize = "3.5vw"
     this.playlistDurationText.id = "totalDuration"
@@ -151,6 +153,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     setTimeout(this.pullupAnimation.bind(this), 50, 78);
     this.playlistDurationText = this.shadow.querySelector("#totalDuration")
     this.cleanContent();
+    this.hideOptions()
     this.excerciseList.style.display = "flex"
     console.log('add activity');
     this.nameInput.style.display = 'none';
@@ -167,7 +170,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       const emptyMessage = document.createElement('p');
       emptyMessage.textContent =
         'press the + at the bottom to make new activties';
-      emptyMessage.classList.add('activty-item');
+      emptyMessage.style = "font-size:5vw;";
       this.content.append(emptyMessage);
       return;
     }
@@ -193,6 +196,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     for (let item of items) {
       item.remove();
     }
+  }
+  hideOptions() {
+    this.excerciseList.style.display = this.optionsList.style.display = "none"
   }
 
   getAfterElement(y) {
@@ -228,7 +234,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       label.textContent = title
       input.type = "time"
       input.step = "600"
-      input.value = "00:00:00"
+      input.value = "00:00:30"
       input.style.fontSize = "5vw"
       return { label, input }
     }
@@ -239,10 +245,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const setLabel = document.createElement("p")
     setInput.type = "number"
     setInput.style.fontSize = "5vw"
+    setInput.value = 1
     setInput.placeholder = "num"
     setInput.style.width = "12vw"
     setLabel.textContent = "number of sets"
-    setContainer.append(setLabel,setInput)
+    this.setInput = setInput
+    setContainer.append(setLabel, setInput)
     items.push(setContainer)
     // rests between exercies and the formated text
     const restTimerContainer = this.createContainer("restTimerContainer")
@@ -266,6 +274,15 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.optionsList.append(item)
     }
   }
+  hideOptions() {
+    const emptyMessage = document.createElement('p');
+    emptyMessage.textContent = 'press add activity to add activties';
+    emptyMessage.style.fontSize = "5vw"
+    this.deleteButton.style.display = 'none';
+    this.content.append(emptyMessage);
+    this.excerciseList.style.display = "none"
+    this.optionsList.style.display = "none"
+  }
 
   playlistCreationTool() {
     setTimeout(this.pullupAnimation.bind(this), 50, 75);
@@ -278,19 +295,14 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }
     this.backButton.style.display = 'none';
     this.content.style.height = '0vh';
-    this.setTitle('create new workout');
+    this.setTitle(`${this.headerTitle}`);
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
 
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
 
     if (this.activityItems.length == 0) {
-      const emptyMessage = document.createElement('p');
-      emptyMessage.textContent = 'press add activity to add activties';
-      emptyMessage.classList.add('activty-item');
-      this.deleteButton.style.display = 'none';
-      this.content.append(emptyMessage);
-      this.excerciseList.style.display = this.optionsList.style.display = "none"
+      this.hideOptions()
       return;
     }
     for (let item of this.activityItems) {
@@ -308,6 +320,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.dataset.id = item;
       entry.style.display = 'flex';
       entry.style.flexDirection = 'row';
+      console.log("custom acitviites id",item)
       name.textContent = customActivties[item].title;
       desciption.textContent = customActivties[item].description;
       this.duration += customActivties[item].duration
@@ -316,8 +329,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
       deleteButton.addEventListener('click', () => {
         this.duration -= customActivties[item].duration
         this.updatePlaylistDuration()
+        console.log("items", this.activityItems, item)
+        this.activityItems = this.activityItems.filter(excercise => excercise != item)
+        if (this.activityItems.length == 0) {
+          this.hideOptions()
+        }
         entry.remove();
-
       });
       entry.draggable = true;
       entry.classList.add('activty-item');
@@ -326,7 +343,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.append(name, desciption, deleteButton, dragField);
     }
     this.updatePlaylistDuration();
-    this.setupPlaylistOptions();
     this.content.append(this.deleteButton)
   }
 
@@ -360,6 +376,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   disconnectedCallback() { }
 
+
+
   async saveNewPlaylist() {
     if (this.UUID === undefined) {
       this.UUID = await getUUID();
@@ -372,8 +390,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
     if (this.activityItems[0] === undefined) {
       this.activityItems = [];
     }
+    console.log("saving playlist", this.activityItems)
     const title = this.nameInput.value;
-    await savePlaylist(this.UUID, title, this.activityItems);
+    console.log("setinput",this.setInput)
+    const sets = parseInt(this.setInput.value);
+    const excerciseRest = stringTimeToSeconds(this.restTimer.value)
+    const setRest = stringTimeToSeconds(this.setRestTimer.value)
+    await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest,false);
     await displayPlaylistPage();
     this.destorySelf();
   }

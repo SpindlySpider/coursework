@@ -1,8 +1,10 @@
 import {
   changeSelectedNavbar,
   createButton,
+  formatedSeconds,
   getActivtyFromID,
   getPlaylist,
+  getStringTimeFrom,
   user,
 } from '../web_componets/utilities.mjs';
 const el = {};
@@ -33,9 +35,10 @@ export async function displayPlaylistPage() {
   console.log(playlists);
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
-    const playlistDetails = await fetch(`playlist/${item.playlist_id}`).then(
+    const response = await fetch(`playlist/${item.playlist_id}`).then(
       (res) => res.json(),
     );
+    const playlistDetails = response.playlistDetails
     console.log(playlistDetails, item);
     const container = document.createElement('li');
     container.style.display = 'flex';
@@ -46,7 +49,8 @@ export async function displayPlaylistPage() {
     container.style.borderRadius = "1vw"
     container.style.padding = "2vw"
     const entry = document.createElement('h2');
-    entry.textContent = playlistDetails.title[0].title;
+    console.log("title", playlistDetails)
+    entry.textContent = playlistDetails.title;
     entry.style.width = "75%";
     entry.dataset.id = item.playlist_id;
     entry.classList.add('menu-item');
@@ -58,7 +62,7 @@ export async function displayPlaylistPage() {
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
-    if (playlistDetails.activites.length !== 0) {
+    if (response.activites.length !== 0) {
       const play = createButton("start");
       container.append(play);
       play.addEventListener('click', async () => {
@@ -73,18 +77,30 @@ async function startTimer(entry) {
 
   const timer = document.createElement('timer-component');
   const playlist = await getPlaylist(entry.dataset.id);
-  // const playlist = await fetch(`playlist/${entry.dataset.id}`).then((res) =>
-  //   res.json(),
-  // );
-  // console.log(playlist.activites);
-  console.log(playlist);
-
+  console.log("timerdata", playlist)
   const workoutItems = [];
-  for (let id of playlist.items) {
-    workoutItems.push(await getActivtyFromID(id));
+  if (playlist.sets < 1) {
+    playlist.sets = 1
   }
+  for (let i = 0; i < playlist.sets; i++) {
+    for (let id of playlist.items) {
+      let item = await getActivtyFromID(id)
+      item["UUID"] = id
+      workoutItems.push(item);
+      workoutItems.push({ title: "rest", description: "rest between excerise", duration: playlist.exercise_rest_time, })
+    }
+    if (playlist.exercise_rest_time > 0) {
+      // make sure that rest and rest are not next to each other
+      workoutItems.pop()
+    }
+    if (playlist.rest_sets_time > 0 && i != playlist.sets - 1) {
+      // add set rests unless it is the final set
+      workoutItems.push({ title: "set rest", description: "rest between set", duration: playlist.rest_sets_time })
+    }
+  }
+
   timer.timerList = workoutItems;
-  timer.customTile = playlist.title.title;
+  timer.customTile = playlist.title;
   main.append(timer);
   console.log(workoutItems);
   console.log(timer.timerList);
@@ -99,9 +115,13 @@ async function editPlaylist(entry) {
   // since the on connect call back is async it ensure all of it is connected
   console.log('playlist', playlist.title.title);
   editMenu.activityItems = playlist.items;
-  editMenu.nameInput.value = playlist.title.title;
+  editMenu.nameInput.value = playlist.title;
+  editMenu.setInput.value = playlist.sets
+  editMenu.restTimer.value = getStringTimeFrom(playlist.exercise_rest_time)
+  editMenu.setRestTimer.value = getStringTimeFrom(playlist.rest_sets_time)
   editMenu.UUID = entry.dataset.id;
+  console.log("playlist title", playlist.title)
+  editMenu.headerTitle = `edit ${playlist.title}`
   editMenu.playlistCreationTool();
-  editMenu.setTitle(`edit ${playlist.title.title}`);
 }
 prepareHandles();

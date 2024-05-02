@@ -6,12 +6,14 @@
 
     #container {
       background-color: var(--main-content-background-color);
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       display: flex;
-      font-size: 2em;
+      font-size: 7vw;
       z-index: 5;
       flex-direction: column;
+      text-align: center;
+      height: 92vh;
     }
 
     .track {
@@ -36,9 +38,21 @@
     input {
       font-size: 0.5em;
     }
+
+    #picture-container {
+      display: flex;
+      flex-direction: column;
+      border: 0.5vw solid black;
+      border-radius: 5vw;
+      width: 87vw;
+      padding: 2vw;
+      height: 32vh;
+
+    }
   </style>
   <div id="container">
     <h1 id="title">title</h1>
+    <div id="picture-container"></div>
     <svg width="250" height="250" id="clockContainer">
       <circle r="100" cx="125" cy="125" class="track"></circle>
       <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
@@ -49,6 +63,6 @@
       <button id="stop">stop</button>
       <button id="close">close</button>
     </div>
-    <h1 id="up-next"></h1>
+    <h3 id="up-next"></h3>
   </div>
 </template>

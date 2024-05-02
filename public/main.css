@@ -11,6 +11,7 @@
 }
 .addButtonBackground{
   background-color:var(--button-colour);
+  border-radius: 7vw;
 }
 
 #titleContainer {

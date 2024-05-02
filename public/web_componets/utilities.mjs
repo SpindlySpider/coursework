@@ -212,7 +212,7 @@ export async function fetchTemplate(shadow, templateURL) {
   shadow.innerHTML = await res.text();
   shadow.append(shadow.querySelector('template').content.cloneNode(true));
 }
-export async function savePlaylist(UUID, title, items, fromServer) {
+export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer) {
   const online = true; // implement later
   if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
@@ -221,6 +221,9 @@ export async function savePlaylist(UUID, title, items, fromServer) {
       title,
       items,
       createdBy: user(),
+      sets,
+      exercise_rest_time: restDuration,
+      rest_sets_time: setRestDuration
     };
     console.log('playload', payload);
 
@@ -261,21 +264,24 @@ export async function getPlaylist(UUID) {
     const response = await fetch(`playlist/${UUID}`);
     if (response.ok) {
       const playlist = await response.json();
-      if (playlist.title[0] !== undefined) {
+      console.log("playlist", playlist)
+      if (playlist.playlistDetails !== undefined) {
         // if the activity is on the server
-        console.log(playlist);
+        console.log("fetched from server for localdb update", playlist);
         // create playlist JSON HERE
         // SQL playlist always makes sure its in ascending order
         const itemsArray = playlist.activites.map((item) => item.activity_id);
         console.log(itemsArray);
         const playlistJSON = {
-          title: playlist.title[0],
+          title: playlist.playlistDetails.title,
           items: itemsArray,
+          sets: playlist.playlistDetails.sets,
+          exercise_rest_time: playlist.playlistDetails.exercise_rest_time,
+          rest_sets_time: playlist.playlistDetails.rest_sets_time
         };
 
         // save/update the playlist locally
-        await savePlaylist(UUID, playlistJSON.title, playlistJSON.items, true);
-
+        await savePlaylist(UUID, playlistJSON.title, playlistJSON.items, playlistJSON.sets, playlistJSON.exercise_rest_time, playlistJSON.rest_sets_time, true);
         return playlistJSON;
       }
     }
@@ -289,7 +295,7 @@ export async function getPlaylist(UUID) {
     getTags(this.entryID, ACTIVTIES_KEY)
     return cachedActivites[UUID];
   } catch (e) {
-    throw new Error('no activity matching ID within local storage');
+    throw new Error(` no activity matching ${UUID} ID within local storage`);
   }
 }
 export function formatedSeconds(seconds) {
@@ -297,6 +303,21 @@ export function formatedSeconds(seconds) {
   const minutes = Math.floor((seconds - hour * 3600) / 60);
   seconds = seconds - (hour * 3600 + minutes * 60);
   return { hour, minutes, seconds };
+}
+
+export function stringTimeToSeconds(str) {
+  // takes stirng of value 00:00:00
+  const timeArr = str.split(":")
+  // [hour, mins , secs]
+  let multipler = 3600
+  let seconds = 0
+  for (let time of timeArr) {
+    seconds += time * multipler
+    multipler = multipler / 60
+  }
+  return seconds
+
+
 }
 export function changeSelectedNavbar(navButtonSelector) {
   const lastNavSelected = document.querySelector('.nav-selected');
@@ -432,6 +453,9 @@ export async function saveTags(UUID, KEY, tags, fromServer) {
     // save it locally here
   }
 
+}
+export function getStringTimeFrom(seconds) {
+  return new Date(seconds * 1000).toISOString().slice(11, 19);
 }
 
 export function cleanLocalTag(UUID, KEY) {
