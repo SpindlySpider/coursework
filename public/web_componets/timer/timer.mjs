@@ -32,7 +32,7 @@ export default class TimerComponent extends HTMLElement {
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
     const secs = duration.seconds === 0 ? '0s' : `${duration.seconds}s`;
-    return `⏱︎ ${hour}${mins}${secs}`;
+    return `${hour}${mins}${secs}`;
   }
 
   getTotalTime() {
@@ -206,9 +206,13 @@ export default class TimerComponent extends HTMLElement {
     }
     const formattedTime = this.getFormatStringTime(this.seconds);
     this.time.textContent = `${formattedTime} / ${this.getFormatStringTime(this.timerList[this.timerIndex].duration)}`;
-    const percent =
-      ((this.miliseconds / 1000) / this.timerList[this.timerIndex].duration) * 100;
-    console.log(percent)
+    const max = this.timerList[this.timerIndex].duration
+    let percent =
+      ((this.miliseconds / 1000) / (max-1)) * 100;
+    console.log(percent ,(max-1),(this.miliseconds / 1000))
+    if(this.miliseconds/1000 > (max-1)){
+      percent = 0
+    }
     this.setProgress(percent);
   }
 
