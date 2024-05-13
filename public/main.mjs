@@ -1,6 +1,6 @@
-import { displayCategoryPage } from './script/category_page.mjs';
-import { displayPlaylistPage } from './script/playlist_page.mjs';
-import { displayProfiles } from './script/profile_page.mjs';
+import { displayCategoryPage } from './pages/category_page.mjs';
+import { displayPlaylistPage } from './pages/playlist_page.mjs';
+import { displayProfiles } from './pages/profile_page.mjs';
 function displayNewActivityMenu() {
   document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');
@@ -64,3 +64,5 @@ document
   .querySelector('#workout-playlist')
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
+
+displayCategoryPage()

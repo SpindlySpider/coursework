@@ -24,18 +24,15 @@ export async function multibodyParser(req, res,id,emitter) {
     // split buffer into content and header
     let [header, content] = splitString(buffer, currentIndex);
     console.log(header.toString())
+    // regex to extract filename
     const filename = header.toString().match(/filename="([a-zA-Z0-9\-]*)(.*)"/g)
     const extention = filename.toString().match(/(\.)(?!.*\.)\w*/g).toString();
-    // extract file extention
-    // logger(content, `chuck${extention}`)
     //save file
 
     const URL = `${import.meta.dirname}/../../photos/${id}${extention}`
     fs.writeFile(URL, content, () => { })
     console.log("file upload",URL)
     emitter.emit("upload-success",URL)
-    // fs.writeFile(`${import.meta.dirname}/${crypto.randomUUID()}${extention}`, content, () => { })
-    // res.status(200).send("saved image")
   })
 }
 

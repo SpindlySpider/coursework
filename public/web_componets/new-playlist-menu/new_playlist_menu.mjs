@@ -1,16 +1,14 @@
 import {
-  ACTIVTIES_KEY,
-  PLAYLIST_KEY,
   deleteFromLocal,
   fetchTemplate,
   formatedSeconds,
-  getAllCustomActivites,
   getUUID,
-  savePlaylist,
   stringTimeToSeconds,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
-import { displayPlaylistPage } from '/../../script/playlist_page.mjs';
+import { displayPlaylistPage } from '/../../pages/playlist_page.mjs';
+import { PLAYLIST_KEY, savePlaylist } from '../playlist-tools.mjs';
+import { ACTIVTIES_KEY, getAllCustomActivites } from '../activity-tools.mjs';
 
 export class newPlaylistMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache

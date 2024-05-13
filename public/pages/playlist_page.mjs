@@ -1,12 +1,10 @@
+import { getActivtyFromID } from '../web_componets/activity-tools.mjs';
 import {
-  changeSelectedNavbar,
-  createButton,
-  formatedSeconds,
-  getActivtyFromID,
   getPlaylist,
-  getStringTimeFrom,
-  user,
-} from '../web_componets/utilities.mjs';
+} from '../web_componets/playlist-tools.mjs';
+import { getStringTimeFrom, user, createButton, changeSelectedNavbar } from '../web_componets/utilities.mjs';
+
+
 const el = {};
 function prepareHandles() {
   el.main = document.querySelector('#main-content');

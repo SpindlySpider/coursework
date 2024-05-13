@@ -27,7 +27,6 @@ export class durationPicker extends HTMLElement {
       return;
     }
     await this.attachTemplate();
-    this.initilized = true;
   }
 
   getDuration() {

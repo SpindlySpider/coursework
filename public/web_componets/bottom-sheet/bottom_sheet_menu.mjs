@@ -2,9 +2,9 @@ import { fetchTemplate } from '../utilities.mjs';
 
 export class bottomSheetMenu extends HTMLElement {
   constructor() {
-    // must do all of the selections within the constructor
     super();
     this.initilized = false;
+    // initilized prevents shadow dom being defined if it already is defined
   }
 
   bottomSheetPrepareHandles() {
@@ -17,7 +17,6 @@ export class bottomSheetMenu extends HTMLElement {
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.deleteButton = this.shadow.querySelector('#bottomsheet-delete');
-    this.disableNavbarBorder();
   }
 
   disableNavbarBorder() {
@@ -42,6 +41,7 @@ export class bottomSheetMenu extends HTMLElement {
     this.content.style.height = '0vh';
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
     this.doneButton.addEventListener('click', this.destorySelf.bind(this));
+    this.disableNavbarBorder();
     this.initilized = true;
   }
 
@@ -77,7 +77,5 @@ export class bottomSheetMenu extends HTMLElement {
   setTitle(str) {
     this.customTitle.textContent = str;
   }
-
-
 }
 customElements.define('bottom-sheet-menu', bottomSheetMenu);

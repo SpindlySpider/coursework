@@ -1,5 +1,7 @@
-import { displayPlaylistPage } from '../../script/playlist_page.mjs';
-import { fetchTemplate, formatedSeconds, getPhotoFromID, getPhotos } from '../utilities.mjs';
+import { displayPlaylistPage } from '../../pages/playlist_page.mjs';
+import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
+import { fetchTemplate, formatedSeconds, } from '../utilities.mjs';
+
 
 export default class TimerComponent extends HTMLElement {
   constructor() {
@@ -208,9 +210,9 @@ export default class TimerComponent extends HTMLElement {
     this.time.textContent = `${formattedTime} / ${this.getFormatStringTime(this.timerList[this.timerIndex].duration)}`;
     const max = this.timerList[this.timerIndex].duration
     let percent =
-      ((this.miliseconds / 1000) / (max-1)) * 100;
-    console.log(percent ,(max-1),(this.miliseconds / 1000))
-    if(this.miliseconds/1000 > (max-1)){
+      ((this.miliseconds / 1000) / (max - 1)) * 100;
+    console.log(percent, (max - 1), (this.miliseconds / 1000))
+    if (this.miliseconds / 1000 > (max - 1)) {
       percent = 0
     }
     this.setProgress(percent);

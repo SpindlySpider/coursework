@@ -1,23 +1,16 @@
 import {
   ACTIVTIES_KEY,
-  deleteFromLocal,
-  fetchTemplate,
-  getActivtyFromID,
   saveActivty,
-  formatedSeconds,
-  saveTags,
-  cleanLocalTag,
-  getTags,
-  createButton,
-  getPhotos,
-  getPhotoFromID,
-  uploadPhoto,
-} from '../utilities.mjs';
+  getActivtyFromID,
+} from '../activity-tools.mjs';
+import { deleteFromLocal, formatedSeconds, createButton } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
   displayCategoryPage,
   displayCustomCateogryPage,
-} from '../../script/category_page.mjs';
+} from '../../pages/category_page.mjs';
+import { cleanLocalTag, saveTags, getTags } from '../tag-tools.mjs';
+import { getPhotos, getPhotoFromID, uploadPhoto } from '../picture-tools.mjs';
 export class Entry extends newActivtyMenu {
   constructor() {
     super();

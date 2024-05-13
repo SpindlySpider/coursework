@@ -1,6 +1,5 @@
-import { getAllCustomActivites } from '../../web_componets/utilities.mjs';
+import { getAllCustomActivites, ACTIVTIES_KEY } from '../../web_componets/activity-tools.mjs';
 import {
-  ACTIVTIES_KEY,
   changeSelectedNavbar,
   user,
 } from '../web_componets/utilities.mjs';
@@ -42,7 +41,7 @@ export async function displayCustomCateogryPage() {
   cleanContent()
   setHeader("your exercises")
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
-  if(isActivitiesEmpty(exercises)){
+  if (isActivitiesEmpty(exercises)) {
     return
   }
   for (let item of Object.keys(exercises)) {
@@ -57,7 +56,7 @@ export async function displayCustomCateogryPage() {
 async function displayAllActivities() {
   const menu = document.createElement('bottom-sheet-menu');
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
-  if(isActivitiesEmpty(exercises)){
+  if (isActivitiesEmpty(exercises)) {
     return
   }
   await menu.attachTemplate();
