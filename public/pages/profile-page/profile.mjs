@@ -1,12 +1,12 @@
-import { ACTIVTIES_KEY } from '../web_componets/activity-tools.mjs';
-import { PLAYLIST_KEY } from '../web_componets/playlist-tools.mjs';
+import { ACTIVTIES_KEY } from '../../web_componets/activity-tools.mjs';
+import { PLAYLIST_KEY } from '../../web_componets/playlist-tools.mjs';
 import {
   USER_KEY,
   changeSelectedNavbar,
   createButton,
   popuplateLocal,
   user,
-} from '../web_componets/utilities.mjs';
+} from '../../web_componets/utilities.mjs';
 
 const el = {};
 function prepareHandles() {

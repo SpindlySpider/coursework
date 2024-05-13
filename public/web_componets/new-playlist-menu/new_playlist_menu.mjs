@@ -6,7 +6,7 @@ import {
   stringTimeToSeconds,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
-import { displayPlaylistPage } from '/../../pages/playlist_page.mjs';
+import { displayPlaylistPage } from '/../../pages/playlist-page/playlist.mjs';
 import { PLAYLIST_KEY, savePlaylist } from '../playlist-tools.mjs';
 import { ACTIVTIES_KEY, getAllCustomActivites } from '../activity-tools.mjs';
 

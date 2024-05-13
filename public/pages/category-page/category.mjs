@@ -1,8 +1,8 @@
-import { getAllCustomActivites, ACTIVTIES_KEY } from '../../web_componets/activity-tools.mjs';
+import { getAllCustomActivites, ACTIVTIES_KEY } from '../../../web_componets/activity-tools.mjs';
 import {
   changeSelectedNavbar,
   user,
-} from '../web_componets/utilities.mjs';
+} from '../../web_componets/utilities.mjs';
 
 const el = {};
 

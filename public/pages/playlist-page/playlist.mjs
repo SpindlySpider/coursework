@@ -1,8 +1,8 @@
-import { getActivtyFromID } from '../web_componets/activity-tools.mjs';
+import { getActivtyFromID } from '/../../web_componets/activity-tools.mjs';
 import {
   getPlaylist,
-} from '../web_componets/playlist-tools.mjs';
-import { getStringTimeFrom, user, createButton, changeSelectedNavbar } from '../web_componets/utilities.mjs';
+} from '../../../web_componets/playlist-tools.mjs';
+import { getStringTimeFrom, user, createButton, changeSelectedNavbar } from '../../web_componets/utilities.mjs';
 
 
 const el = {};

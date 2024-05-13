@@ -1,18 +1,21 @@
-import { displayCategoryPage } from './pages/category_page.mjs';
-import { displayPlaylistPage } from './pages/playlist_page.mjs';
-import { displayProfiles } from './pages/profile_page.mjs';
+import { displayCategoryPage } from './pages/category-page/category.mjs';
+import { displayPlaylistPage } from './pages/playlist-page/playlist.mjs';
+import { displayProfiles } from './pages/profile-page/profile.mjs';
+
 function displayNewActivityMenu() {
   document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');
   const menu = document.createElement('new-activty-menu');
   main.appendChild(menu);
 }
+
 function displayNewPlaylistMenu() {
   document.querySelector('#activtyList').remove();
   const main = document.querySelector('#main-content');
   const menu = document.createElement('new-playlist-menu');
   main.appendChild(menu);
 }
+
 function displayNewEntryOptions() {
   if (document.querySelector('#activtyList') == null) {
     const background = document.createElement('main');

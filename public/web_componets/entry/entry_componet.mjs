@@ -8,7 +8,7 @@ import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
   displayCategoryPage,
   displayCustomCateogryPage,
-} from '../../pages/category_page.mjs';
+} from '../../pages/category-page/category.mjs';
 import { cleanLocalTag, saveTags, getTags } from '../tag-tools.mjs';
 import { getPhotos, getPhotoFromID, uploadPhoto } from '../picture-tools.mjs';
 export class Entry extends newActivtyMenu {

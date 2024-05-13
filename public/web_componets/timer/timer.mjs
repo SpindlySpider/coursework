@@ -1,4 +1,4 @@
-import { displayPlaylistPage } from '../../pages/playlist_page.mjs';
+import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
 import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
 import { fetchTemplate, formatedSeconds, } from '../utilities.mjs';
 

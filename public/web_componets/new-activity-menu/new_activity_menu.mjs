@@ -6,7 +6,7 @@ import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import {
   displayCategoryPage,
   displayCustomCateogryPage,
-} from '../../pages/category_page.mjs';
+} from '../../pages/category-page/category.mjs';
 import { ACTIVTIES_KEY, saveActivty } from '../activity-tools.mjs';
 import { cleanLocalTag, saveTags } from '../tag-tools.mjs';
 import { uploadPhoto } from '../picture-tools.mjs';
