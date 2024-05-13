@@ -60,7 +60,7 @@ class TagComponent extends HTMLElement {
     });
   }
 
-  setTags(textList) {
+  setTags(textList = []) {
     for (let tag of textList) {
       this.addTag(tag);
     }

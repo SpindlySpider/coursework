@@ -3,7 +3,7 @@ import {
   saveActivty,
   getActivtyFromID,
 } from '../activity-tools.mjs';
-import { deleteFromLocal, formatedSeconds,  fetchTemplate } from '../utilities.mjs';
+import { deleteFromLocal, formatedSeconds, fetchTemplate } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
   displayCategoryPage,
@@ -66,25 +66,24 @@ export class Entry extends newActivtyMenu {
     if (this.editing || this.initilized) {
       return;
     }
+    // setting up inner HTML for shadowDOM
     this.shadow = this.attachShadow({ mode: 'open' });
-    // fetch pictures for this activity from the server here
     this.entryJSON = await getActivtyFromID(this.entryID);
     const thumbnail = await fetch(import.meta.resolve("./thumbnail.inc")).then(item => item.text())
     this.shadow.innerHTML = thumbnail;
-    this.entryName = this.shadow.querySelector("#title")
-    this.description = this.shadow.querySelector("#description")
-    this.image = this.shadow.querySelector("#image")
-    this.durationDisplay = this.shadow.querySelector("#duration")
-
-    this.entryName.textContent = this.entryJSON.title;
+    // setting values for title, description and duration
+    this.shadow.querySelector("#title").textContent = this.entryJSON.title
+    this.shadow.querySelector("#description").textContent = this.entryJSON.description
     this.seconds = this.entryJSON.duration;
-    this.description = this.entryJSON.description;
-    this.durationDisplay.textContent = this.getFormatStringTime()
+    this.shadow.querySelector("#duration").textContent = this.getFormatStringTime()
+    // appending any photos if there are any
     const photoIDs = await getPhotos(this.entryID)
     if (photoIDs.length > 0) {
+      this.image = this.shadow.querySelector("#image")
       const response = await getPhotoFromID(photoIDs[0])
       this.image.src = response.url
     }
+    // if own this event you can edit it
     if (this.editable) {
       this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
         once: true,
@@ -139,23 +138,19 @@ export class Entry extends newActivtyMenu {
 
   async appendPictures() {
     for (let id of this.pictures) {
-      // add a delete button to the images somewhere here
-      const imageHolder = document.createElement("div")
-      imageHolder.style = "display:flex; flex-direction:column; border: 1px solid black; border-radius: 5vw ; width : 75vw;"
-      const deleteButton = document.createElement("button")
-      deleteButton.type = "button"
-      deleteButton.textContent = "delete"
-      deleteButton.classList.add("bottomsheet-header-button")
-      let image = document.createElement("img")
-      image.style = "object-fit: contain;"
       const response = await getPhotoFromID(id)
-      image.src = response.url
-      deleteButton.addEventListener("click", () => {
+      if (!response.ok) {
+        throw Error("couldnt get photo")
+      }
+      const template = await fetch(import.meta.resolve("./picture-holder.inc")).then(item => item.text())
+      const imageHolder = document.createElement("div")
+      imageHolder.innerHTML = template
+      this.content.append(imageHolder)
+      imageHolder.querySelector("img").src = response.url
+      imageHolder.querySelector("button").addEventListener("click", () => {
         this.deletePicture(id);
         imageHolder.remove()
       })
-      imageHolder.append(image, deleteButton)
-      this.content.append(imageHolder)
 
     }
   }

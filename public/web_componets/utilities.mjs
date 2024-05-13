@@ -1,3 +1,7 @@
+import { ACTIVTIES_KEY, getActivtyFromID } from "./activity-tools.mjs";
+import { PLAYLIST_KEY, getPlaylist } from "./playlist-tools.mjs";
+
+export const user = () => localStorage.getItem(USER_KEY) ?? null;
 export const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const USER_KEY = 'account';
 
@@ -97,21 +101,23 @@ export function changeSelectedNavbar(navButtonSelector) {
 }
 
 export async function popuplateLocal() {
-  const online = true
-  if (user() && online) {
+  if (!(user())) {
     return
   }
-  const activities = await fetch(`users/${user()}/activities`).then((res) => {
-    return res.json();
-  });
+  const activities = await fetch(`users/${user()}/activities`).then((res) =>res.json());
+  // popuplates all activities
   for (let item of activities.data) {
     await getActivtyFromID(item.activity_id);
   } // popuplates local storage with upto date sever infromation
-  // TODO popuplate tags and playlist here
+  const playlists = await fetch(`users/${user()}/playlists`).then((res) =>res.json());
+  // populates playlists
+  for (let item of playlists.data) {
+    await getPlaylist(item.playlist_id)
+  }
+
 }
 
 export function getStringTimeFrom(seconds) {
   return new Date(seconds * 1000).toISOString().slice(11, 19);
 }
 
-export const user = () => localStorage.getItem(USER_KEY) ?? null;
