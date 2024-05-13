@@ -10,6 +10,7 @@ import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import { displayPlaylistPage } from '/../../pages/playlist-page/playlist.mjs';
 import { PLAYLIST_KEY, savePlaylist } from '../playlist-tools.mjs';
 import { ACTIVTIES_KEY, getAllCustomActivites } from '../activity-tools.mjs';
+import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
 
 export class newPlaylistMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -139,22 +140,20 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   addEntryToList(entry) {
     console.log(`add ${entry.dataset.id}`);
+    // add visuall notifcaiton of adding activity
     this.activityItems.push(entry.dataset.id);
   }
 
   async customActivitesSelection() {
     setTimeout(this.pullupAnimation.bind(this), 50, 78);
+    let hideList = [this.nameInput, this.cancel, this.doneButton, this.addButton, this.deleteButton, this.playlistDurationText]
     this.playlistDurationText = this.shadow.querySelector("#totalDuration")
     this.cleanContent();
     this.hideOptions()
-    console.log('add activity');
-    this.nameInput.style.display = 'none';
+    for (let item of hideList) {
+      item.style.display = "none"
+    }
     this.excerciseList.style.display = "flex"
-    this.cancel.style.display = 'none';
-    this.doneButton.style.display = 'none';
-    this.addButton.style.display = 'none';
-    this.deleteButton.style.display = 'none';
-    this.playlistDurationText.style.display = "none";
     this.backButton.style.display = 'flex';
     this.setTitle('add activity');
 
@@ -170,17 +169,23 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
     for (let item of Object.keys(customActivties)) {
       // make a web componenet for the event
-      const entry = document.createElement('ul');
-      const entryText = document.createElement('p');
+      const entry = await fetchFragment(import.meta.resolve("./playlist-excerises-item.inc"))
       entry.dataset.id = item;
-      entry.textContent = customActivties[item].title;
+      entry.querySelector("#title").textContent = customActivties[item].title;
+      entry.querySelector("#duration").textContent = this.updateplaylistduration(customActivties[item].duration);
+      console.log(customActivties)
+
       entry.entryID = item;
-      // await entry.attachTemplate();
-      entry.classList.add('bottomsheet-content-item');
-      entry.classList.add('activty-item');
-      entry.classList.add('clickable');
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
       this.excerciseList.append(entry);
+      const photos = await getPhotos(item)
+      if (photos[0] !== undefined) {
+        const response = await getPhotoFromID(photos[0])
+        if (!response.ok) {
+          throw Error("couldnt get photo")
+        }
+        entry.querySelector("img").src = response.url;
+      }
     }
   }
 
@@ -190,6 +195,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       item.remove();
     }
   }
+
   hideOptions() {
     this.excerciseList.style.display = this.optionsList.style.display = "none"
   }
