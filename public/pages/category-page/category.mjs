@@ -56,26 +56,18 @@ export async function displayCustomCateogryPage() {
 }
 
 async function displayAllActivities() {
-  const menu = document.createElement('bottom-sheet-menu');
+  cleanContent()
+  setHeader("all exercises")
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
   if (isActivitiesEmpty(exercises)) {
     return
   }
-  await menu.attachTemplate();
-  menu.addButton.style.display = 'none';
-  menu.setTitle('all activities');
-  el.main.append(menu);
-  const activities = await fetch(`users/${user()}/activities`).then((res) => {
-    return res.json();
-  });
-  console.log(activities);
-  for (let item of activities.data) {
+  for (let item of Object.keys(exercises)) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
-    entry.entryID = item.activity_id;
-    await entry.attachTemplate();
-    entry.classList.add('bottomsheet-content-item');
-    menu.appendEntry(entry);
+    entry.entryID = item;
+    entry.classList.add("menu-item")
+    el.content.append(entry);
   }
 }
 

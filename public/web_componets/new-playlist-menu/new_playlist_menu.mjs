@@ -1,5 +1,6 @@
 import {
   deleteFromLocal,
+  fetchFragment,
   fetchTemplate,
   formatedSeconds,
   getUUID,
@@ -29,18 +30,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.initilized = true;
   }
 
-  prepareHandles() {
+  async prepareHandles() {
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.textContent = '➕exercise';
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.cancel = this.shadow.querySelector('#bottomsheet-cancel');
     this.extraDetails = document.createElement("div")
-    this.excerciseList = document.createElement("div")
-    this.optionsList = document.createElement("div")
+    this.excerciseList = await fetchFragment(import.meta.resolve("./playlist-option-list.inc"))
+    this.optionsList = await fetchFragment(import.meta.resolve("./playlist-option-list.inc"))
     this.excerciseList.id = "exercise-list"
     this.optionsList.id = "options-list"
-    this.excerciseList.style = this.optionsList.style = `border: 0.5vw solid gray; padding: 0; box-shadow: 0px 0.5vw 13px 0.5vw #534747; border-radius: 3vw; margin-bottom: 1vh ;display:none; flex-direction: column;`
     this.setupPlaylistOptions();
     this.playlistDurationText = document.createElement("p");
     this.playlistDurationText.style.fontSize = "3.5vw"
@@ -60,8 +60,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
       '../../web_componets/bottom-sheet/bottomsheet.html',
     );
     this.bottomSheetPrepareHandles();
-    this.prepareHandles();
-    this.createButtons();
+    await this.prepareHandles();
+    await this.createButtons();
     this.setupEventListeners();
     this.setTitle('new playlist');
     setTimeout(this.pullupAnimation.bind(this), 25, 75);
@@ -115,9 +115,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.destorySelf();
   }
 
-  createButtons() {
-    this.createEmptyPlaylist = document.createElement('button');
-    this.importPlaylist = document.createElement('button');
+  async createButtons() {
+    this.createEmptyPlaylist = await fetchFragment(import.meta.resolve("./playlist-button.inc"))
+    this.importPlaylist = await fetchFragment(import.meta.resolve("./playlist-button.inc"))
 
     this.cancel.style.display = 'flex';
 
@@ -128,18 +128,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.createEmptyPlaylist.textContent = 'create empty playlist';
     this.deleteButton.textContent = "delete playlist"
     this.importPlaylist.textContent = 'import playlist';
-    this.createEmptyPlaylist.type = 'button';
-    this.importPlaylist.type = 'button';
     this.doneButton.textContent = 'save';
 
-    this.createEmptyPlaylist.classList.add('bottomsheet-content-item');
-    this.importPlaylist.classList.add('bottomsheet-content-item');
     this.nameInput.classList.add('bottomsheet-content-item');
     this.deleteButton.style.backgroundColor = "red"
     this.deleteButton.style.alignSelf = "flex-end"
     this.nameInput.style.display = this.backButton.style.display = 'none';
     this.content.append(this.createEmptyPlaylist, this.importPlaylist, this.nameInput);
-    this.content.append(this.excerciseList, this.optionsList)
   }
 
   addEntryToList(entry) {
@@ -152,9 +147,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.playlistDurationText = this.shadow.querySelector("#totalDuration")
     this.cleanContent();
     this.hideOptions()
-    this.excerciseList.style.display = "flex"
     console.log('add activity');
     this.nameInput.style.display = 'none';
+    this.excerciseList.style.display = "flex"
     this.cancel.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.style.display = 'none';
@@ -165,13 +160,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     if (customActivties == null || Object.keys(customActivties).length == 0) {
-      const emptyMessage = document.createElement('p');
+      this.excerciseList.style.display = "none"
+      const emptyMessage = this.content.querySelector("#message");
       emptyMessage.textContent =
         'press the + at the bottom to make new activties';
-      emptyMessage.style = "font-size:5vw;";
-      this.content.append(emptyMessage);
       return;
     }
+    this.content.querySelector("#message").style.display = "none"
 
     for (let item of Object.keys(customActivties)) {
       // make a web componenet for the event
@@ -272,21 +267,27 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.optionsList.append(item)
     }
   }
-  hideOptions() {
-    const emptyMessage = document.createElement('p');
-    emptyMessage.textContent = 'press add activity to add activties';
-    emptyMessage.style.fontSize = "5vw"
+
+  async hideOptions() {
+    let emptyMessage;
+    if (this.shadow.querySelector("#message")) {
+      emptyMessage = this.shadow.querySelector("#message");
+      emptyMessage.style.display = "flex"
+    }
+    else {
+      emptyMessage = await fetchFragment(import.meta.resolve("./playlist-empty-message.inc"))
+      this.content.append(emptyMessage);
+    }
     this.deleteButton.style.display = 'none';
-    this.content.append(emptyMessage);
     this.excerciseList.style.display = "none"
     this.optionsList.style.display = "none"
   }
 
-  playlistCreationTool() {
+  async playlistCreationTool() {
     setTimeout(this.pullupAnimation.bind(this), 50, 75);
     this.cleanContent();
-
     this.duration = 0;
+    this.content.append(this.excerciseList, this.optionsList)
     const enableList = [this.nameInput, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
     for (let item of enableList) {
       item.style.display = "flex"
@@ -296,53 +297,43 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.setTitle(`${this.headerTitle}`);
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
-
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
-
     if (this.activityItems.length == 0) {
       this.hideOptions()
       return;
     }
     for (let item of this.activityItems) {
-      const entry = document.createElement('ul');
-      const name = document.createElement('h2');
-      const dragField = document.createElement('p');
-      const deleteButton = document.createElement('h4');
-      const duration = document.createElement('p');
-      entry.style.justifyContent = 'space-between';
-      dragField.textContent = '⋮⋮';
-      duration.style.alignSelf = 'flex-end';
-      duration.style.overflowWrap = 'anywhere';
-      this.playlistDurationText = document.createElement("p");
-      deleteButton.textContent = '🗑️';
+      const entry = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
+      const name = entry.querySelector('h2');
+      // const dragField = entry.querySelector('#drag');
+      const deleteButton = entry.querySelector('h4');
+      const duration = entry.querySelector('#duration');
       entry.dataset.id = item;
-      entry.style.display = 'flex';
-      entry.style.flexDirection = 'row';
-      console.log("custom acitviites id", item)
+      // console.log("custom acitviites id", item)
       name.textContent = customActivties[item].title;
       duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
-      entry.classList.add('bottomsheet-content-item');
-      entry.classList.add('draggable');
 
       deleteButton.addEventListener('click', () => {
-
         this.duration -= customActivties[item].duration
         duration.textContent = this.updateplaylistduration(this.duration)
         console.log("items", this.activityItems, item)
-        this.activityItems = this.activityItems.filter(excercise => excercise != item)
+        let removed = false;
+        this.activityItems = this.activityItems.filter((excercise) => {
+          if (!removed && excercise == item) {
+            removed = true
+          }
+          return removed
+        })
         if (this.activityItems.length == 0) {
           this.hideOptions()
         }
         entry.remove();
       });
-
-      entry.draggable = true;
-      entry.classList.add('activty-item');
       this.draggingEventListeners(entry);
       this.excerciseList.append(entry);
-      entry.append(name, duration, deleteButton, dragField);
     }
+
     const text = this.shadow.querySelector("#totalDuration")
     text.textContent = `excerise length :${this.updateplaylistduration(this.duration)}`;
     this.content.append(this.deleteButton)

@@ -151,7 +151,6 @@ export class Entry extends newActivtyMenu {
         this.deletePicture(id);
         imageHolder.remove()
       })
-
     }
   }
   async deletePicture(pictureID) {

@@ -4,6 +4,7 @@ import {
   USER_KEY,
   changeSelectedNavbar,
   createButton,
+  fetchFragment,
   popuplateLocal,
   user,
 } from '../../web_componets/utilities.mjs';
@@ -16,20 +17,14 @@ function prepareHandles() {
 
 export async function displayProfiles() {
   changeSelectedNavbar('#profile');
-
   const users = await fetch('users/').then((res) => {
     return res.json();
   });
-  const para = document.createElement("h1")
-  para.classList.add("menu-title")
-  para.textContent = "users"
-  el.main.append(para);
+  const title = await fetchFragment(import.meta.resolve("./profile-title.inc"))
+  el.main.append(title);
 
   if (user()) {
-    console.log(user());
-    const account = await fetch(`users/${user()}`).then((res) => {
-      return res.json();
-    });
+    const account = await fetch(`users/${user()}`).then((res) => res.json());
     const text = document.createElement('h1');
     const signOutbutton = createButton('sign out');
     text.classList.add("menu-title")
