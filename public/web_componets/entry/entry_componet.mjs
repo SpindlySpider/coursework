@@ -3,7 +3,7 @@ import {
   saveActivty,
   getActivtyFromID,
 } from '../activity-tools.mjs';
-import { deleteFromLocal, formatedSeconds, createButton } from '../utilities.mjs';
+import { deleteFromLocal, formatedSeconds,  fetchTemplate } from '../utilities.mjs';
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
   displayCategoryPage,
@@ -67,53 +67,24 @@ export class Entry extends newActivtyMenu {
       return;
     }
     this.shadow = this.attachShadow({ mode: 'open' });
-    this.entryThumbnail = document.createElement('ul');
-    this.entryThumbnail.id = "entryThumbnail"
-    this.entryThumbnail.style = `display: flex; border: 0.5vw solid black; border-radius: 5vw;flex-direction:column;overflow-wrap: anywhere;width: 75vw;padding: 2vh 2vw;justify-content: center;
-  align-content: center;
-  padding: 2vh 2vw;`
     // fetch pictures for this activity from the server here
     this.entryJSON = await getActivtyFromID(this.entryID);
+    const thumbnail = await fetch(import.meta.resolve("./thumbnail.inc")).then(item => item.text())
+    this.shadow.innerHTML = thumbnail;
+    this.entryName = this.shadow.querySelector("#title")
+    this.description = this.shadow.querySelector("#description")
+    this.image = this.shadow.querySelector("#image")
+    this.durationDisplay = this.shadow.querySelector("#duration")
 
-    this.entryName = document.createElement('h3');
     this.entryName.textContent = this.entryJSON.title;
     this.seconds = this.entryJSON.duration;
     this.description = this.entryJSON.description;
-    this.entryDescription = document.createElement('p');
-    this.entryDescription.style = 'margin:0;text-align: center;';
-    this.entryName.style = 'margin-bottom:0;text-align: center;';
-    this.entryDescription.textContent = this.thumbnailDescription();
-    const container = document.createElement('ul');
-    container.style = `display: flex;
-  justify-content: space-around;
-  margin: 0;
-  padding: 0;
-  height: 10vh;
-  text-align: center;
-  font-size: 8vw;`
-    this.durationDisplay = document.createElement('p');
-    this.editButton = createButton("edit");
-    this.editButton.style = `;
-    align-self: center;
-  font-size: 9vw;
-  background-color: var(--button-colour);
-  padding: 1vw;
-  border: 1px;
-  border-radius: 2vw;
-  margin: 2vw;
-  width: 26vw;`
     this.durationDisplay.textContent = this.getFormatStringTime()
     const photoIDs = await getPhotos(this.entryID)
     if (photoIDs.length > 0) {
       const response = await getPhotoFromID(photoIDs[0])
-      let imageholder = document.createElement("img")
-      imageholder.src = response.url
-      imageholder.style = "object-fit: contain;"
-      this.entryThumbnail.append(imageholder)
+      this.image.src = response.url
     }
-    container.append(this.durationDisplay, this.editButton)
-    this.shadow.append(this.entryThumbnail);
-    this.entryThumbnail.append(this.entryName, this.entryDescription, container);
     if (this.editable) {
       this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
         once: true,
