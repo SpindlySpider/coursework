@@ -2,8 +2,7 @@ import { getActivtyFromID } from '/../../web_componets/activity-tools.mjs';
 import {
   getPlaylist,
 } from '../../../web_componets/playlist-tools.mjs';
-import { getStringTimeFrom, user, createButton, changeSelectedNavbar } from '../../web_componets/utilities.mjs';
-
+import { getStringTimeFrom, user, createButton, changeSelectedNavbar, fetchFragment } from '../../web_componets/utilities.mjs';
 
 const el = {};
 function prepareHandles() {
@@ -11,68 +10,48 @@ function prepareHandles() {
   el.navbar = document.querySelector('#navbar');
 }
 
-
 export async function displayPlaylistPage() {
   changeSelectedNavbar('#workout-playlist');
   if (document.querySelector('bottom-sheet-menu')) {
     // already have a menu on display
     return;
   }
-  const menu = document.createElement('ul');
-  menu.id = 'playlist-items';
-  const customActivties = document.createElement('h1');
-  customActivties.classList.add('menu-title');
-  customActivties.textContent = 'playlist page';
-  el.main.appendChild(menu);
-  menu.append(customActivties);
-
+  const title = await fetchFragment(import.meta.resolve("./playlist-list.inc"))
+  el.main.append(title);
+  const menu = el.main.querySelector("#playlist-items")
   // need to see from local storage incase your offline
-  const playlists = await fetch(`/users/${user()}/playlists`).then((res) => {
-    return res.json();
-  });
-  console.log(playlists);
+  const playlists = await fetch(`/users/${user()}/playlists`).then(res => res.json());
+
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
     const response = await fetch(`playlist/${item.playlist_id}`).then(
       (res) => res.json(),
     );
     const playlistDetails = response.playlistDetails
-    console.log(playlistDetails, item);
-    const container = document.createElement('li');
-    container.style.display = 'flex';
-    container.style.overflowWrap = "anywhere"
-    container.style.flexDirection = 'row';
-    container.style.width = '90vw';
-    container.style.border = "0.5vw solid var(--border-colour)"
-    container.style.borderRadius = "1vw"
-    container.style.padding = "2vw"
-    const entry = document.createElement('h2');
-    console.log("title", playlistDetails)
-    entry.textContent = playlistDetails.title;
-    entry.style.width = "75%";
-    entry.dataset.id = item.playlist_id;
-    entry.classList.add('menu-item');
-    const edit = createButton("edit");
+    // create a entry for each playlist entry
+    const playlistItem = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
+    const entry = playlistItem.querySelector("h2")
+    const edit = playlistItem.querySelector("button")
+    entry.textContent = playlistDetails.title
+    entry.dataset.id = item.playlist_id
 
-    menu.append(container);
-    container.append(entry);
-    container.append(edit);
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
     if (response.activites.length !== 0) {
-      const play = createButton("start");
-      container.append(play);
-      play.addEventListener('click', async () => {
+      const start = playlistItem.querySelector("#start");
+      start.style.display = "flex"
+      start.addEventListener('click', async () => {
         await startTimer(entry);
       });
     }
+    menu.append(playlistItem);
   }
 }
+
 async function startTimer(entry) {
   const main = document.querySelector('#main-content');
   main.textContent = '';
-
   const timer = document.createElement('timer-component');
   const playlist = await getPlaylist(entry.dataset.id);
   console.log("timerdata", playlist)
@@ -91,7 +70,6 @@ async function startTimer(entry) {
       workoutItems.push(item);
       if (rest != null) {
         // probbay a more efficent way of doing this as it checkes very time if rest is null
-
         workoutItems.push(rest)
       }
     }
@@ -119,7 +97,7 @@ async function editPlaylist(entry) {
   el.main.append(editMenu);
   const playlist = await getPlaylist(entry.dataset.id);
   // since the on connect call back is async it ensure all of it is connected
-  console.log('playlist', playlist.title.title);
+  console.log('playlist', playlist.title);
   editMenu.activityItems = playlist.items;
   editMenu.nameInput.value = playlist.title;
   editMenu.setInput.value = playlist.sets

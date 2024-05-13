@@ -52,6 +52,16 @@ export async function getUUID() {
   return newUUID.uuid;
 }
 
+export async function fetchFragment(URL) {
+  // fetches fragement(.inc) and returns DOM html
+  const htmlText = await fetch(URL).then(item => item.text())
+  let tempObj = document.createElement("div")
+  tempObj.innerHTML = htmlText
+  console.log(tempObj.firstChild)
+  return tempObj.firstChild;
+
+}
+
 export async function fetchTemplate(shadow, templateURL) {
   // taken from SSMB
   const res = await fetch(import.meta.resolve(templateURL));
@@ -104,12 +114,12 @@ export async function popuplateLocal() {
   if (!(user())) {
     return
   }
-  const activities = await fetch(`users/${user()}/activities`).then((res) =>res.json());
+  const activities = await fetch(`users/${user()}/activities`).then((res) => res.json());
   // popuplates all activities
   for (let item of activities.data) {
     await getActivtyFromID(item.activity_id);
   } // popuplates local storage with upto date sever infromation
-  const playlists = await fetch(`users/${user()}/playlists`).then((res) =>res.json());
+  const playlists = await fetch(`users/${user()}/playlists`).then((res) => res.json());
   // populates playlists
   for (let item of playlists.data) {
     await getPlaylist(item.playlist_id)

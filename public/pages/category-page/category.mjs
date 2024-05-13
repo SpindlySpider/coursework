@@ -1,6 +1,7 @@
 import { getAllCustomActivites, ACTIVTIES_KEY } from '../../../web_componets/activity-tools.mjs';
 import {
   changeSelectedNavbar,
+  fetchFragment,
   user,
 } from '../../web_componets/utilities.mjs';
 
@@ -17,15 +18,15 @@ function prepareHandles() {
 }
 
 function setHeader(str) {
-  const title = el.main.querySelector("#customActivtiesCategory")
   const headerList = el.main.querySelector("#titleContainer")
-  title.textContent = str
+  el.title.textContent = str
   const backButton = document.createElement("button")
   backButton.textContent = "back"
   backButton.classList.add("bottomsheet-content-item")
   backButton.addEventListener("click", displayCategoryPage)
   headerList.append(backButton)
 }
+
 function isActivitiesEmpty(exercises) {
   if (exercises == null || Object.keys(exercises).length == 0) {
     let emptyMessage = document.createElement('p');
@@ -37,6 +38,7 @@ function isActivitiesEmpty(exercises) {
   }
   return false
 }
+
 export async function displayCustomCateogryPage() {
   cleanContent()
   setHeader("your exercises")
@@ -80,37 +82,18 @@ async function displayAllActivities() {
 export async function displayCategoryPage() {
   changeSelectedNavbar('#catagories');
 
-  const titleContainer = document.createElement('ul');
-  titleContainer.id = "titleContainer";
+  const titleContainer = await fetchFragment(import.meta.resolve("./category-title.inc"))
+  const userActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
+  const allActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
+  allActivities.textContent = "all exercises"
+  userActivities.textContent = "your exercises"
 
-  const title = document.createElement('h1');
-  title.textContent = 'categories';
-  title.id = 'customActivtiesCategory';
-  title.classList.add('menu-title');
-
-  const customActivties = document.createElement('h2');
-  customActivties.classList.add('menu-title');
-  customActivties.textContent = 'your exercises';
-  customActivties.id = 'customActivtiesCategory';
-  customActivties.classList.add('category-item');
-  customActivties.classList.add('menu-item');
-
-  const allActivties = document.createElement('h2');
-  allActivties.classList.add('menu-title');
-  allActivties.textContent = 'all activties';
-  allActivties.id = 'all-activities';
-  allActivties.classList.add('category-item', "menu-item");
-  allActivties.classList.add('menu-item');
-
-  const container = document.createElement('ul');
-  container.id = "categoryContainer"
-  container.style = `display: flex; flex-direction: column;overflow-y: scroll;height: 75vh;`
+  const container = await fetchFragment(import.meta.resolve("./category-list.inc"))
   el.main.append(titleContainer, container);
-  container.append(customActivties, allActivties);
-  titleContainer.append(title)
+  container.append(userActivities, allActivities);
   prepareHandles()
-  customActivties.addEventListener('click', displayCustomCateogryPage, {});
-  allActivties.addEventListener('click', displayAllActivities, {});
+  userActivities.addEventListener('click', displayCustomCateogryPage);
+  allActivities.addEventListener('click', displayAllActivities);
 }
 
 prepareHandles();

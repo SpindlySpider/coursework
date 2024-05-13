@@ -318,15 +318,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.dataset.id = item;
       entry.style.display = 'flex';
       entry.style.flexDirection = 'row';
-      console.log("custom acitviites id",item)
+      console.log("custom acitviites id", item)
       name.textContent = customActivties[item].title;
-      duration.textContent =  this.updateplaylistduration(customActivties[item].duration);
+      duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
       entry.classList.add('bottomsheet-content-item');
       entry.classList.add('draggable');
+
       deleteButton.addEventListener('click', () => {
+
         this.duration -= customActivties[item].duration
-        this.updatePlaylistDuration()
+        duration.textContent = this.updateplaylistduration(this.duration)
         console.log("items", this.activityItems, item)
         this.activityItems = this.activityItems.filter(excercise => excercise != item)
         if (this.activityItems.length == 0) {
@@ -334,6 +336,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
         }
         entry.remove();
       });
+
       entry.draggable = true;
       entry.classList.add('activty-item');
       this.draggingEventListeners(entry);
@@ -341,12 +344,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.append(name, duration, deleteButton, dragField);
     }
     const text = this.shadow.querySelector("#totalDuration")
-    text.textContent =`excerise length :${this.updateplaylistduration(this.duration)}`;
+    text.textContent = `excerise length :${this.updateplaylistduration(this.duration)}`;
     this.content.append(this.deleteButton)
   }
 
   updateplaylistduration(seconds) {
-    if (seconds<= 0) {
+    if (seconds <= 0) {
       return ""
     }
     const duration = formatedSeconds(seconds);
@@ -389,11 +392,11 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }
     console.log("saving playlist", this.activityItems)
     const title = this.nameInput.value;
-    console.log("setinput",this.setInput)
+    console.log("setinput", this.setInput)
     const sets = parseInt(this.setInput.value);
     const excerciseRest = stringTimeToSeconds(this.restTimer.value)
     const setRest = stringTimeToSeconds(this.setRestTimer.value)
-    await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest,false);
+    await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false);
     await displayPlaylistPage();
     this.destorySelf();
   }
