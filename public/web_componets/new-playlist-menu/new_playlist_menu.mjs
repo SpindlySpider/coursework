@@ -334,7 +334,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.draggingEventListeners(entry);
       this.excerciseList.append(entry);
     }
-
     const text = this.shadow.querySelector("#totalDuration")
     text.textContent = `excerise length :${this.updateplaylistduration(this.duration)}`;
     this.content.append(this.deleteButton)
