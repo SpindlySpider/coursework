@@ -42,7 +42,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.optionsList = await fetchFragment(import.meta.resolve("./playlist-option-list.inc"))
     this.excerciseList.id = "exercise-list"
     this.optionsList.id = "options-list"
-    this.setupPlaylistOptions();
+    await this.setupPlaylistOptions();
     this.playlistDurationText = document.createElement("p");
     this.playlistDurationText.style.fontSize = "3.5vw"
     this.playlistDurationText.id = "totalDuration"
@@ -139,7 +139,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   addEntryToList(entry) {
-    console.log(`add ${entry.dataset.id}`);
     // add visuall notifcaiton of adding activity
     this.activityItems.push(entry.dataset.id);
   }
@@ -150,9 +149,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.playlistDurationText = this.shadow.querySelector("#totalDuration")
     this.cleanContent();
     await this.hideOptions()
-    for (let item of hideList) {
-      item.style.display = "none"
-    }
+    hideList.forEach((item) => item.style.display = "none")
     this.excerciseList.style.display = "flex"
     this.backButton.style.display = 'flex';
     this.setTitle('add activity');
@@ -173,8 +170,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.dataset.id = item;
       entry.querySelector("#title").textContent = customActivties[item].title;
       entry.querySelector("#duration").textContent = this.updateplaylistduration(customActivties[item].duration);
-      console.log(customActivties)
-
       entry.entryID = item;
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
       this.excerciseList.append(entry);
@@ -222,56 +217,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
     return container
   }
 
-  setupPlaylistOptions() {
-    function createTimeInput(title) {
-      const label = document.createElement("p")
-      const input = document.createElement("input")
-      label.textContent = title
-      input.type = "time"
-      input.step = "600"
-      input.value = "00:00:30"
-      input.style.fontSize = "5vw"
-      return { label, input }
-    }
-    const items = []
-    //number of sets
-    const setContainer = this.createContainer("setContainer")
-    const setInput = document.createElement("input")
-    const setLabel = document.createElement("p")
-    setInput.type = "number"
-    setInput.style.fontSize = "5vw"
-    setInput.value = 1
-    setInput.placeholder = "num"
-    setInput.style.width = "12vw"
-    setLabel.textContent = "number of sets"
-    this.setInput = setInput
-    setContainer.append(setLabel, setInput)
-    items.push(setContainer)
-    // rests between exercies and the formated text
-    const restTimerContainer = this.createContainer("restTimerContainer")
-    const restTimer = createTimeInput("rest between exercises")
-    this.restTimerLabel = restTimer.label
-    this.restTimer = restTimer.input
-    restTimerContainer.append(this.restTimerLabel, this.restTimer)
-    items.push(restTimerContainer)
-    // rests between sets
-    const setRestContainer = this.createContainer("setRestContainer")
-    const setRest = createTimeInput("rest between sets")
-    this.setRestLabel = setRest.label
-    this.setRestTimer = setRest.input
-    setRestContainer.append(this.setRestLabel, this.setRestTimer)
-    items.push(setRestContainer)
-    // audio option 
-    // vibrate 
-    // difficulty
-    for (let item of items) {
-      item.classList.add("bottomsheet-content-item")
-      this.optionsList.append(item)
-    }
+  async setupPlaylistOptions() {
+    const options = await fetchFragment(import.meta.resolve("./playlist-exercise-options.inc"))
+    this.optionsList.innerHTML = options.innerHTML
+    this.setInput = this.optionsList.querySelector("#set-input")
+    this.restTimer = this.optionsList.querySelector("#rest-timer-input")
+    this.setRestTimer = this.optionsList.querySelector("#set-rest-input")
   }
 
   async hideOptions() {
     let emptyMessage;
+    const hideList = [this.deleteButton, this.excerciseList, this.optionsList]
     if (this.shadow.querySelector("#message")) {
       emptyMessage = this.shadow.querySelector("#message");
       emptyMessage.style.display = "flex"
@@ -280,9 +236,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       emptyMessage = await fetchFragment(import.meta.resolve("./playlist-empty-message.inc"))
       this.content.append(emptyMessage);
     }
-    this.deleteButton.style.display = 'none';
-    this.excerciseList.style.display = "none"
-    this.optionsList.style.display = "none"
+    hideList.forEach((item) => item.style.display = "none")
   }
 
   async playlistCreationTool() {
@@ -291,9 +245,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.duration = 0;
     this.content.append(this.excerciseList, this.optionsList)
     const enableList = [this.nameInput, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
-    for (let item of enableList) {
-      item.style.display = "flex"
-    }
+    enableList.forEach((item) => item.style.display = "flex")
     this.backButton.style.display = 'none';
     this.content.style.height = '0vh';
     this.setTitle(`${this.headerTitle}`);
@@ -379,9 +331,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     if (this.activityItems[0] === undefined) {
       this.activityItems = [];
     }
-    console.log("saving playlist", this.activityItems)
     const title = this.nameInput.value;
-    console.log("setinput", this.setInput)
     const sets = parseInt(this.setInput.value);
     const excerciseRest = stringTimeToSeconds(this.restTimer.value)
     const setRest = stringTimeToSeconds(this.setRestTimer.value)
