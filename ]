@@ -299,10 +299,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.setTitle(`${this.headerTitle}`);
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
-    if (this.activityItems.length == 0) {
-      this.hideOptions()
-      return;
-    }
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     for (let item of this.activityItems) {
       const entry = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
@@ -318,17 +314,19 @@ export class newPlaylistMenu extends bottomSheetMenu {
       deleteButton.addEventListener('click', () => {
         this.duration -= customActivties[item].duration
         duration.textContent = this.updateplaylistduration(this.duration)
+        console.log(" deleteing items", this.activityItems, item)
         let removed = false;
         this.activityItems = this.activityItems.filter((excercise) => {
           if (!removed && excercise == item) {
+            console.log(excercise,item)
             removed = true
-            return false
           }
           return removed
         })
         if (this.activityItems.length == 0) {
           this.hideOptions()
         }
+        console.log("items after delete", this.activityItems, item)
         entry.remove();
       });
       this.draggingEventListeners(entry);
