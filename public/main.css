@@ -9,8 +9,9 @@
   --button-colour: #589aff;
   --border-colour: gray;
 }
-.addButtonBackground{
-  background-color:var(--button-colour);
+
+.addButtonBackground {
+  background-color: var(--button-colour);
   border-radius: 7vw;
 }
 
@@ -19,8 +20,8 @@
   justify-content: space-between;
 }
 
-.navbar-icon{
-  display:flex;
+.navbar-icon {
+  display: flex;
   object-fit: contain;
   height: 80%;
 }
@@ -33,6 +34,7 @@
   /* overflow: hidden; */
   padding: 0;
   margin: 0;
+  font-family: Syne, sans-serif;
 }
 
 button {
@@ -120,7 +122,8 @@ body {
   flex-direction: column;
   width: 18vw;
 }
-.navbar-text{
+
+.navbar-text {
   font-size: 5vw;
 }
 

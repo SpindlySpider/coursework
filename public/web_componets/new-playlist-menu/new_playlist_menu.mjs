@@ -130,6 +130,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   addEntryToList(entry) {
     // add visuall notifcaiton of adding activity
     this.activityItems.push(entry.dataset.id);
+    document.querySelector("toast-notification")
   }
 
   async customActivitesSelection() {

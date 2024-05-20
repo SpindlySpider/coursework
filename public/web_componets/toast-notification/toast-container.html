@@ -1,2 +1,49 @@
 <!DOCTYPE>
+<template>
+  <style>
+    ul {
+      display: flex;
+      position: absolute;
+      width: 80vw;
+      height: 100vh;
+      flex-direction: column;
+      font-size: 5.5vw;
+      bottom: 7vh;
+      right: 0;
+      align-items: flex-end;
+      justify-content: flex-end;
+      overflow-wrap: anywhere;
+      list-style-type: none;
+      pointer-events: none;
+    }
 
+    div {
+      border: 1vw solid black;
+      text-align: center;
+      margin: 2vw 2vw;
+      width: 90%;
+      border-radius: 3vw;
+      display: flex;
+      flex-direction: row;
+      background: #f3e4f0;
+      z-index: 99;
+      justify-content: flex-start;
+      text-align: start;
+      padding: 0vh 2vw;
+      transition: opacity 1.5s;
+    }
+
+    .remove {
+      opacity: 0;
+    }
+
+    img {
+      width: 30%;
+      object-fit: contain;
+      margin: 2vw;
+      border-radius: 5vw;
+    }
+  </style>
+  <ul id="toast-container">
+  </ul>
+</template>

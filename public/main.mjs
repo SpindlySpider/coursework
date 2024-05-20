@@ -68,4 +68,8 @@ document
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
 
+
 displayCategoryPage()
+
+
+await document.querySelector("toast-notification").addNotification("a wonderful new notification",1500,"http://localhost:8080/picture/891c6c00-1bc1-4f16-ba20-b3cbc0872143")
