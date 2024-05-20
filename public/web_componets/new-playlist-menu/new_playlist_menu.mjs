@@ -134,8 +134,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   async customActivitesSelection() {
     setTimeout(this.pullupAnimation.bind(this), 50, 78);
-    let hideList = [this.nameInput, this.cancel, this.doneButton, this.addButton, this.deleteButton, this.playlistDurationText]
-    let enableList = [this.excerciseList, this.backButton]
+    let hideList = [this.nameInput, this.cancel, this.doneButton, this.addButton, this.deleteButton, this.playlistDurationText, this.excerciseList]
+    let enableList = [this.backButton]
     this.cleanContent();
     await this.hideOptions()
     hideList.forEach((item) => item.style.display = "none")
@@ -160,7 +160,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.querySelector("#duration").textContent = this.updateplaylistduration(customActivties[item].duration);
       entry.entryID = item;
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
-      this.excerciseList.append(entry);
+      this.content.append(entry)
       const photos = await getPhotos(item)
       if (photos[0] !== undefined) {
         const response = await getPhotoFromID(photos[0])
@@ -168,12 +168,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
           throw Error("couldnt get photo")
         }
         entry.querySelector("img").src = response.url;
+        entry.querySelector("img").style.display = "flex";
       }
     }
   }
 
   cleanContent() {
-    const items = this.excerciseList.querySelectorAll('.activty-item');
+    const items = this.content.querySelectorAll('.activty-item');
     for (let item of items) {
       item.remove();
     }
@@ -254,7 +255,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       name.textContent = customActivties[item].title;
       duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
-      deleteButton.addEventListener('click', this.deleteItem.bind(this, duration, item, customActivties, entry));
+      deleteButton.addEventListener('click', () => this.deleteItem(duration, item, customActivties, entry));
       this.draggingEventListeners(entry);
       this.excerciseList.append(entry);
     }
@@ -271,8 +272,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
         removed = true
         return false
       }
-      return removed
-    })
+      return true
+    });
     if (this.activityItems.length == 0) {
       this.hideOptions()
     }
