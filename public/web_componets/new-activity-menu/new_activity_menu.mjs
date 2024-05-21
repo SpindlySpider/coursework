@@ -10,7 +10,7 @@ import {
 } from '../../pages/category-page/category.mjs';
 import { ACTIVTIES_KEY, saveActivty } from '../activity-tools.mjs';
 import { cleanLocalTag, saveTags } from '../tag-tools.mjs';
-import { getPhotoFromID,  uploadPhoto } from '../picture-tools.mjs';
+import { getPhotoFromID, uploadPhoto } from '../picture-tools.mjs';
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -42,7 +42,8 @@ export class newActivtyMenu extends bottomSheetMenu {
     urlReader.readAsDataURL(photo)
     urlReader.onload = async () => {
       const imageHolder = await this.createImageHolder();
-      imageHolder.querySelector("img").src = urlReader.result
+      this.pictureURL = urlReader.result
+      imageHolder.querySelector("img").src = this.pictureURL
       imageHolder.querySelector("button").addEventListener("click", () => {
         imageHolder.remove()
         this.content.querySelector("#add-photo-label").style.display = "flex"
@@ -51,13 +52,17 @@ export class newActivtyMenu extends bottomSheetMenu {
       this.content.querySelector("#photo-duration-container").prepend(imageHolder)
     }
   }
+  async getPhotoURL(id) {
+    const response = await getPhotoFromID(id)
+    if (!response.ok) throw Error("couldnt get photo")
+    return response.url
+  }
 
   async appendPictures() {
     for (let id of this.pictures) {
-      const response = await getPhotoFromID(id)
-      if (!response.ok) throw Error("couldnt get photo")
       const imageHolder = await this.createImageHolder();
-      imageHolder.querySelector("img").src = response.url
+      this.pictureURL = await this.getPhotoURL(id)
+      imageHolder.querySelector("img").src = this.pictureURL
       imageHolder.querySelector("button").addEventListener("click", () => {
         this.deletePicture(id);
         imageHolder.remove()
@@ -125,7 +130,7 @@ export class newActivtyMenu extends bottomSheetMenu {
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
-    if ( title == "" ) {
+    if (title == "") {
       this.toastNotification(`cannot save as there is no title`)
       throw Error("no title")
     }
@@ -139,14 +144,17 @@ export class newActivtyMenu extends bottomSheetMenu {
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
+    let photoURL = null
     if (this.photoInput.files.length >= 0) {
       for (let file of this.photoInput.files) {
         const input = new FormData()
         input.append("file", file)
         await uploadPhoto(UUID, input)
       }
+      photoURL = this.pictureURL
+      console.log("photo url",photoURL)
     }
-    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500)
+    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500, photoURL)
     this.destorySelf();
   }
 }

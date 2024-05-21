@@ -146,7 +146,7 @@ export class Entry extends newActivtyMenu {
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
-    if ( title == "" ) {
+    if (title == "") {
       this.toastNotification(`cannot save as there is no title`)
       throw Error("no title")
     }
@@ -161,14 +161,16 @@ export class Entry extends newActivtyMenu {
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     document.querySelector('#main-content').textContent = '';
+    let photoURL = null
     if (this.photoInput.files.length >= 0) {
       for (let file of this.photoInput.files) {
         const input = new FormData()
         input.append("file", file)
         await uploadPhoto(UUID, input)
       }
+      photoURL = this.pictureURL
     }
-    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500)
+    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500, photoURL)
     this.destorySelf();
   }
 }
