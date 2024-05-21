@@ -85,7 +85,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.bottomSheetPrepareHandles();
     await this.createActivtyInputs();
     this.setupActivityEventListeners();
-    setTimeout(this.pullupAnimation.bind(this), 25, 75);
+    setTimeout(this.pullupAnimation.bind(this), 25, 70);
     this.setTitle('new activity');
     this.initilized = true;
   }

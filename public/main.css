@@ -31,7 +31,6 @@
 }
 
 * {
-  /* overflow: hidden; */
   padding: 0;
   margin: 0;
   font-family: Syne, sans-serif;
@@ -55,7 +54,7 @@ button {
 
 .menu-title {
   display: flex;
-  font-size: 15vw;
+  font-size: 11vw;
   text-align: center;
 }
 

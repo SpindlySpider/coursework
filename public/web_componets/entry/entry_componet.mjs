@@ -132,7 +132,7 @@ export class Entry extends newActivtyMenu {
     this.descriptionInput.value = this.entryJSON.description;
     this.editing = true;
     this.setupEventListners();
-    setTimeout(this.pullupAnimation.bind(this), 25, 78);
+    setTimeout(this.pullupAnimation.bind(this), 25, 70);
     this.pictures = await getPhotos(this.entryID)
     await this.appendPictures()
   }

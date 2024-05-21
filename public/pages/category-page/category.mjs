@@ -21,10 +21,10 @@ function setHeader(str) {
   const headerList = el.main.querySelector("#titleContainer")
   el.title.textContent = str
   const backButton = document.createElement("button")
-  backButton.textContent = "back"
+  backButton.textContent = "<"
   backButton.classList.add("bottomsheet-content-item")
   backButton.addEventListener("click", displayCategoryPage)
-  headerList.append(backButton)
+  headerList.prepend(backButton)
 }
 
 function isActivitiesEmpty(exercises) {

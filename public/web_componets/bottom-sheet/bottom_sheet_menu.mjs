@@ -39,7 +39,7 @@ export class bottomSheetMenu extends HTMLElement {
     );
     this.bottomSheetPrepareHandles();
     this.content.style.height = '0vh';
-    setTimeout(this.pullupAnimation.bind(this), 25, 75);
+    setTimeout(this.pullupAnimation.bind(this), 25, 70);
     this.doneButton.addEventListener('click', this.destorySelf.bind(this));
     this.disableNavbarBorder();
     this.initilized = true;
