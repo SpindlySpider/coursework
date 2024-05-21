@@ -57,7 +57,7 @@ export async function fetchFragment(URL) {
   const htmlText = await fetch(URL).then(item => item.text())
   let tempObj = document.createElement("div")
   tempObj.innerHTML = htmlText
-  console.log(tempObj.firstChild)
+  console.log("fetched fragement",tempObj.firstChild)
   return tempObj.firstChild;
 
 }

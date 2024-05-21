@@ -3,6 +3,7 @@ import { fetchTemplate } from '../utilities.mjs';
 class TagComponent extends HTMLElement {
   constructor() {
     super();
+    this.shadow = this.attachShadow({ mode: 'open' });
     this.tags = [];
     this.initilized = false;
   }
@@ -12,7 +13,6 @@ class TagComponent extends HTMLElement {
       return;
     }
     // setting up DOM
-    this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(this.shadow, './tags/tag.html');
     // setting up event listeners
     this.prepareHandles();

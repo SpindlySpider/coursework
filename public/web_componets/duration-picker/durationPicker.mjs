@@ -5,6 +5,7 @@ export class durationPicker extends HTMLElement {
     super();
     this.seconds = 0;
     this.initilized = false;
+    this.shadow = this.attachShadow({ mode: 'open' });
   }
 
   async attachTemplate() {
@@ -12,7 +13,6 @@ export class durationPicker extends HTMLElement {
     if (this.initilized) {
       return;
     }
-    this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
       '../../web_componets/duration-picker/durationTimer.html',
@@ -23,9 +23,7 @@ export class durationPicker extends HTMLElement {
   }
 
   async connectedCallback() {
-    if (this.initilized) {
-      return;
-    }
+    if (this.initilized) return;
     await this.attachTemplate();
   }
 

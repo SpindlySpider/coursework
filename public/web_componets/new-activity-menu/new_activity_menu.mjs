@@ -10,7 +10,7 @@ import {
 } from '../../pages/category-page/category.mjs';
 import { ACTIVTIES_KEY, saveActivty } from '../activity-tools.mjs';
 import { cleanLocalTag, saveTags } from '../tag-tools.mjs';
-import { getPhotos, uploadPhoto } from '../picture-tools.mjs';
+import { getPhotoFromID,  uploadPhoto } from '../picture-tools.mjs';
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -23,15 +23,57 @@ export class newActivtyMenu extends bottomSheetMenu {
   async createActivtyInputs() {
     const frag = await fetchFragment(import.meta.resolve("./content.inc"))
     this.content.innerHTML = frag.innerHTML
-    this.nameInput = this.shadow.querySelector("#activityNameInput")
-    this.descriptionInput = this.shadow.querySelector("#descriptionInput")
-    this.timeInput = this.shadow.querySelector("#timeInput")
-    this.photoInput = this.shadow.querySelector("#addPhoto")
-    this.tags = this.shadow.querySelector("#tag")
+    this.timeInput = this.content.querySelector("#timeInput")
+    this.tags = this.content.querySelector("#tag")
+    await this.tags.attachTemplate()
+    this.nameInput = this.content.querySelector("#activityNameInput")
+    this.descriptionInput = this.content.querySelector("#descriptionInput")
+    this.photoInput = this.content.querySelector("#addPhoto")
     this.descriptionInput.addEventListener(
       'keyup',
       this.resizingTextarea.bind(this),
     );
+    this.photoInput.addEventListener("change", this.selectedPhoto.bind(this))
+  }
+  async selectedPhoto() {
+    // https://www.youtube.com/watch?v=Uo9Jme8IwlM&t=810s
+    const photo = this.photoInput.files[0]
+    const urlReader = new FileReader()
+    urlReader.readAsDataURL(photo)
+    urlReader.onload = async () => {
+      const imageHolder = await this.createImageHolder();
+      imageHolder.querySelector("img").src = urlReader.result
+      imageHolder.querySelector("button").addEventListener("click", () => {
+        imageHolder.remove()
+        this.content.querySelector("#add-photo-label").style.display = "flex"
+      })
+      this.content.querySelector("#add-photo-label").style.display = "none"
+      this.content.querySelector("#photo-duration-container").prepend(imageHolder)
+    }
+  }
+
+  async appendPictures() {
+    for (let id of this.pictures) {
+      const response = await getPhotoFromID(id)
+      if (!response.ok) throw Error("couldnt get photo")
+      const imageHolder = await this.createImageHolder();
+      imageHolder.querySelector("img").src = response.url
+      imageHolder.querySelector("button").addEventListener("click", () => {
+        this.deletePicture(id);
+        imageHolder.remove()
+        this.content.querySelector("#add-photo-label").style.display = "flex"
+      })
+      this.content.querySelector("#add-photo-label").style.display = "none"
+      this.content.querySelector("#photo-duration-container").prepend(imageHolder)
+    }
+  }
+  async deletePicture(pictureID) {
+    await fetch(`picture/${this.entryID}/${pictureID}`, { method: "delete" })
+  }
+
+  async createImageHolder() {
+    const template = await fetchFragment(import.meta.resolve("../new-activity-menu/picture-holder.inc"))
+    return template
   }
 
   resizingTextarea(e) {
@@ -75,8 +117,6 @@ export class newActivtyMenu extends bottomSheetMenu {
       displayCustomCateogryPage();
     }, 300);
   }
-
-  disconnectedCallback() { }
 
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites

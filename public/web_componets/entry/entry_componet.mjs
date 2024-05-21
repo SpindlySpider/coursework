@@ -125,7 +125,6 @@ export class Entry extends newActivtyMenu {
     this.setTitle(`edit ${this.entryJSON.title}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
-    this.timeInput.setDuration(this.seconds);
     await this.getTags();
     this.parentNode.append(this);
     this.nameInput.value = this.entryJSON.title;
@@ -135,28 +134,10 @@ export class Entry extends newActivtyMenu {
     setTimeout(this.pullupAnimation.bind(this), 25, 70);
     this.pictures = await getPhotos(this.entryID)
     await this.appendPictures()
+    this.timeInput.setDuration(this.seconds);
   }
 
-  async appendPictures() {
-    for (let id of this.pictures) {
-      const response = await getPhotoFromID(id)
-      if (!response.ok) {
-        throw Error("couldnt get photo")
-      }
-      const template = await fetch(import.meta.resolve("./picture-holder.inc")).then(item => item.text())
-      const imageHolder = document.createElement("div")
-      imageHolder.innerHTML = template
-      this.content.append(imageHolder)
-      imageHolder.querySelector("img").src = response.url
-      imageHolder.querySelector("button").addEventListener("click", () => {
-        this.deletePicture(id);
-        imageHolder.remove()
-      })
-    }
-  }
-  async deletePicture(pictureID) {
-    await fetch(`picture/${this.entryID}/${pictureID}`, { method: "delete" })
-  }
+
 
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
