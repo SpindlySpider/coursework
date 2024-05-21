@@ -67,9 +67,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.bottomSheetPrepareHandles();
     await this.prepareHandles();
     await this.createButtons();
+    this.setupContent()
     this.setupEventListeners();
     this.setTitle('new playlist');
-    this.setupContent()
     setTimeout(this.pullupAnimation.bind(this), 25, 70);
     this.initilized = true;
   }
@@ -99,16 +99,14 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   dragOverInsert(event) {
     let yPos = event.clientY;
-    if (event.type === 'touchmove') {
-      yPos = event.targetTouches[0].clientY;
-    }
-    event.preventDefault();
+    if (event.type === 'touchmove') yPos = event.targetTouches[0].clientY;
     const elementAfter = this.getAfterElement(yPos);
     const draggable = this.shadow.querySelector('.dragging');
     if (draggable == null) throw Error("not dragging anything");
-    if (elementAfter == null) {
-      this.excerciseList.appendChild(draggable);
-    } else this.excerciseList.insertBefore(draggable, elementAfter);
+    // in this order so that the user can still scroll on mobile devices
+    event.preventDefault();
+    if (elementAfter == null) this.excerciseList.appendChild(draggable);
+    else this.excerciseList.insertBefore(draggable, elementAfter);
   }
 
   async deletePlaylist() {
@@ -129,9 +127,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   async addEntryToList(entry) {
     this.activityItems.push(entry.dataset.id);
     let image = entry.querySelector("img")
-    if (image) {
-      image = image.src
-    }
+    if (image) image = image.src
     const name = entry.querySelector("#title").textContent
     //add pop up to notify the user an exercise has been added
     await document.querySelector("toast-notification").addNotification(`added ${name} to workout`, 1500, image)
@@ -170,17 +166,13 @@ export class newPlaylistMenu extends bottomSheetMenu {
         entry.querySelector("img").src = image
         entry.querySelector("img").style.display = "flex";
       }
-
-
     }
   }
   async getPhotoURL(UUID) {
     const photos = await getPhotos(UUID)
     if (photos[0] !== undefined) {
       const response = await getPhotoFromID(photos[0])
-      if (!response.ok) {
-        return null
-      }
+      if (!response.ok) return null;
       return response.url
     }
   }
@@ -255,6 +247,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       const deleteButton = entry.querySelector('h4');
       const duration = entry.querySelector('#duration');
       const image = await this.getPhotoURL(item)
+      const drag = entry.querySelector("#drag")
       if (image !== null && image !== undefined) {
         entry.querySelector("img").style.display = "flex"
         entry.querySelector("img").src = image
@@ -265,7 +258,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
       deleteButton.addEventListener('click', () => { this.deleteItem(item, customActivties, entry) });
-      this.draggingEventListeners(entry);
+      this.draggingEventListeners(drag);
       this.excerciseList.append(entry);
     }
     this.playlistDurationText.textContent = `excerise length :${this.updateplaylistduration(this.duration)}`;
@@ -298,16 +291,20 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   draggingEventListeners(element) {
     element.addEventListener('dragstart', () => {
-      element.classList.add('dragging');
+      element.parentNode.classList.add("dragging")
+      // element.classList.add('dragging');
     });
     element.addEventListener('touchstart', () => {
-      element.classList.add('dragging');
+      element.parentNode.parentNode.classList.add("dragging")
+      // element.classList.add('dragging');
     });
     element.addEventListener('dragend', () => {
-      element.classList.remove('dragging');
+      element.parentNode.classList.remove("dragging")
+      // element.classList.remove('dragging');
     });
     element.addEventListener('touchend', () => {
-      element.classList.remove('dragging');
+      element.parentNode.parentNode.classList.remove("dragging")
+      // element.classList.remove('dragging');
     });
   }
 
