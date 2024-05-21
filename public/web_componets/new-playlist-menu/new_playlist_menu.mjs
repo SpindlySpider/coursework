@@ -111,6 +111,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   async deletePlaylist() {
     await deleteFromLocal(this.UUID, PLAYLIST_KEY);
     await displayPlaylistPage();
+    document.querySelector("toast-notification").addNotification(`deleted ${this.nameInput.value}`, 1500)
     this.destorySelf();
   }
 
@@ -130,14 +131,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
   async addEntryToList(entry) {
     // add visuall notifcaiton of adding activity
     this.activityItems.push(entry.dataset.id);
-    // const notification = document.querySelector("toast-notification")
-    // notification.addNotification(`added ${entry}`)
     let image = entry.querySelector("img")
-    if(image){
+    if (image) {
       image = image.src
     }
     const name = entry.querySelector("#title").textContent
-    await document.querySelector("toast-notification").addNotification(`added ${name} to workout`, 1500,image)
+    await document.querySelector("toast-notification").addNotification(`added ${name} to workout`, 1500, image)
   }
 
   async customActivitesSelection() {
@@ -169,15 +168,24 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.entryID = item;
       entry.addEventListener('click', this.addEntryToList.bind(this, entry));
       this.content.append(entry)
-      const photos = await getPhotos(item)
-      if (photos[0] !== undefined) {
-        const response = await getPhotoFromID(photos[0])
-        if (!response.ok) {
-          throw Error("couldnt get photo")
-        }
-        entry.querySelector("img").src = response.url;
+      const image = await this.getPhotoURL(item);
+      if (image) {
+        entry.querySelector("img").src = image
         entry.querySelector("img").style.display = "flex";
       }
+
+
+    }
+  }
+  async getPhotoURL(UUID) {
+    const photos = await getPhotos(UUID)
+    if (photos[0] !== undefined) {
+      const response = await getPhotoFromID(photos[0])
+      if (!response.ok) {
+        // throw Error("couldnt get photo")
+        return null
+      }
+      return response.url
     }
   }
 
@@ -259,12 +267,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
       console.log(item, customActivties)
       const deleteButton = entry.querySelector('h4');
       const duration = entry.querySelector('#duration');
+      const image = await this.getPhotoURL(item)
+      if (image !== null && image !== undefined) {
+        entry.querySelector("img").style.display = "flex"
+        entry.querySelector("img").src = image
+      }
       entry.dataset.id = item;
       entry.name = customActivties[item].title
       name.textContent = entry.name;
       duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
-      deleteButton.addEventListener('click', () => this.deleteItem(duration, item, customActivties, entry));
+      deleteButton.addEventListener('click', () => { this.deleteItem(duration, item, customActivties, entry) });
       this.draggingEventListeners(entry);
       this.excerciseList.append(entry);
     }
@@ -274,7 +287,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   deleteItem(duration, item, customActivties, entry) {
     this.duration -= customActivties[item].duration
-    duration.textContent = this.updateplaylistduration(this.duration)
     let removed = false;
     this.activityItems = this.activityItems.filter((excercise) => {
       if (!removed && excercise == item) {
@@ -286,6 +298,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     if (this.activityItems.length == 0) {
       this.hideOptions()
     }
+    this.shadow.querySelector('#total-duration').textContent = `excerise length :${this.updateplaylistduration(this.duration)}`
     entry.remove();
   }
 
@@ -335,6 +348,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const setRest = stringTimeToSeconds(this.setRestTimer.value)
     await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false);
     await displayPlaylistPage();
+    await document.querySelector("toast-notification").addNotification(`saved ${this.nameInput.value}`, 1500)
     this.destorySelf();
   }
 }

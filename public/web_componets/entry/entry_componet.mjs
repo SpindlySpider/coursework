@@ -26,6 +26,7 @@ export class Entry extends newActivtyMenu {
     for (let id of this.pictures) {
       this.deletePicture(id);
     }
+    document.querySelector("toast-notification").addNotification(`deleted ${this.entryJSON.title}`, 1500)
     this.destorySelf();
   }
 
@@ -174,6 +175,7 @@ export class Entry extends newActivtyMenu {
         await uploadPhoto(UUID, input)
       }
     }
+    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500)
     this.destorySelf();
   }
 }

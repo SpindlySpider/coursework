@@ -42,7 +42,7 @@ export async function displayProfiles() {
     userPara.textContent = user.username;
     userPara.dataset.id = user.user_id;
     signInbutton.addEventListener('click', () => {
-      signIn(user.user_id);
+      signIn(user);
     });
     el.main.append(userPara);
     userPara.append(signInbutton);
@@ -50,14 +50,16 @@ export async function displayProfiles() {
 }
 
 async function signOut() {
+  document.querySelector("toast-notification").addNotification(`signed out`, 2000)
   localStorage[USER_KEY] = '';
   localStorage[ACTIVTIES_KEY] = '{}';
   localStorage[PLAYLIST_KEY] = '{}';
   await displayProfiles();
 }
 
-async function signIn(accountKey) {
-  localStorage[USER_KEY] = accountKey;
+async function signIn(userData) {
+  document.querySelector("toast-notification").addNotification(`logged in as ${userData.username}`, 2000)
+  localStorage[USER_KEY] = userData.user_id;
   await popuplateLocal();
   await displayProfiles();
 }

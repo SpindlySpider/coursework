@@ -9,7 +9,7 @@ import {
 } from '../../pages/category-page/category.mjs';
 import { ACTIVTIES_KEY, saveActivty } from '../activity-tools.mjs';
 import { cleanLocalTag, saveTags } from '../tag-tools.mjs';
-import { uploadPhoto } from '../picture-tools.mjs';
+import { getPhotos, uploadPhoto } from '../picture-tools.mjs';
 
 export class newActivtyMenu extends bottomSheetMenu {
   // also if any of the attributes change then we need to update local storage + server cache
@@ -126,6 +126,7 @@ export class newActivtyMenu extends bottomSheetMenu {
         await uploadPhoto(UUID, input)
       }
     }
+    document.querySelector("toast-notification").addNotification(`saved ${title}`,1500)
     this.destorySelf();
   }
 }
