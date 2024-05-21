@@ -1,6 +1,7 @@
 import {
   getUUID,
   fetchTemplate,
+  fetchFragment,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import {
@@ -20,44 +21,16 @@ export class newActivtyMenu extends bottomSheetMenu {
   }
 
   async createActivtyInputs() {
-    this.nameInput = document.createElement('input');
-    this.descriptionInput = document.createElement('textarea');
-
-    this.timeInput = document.createElement('duration-picker');
-    await this.timeInput.attachTemplate();
-    this.photoInput = document.createElement('input');
-    this.tags = document.createElement('tag-input');
-    await this.tags.attachTemplate();
-
-    this.nameInput.id = 'activityNameInput';
-    this.descriptionInput.id = 'descriptionInput';
-    this.timeInput.id = 'timeInput';
-    this.photoInput.id = 'addPhoto';
-    this.photoInput.type = "file"
-    this.photoInput.accept = "image/jpeg, image/png, image/jpg,image/gif"
-    this.photoInput.multiple = "multiple"
-    this.tags.id = 'tag';
-    this.addButton.textContent = 'cancel';
-
-    this.nameInput.placeholder = 'title';
-    this.descriptionInput.placeholder = 'descrption';
-
-    this.nameInput.classList.add('bottomsheet-content-item');
-    this.descriptionInput.classList.add('bottomsheet-content-item');
-    this.timeInput.classList.add('bottomsheet-content-item');
-    this.photoInput.classList.add('bottomsheet-content-item');
-
+    const frag = await fetchFragment(import.meta.resolve("./content.inc"))
+    this.content.innerHTML = frag.innerHTML
+    this.nameInput = this.shadow.querySelector("#activityNameInput")
+    this.descriptionInput = this.shadow.querySelector("#descriptionInput")
+    this.timeInput = this.shadow.querySelector("#timeInput")
+    this.photoInput = this.shadow.querySelector("#addPhoto")
+    this.tags = this.shadow.querySelector("#tag")
     this.descriptionInput.addEventListener(
       'keyup',
       this.resizingTextarea.bind(this),
-    );
-
-    this.content.append(
-      this.nameInput,
-      this.descriptionInput,
-      this.timeInput,
-      this.photoInput,
-      this.tags,
     );
   }
 
@@ -74,9 +47,7 @@ export class newActivtyMenu extends bottomSheetMenu {
 
   async attachTemplate() {
     // extracting this out of the on connectedCallback because it means we can invoke this in javacript to ensure everything is set up correctly
-    if (this.initilized) {
-      return;
-    }
+    if (this.initilized) return;
     this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
@@ -91,9 +62,7 @@ export class newActivtyMenu extends bottomSheetMenu {
   }
 
   async connectedCallback() {
-    if (this.initilized) {
-      return;
-    }
+    if (this.initilized) return;
     await this.attachTemplate();
   }
 
@@ -126,7 +95,7 @@ export class newActivtyMenu extends bottomSheetMenu {
         await uploadPhoto(UUID, input)
       }
     }
-    document.querySelector("toast-notification").addNotification(`saved ${title}`,1500)
+    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500)
     this.destorySelf();
   }
 }
