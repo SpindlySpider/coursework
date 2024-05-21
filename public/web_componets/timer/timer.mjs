@@ -84,6 +84,37 @@ export default class TimerComponent extends HTMLElement {
     this.prepareHandle();
     this.setupEventListener();
     this.initilized = true;
+    this.timerStartCountdown()
+  }
+  timerStartCountdown() {
+    let counter = 3
+    let ms = 0
+    setTimeout(() => {
+      this.countdownStart(counter, ms)
+    }, 50)
+  }
+  countdownStart(counter, ms) {
+    // start timer
+    if (ms > 1000) {
+      this.shadow.querySelector("#countdown-timer").textContent = counter
+      if (counter <= 0) {
+        this.shadow.querySelector("#countdown-timer").style.display = "none"
+        this.startTimer()
+      }
+      else {
+        ms = 0
+        setTimeout(() => {
+          this.countdownStart(counter - 1, ms)
+        }, 50)
+      }
+    }
+    else {
+      ms += 50
+      setTimeout(() => {
+        this.countdownStart(counter, ms)
+      }, 50)
+    }
+
   }
 
   async connectedCallback() {
@@ -148,17 +179,16 @@ export default class TimerComponent extends HTMLElement {
   }
 
   async appendPictures(UUID) {
-    this.pictureContainer.style.display = "flex"
+    let image = this.shadow.querySelector("#picture-container")
+    image.style.display = "flex"
     const pictures = await getPhotos(UUID);
     console.log("pictues", pictures)
     if (pictures[0] != undefined) {
       for (let id of pictures) {
         // add a delete button to the images somewhere here
-        let image = document.createElement("img")
         image.style = "object-fit: contain;height: 100%;"
         const response = await getPhotoFromID(id)
         image.src = response.url
-        this.pictureContainer.append(image)
         // add next and prevouis image button here
       }
     }
@@ -179,6 +209,8 @@ export default class TimerComponent extends HTMLElement {
       this.updateTimerDisplay();
       this.time.classList.remove('hidden');
       this.upNext.classList.remove('hidden');
+      this.shadow.querySelector("#container").style.display = "flex"
+      this.shadow.querySelector("#next-container").style.display = "flex"
       this.clockContainer.classList.remove('hidden');
       this.titleText.textContent = this.timerList[this.timerIndex].title;
       this.close.classList.add('hidden');
@@ -202,9 +234,9 @@ export default class TimerComponent extends HTMLElement {
   }
 
   updateTimerDisplay() {
-    this.upNext.textContent = 'next : end of workout';
+    this.upNext.textContent = 'end of workout';
     if (this.timerList.length - this.timerIndex > 1) {
-      this.upNext.textContent = `next : ${this.timerList[this.timerIndex + 1].title}`;
+      this.upNext.textContent = `${this.timerList[this.timerIndex + 1].title}`;
     }
     const formattedTime = this.getFormatStringTime(this.seconds);
     this.time.textContent = `${formattedTime} / ${this.getFormatStringTime(this.timerList[this.timerIndex].duration)}`;

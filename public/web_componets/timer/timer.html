@@ -8,12 +8,15 @@
       background-color: var(--main-content-background-color);
       justify-content: flex-start;
       align-items: center;
-      display: flex;
+      display: none;
       font-size: 7vw;
       z-index: 5;
       flex-direction: column;
       text-align: center;
-      height: 92vh;
+      margin: 3vh 0vw;
+      border-radius: 5vw;
+      border: 1vw black solid;
+      width: 90vw;
     }
 
     .track {
@@ -53,29 +56,58 @@
     #picture-container {
       display: flex;
       flex-direction: column;
-      border: 0.5vw solid black;
-      border-radius: 5vw;
-      width: 87vw;
       padding: 2vw;
-      height: 45vw;
+      height: 45vh;
+      width: 40vw;
+      border-radius: 5vw;
 
     }
+
+    #picture-clock-container {
+      display: flex;
+    }
+
+    #next-container {
+      display: none;
+      flex-direction: row;
+      font-size: 5vw;
+      width: 90vw;
+      justify-content: space-around;
+      border: 1vw black solid;
+      border-radius: 5vw;
+    }
+
+    #countdown-timer {
+      font-size: 24vw;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
   </style>
-  <div id="container">
-    <h1 id="title">title</h1>
-    <div id="picture-container"></div>
-    <svg width="250" height="250" id="clockContainer">
-      <circle r="100" cx="125" cy="125" class="track"></circle>
-      <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
-    </svg>
-    <div id="time-display" class="row-direction"></div>
-    <h5 id="description">
-      </h3>
-      <div class="row-direction">
-        <button id="start">start</button>
-        <button id="stop">stop</button>
-        <button id="close">close</button>
+  <h1 id="countdown-timer">3<h1>
+      <div id="container">
+        <h1 id="title">title</h1>
+        <div id="picture-clock-container">
+          <img id="picture-container"></img>
+          <div id="clock-container">
+            <svg id="clockContainer" width="250" height="250">
+              <circle r="100" cx="125" cy="125" class="track"></circle>
+              <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
+            </svg>
+            <div id="time-display" class="row-direction"></div>
+          </div>
+        </div>
+        <h5 id="description">
+          </h3>
+          <div class="row-direction">
+            <button id="start">start</button>
+            <button id="stop">stop</button>
+            <button id="close">close</button>
+          </div>
+
       </div>
-      <h3 id="up-next"></h3>
-  </div>
+      <div id="next-container">
+        <h3>next:</h3>
+        <h3 id="up-next"></h3>
+      </div>
 </template>

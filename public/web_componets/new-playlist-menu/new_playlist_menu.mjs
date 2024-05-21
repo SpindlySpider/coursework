@@ -127,10 +127,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.deleteButton.style.alignSelf = "flex-end"
   }
 
-  addEntryToList(entry) {
+  async addEntryToList(entry) {
     // add visuall notifcaiton of adding activity
     this.activityItems.push(entry.dataset.id);
-    document.querySelector("toast-notification")
+    // const notification = document.querySelector("toast-notification")
+    // notification.addNotification(`added ${entry}`)
+    let image = entry.querySelector("img")
+    if(image){
+      image = image.src
+    }
+    const name = entry.querySelector("#title").textContent
+    await document.querySelector("toast-notification").addNotification(`added ${name} to workout`, 1500,image)
   }
 
   async customActivitesSelection() {
@@ -253,7 +260,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
       const deleteButton = entry.querySelector('h4');
       const duration = entry.querySelector('#duration');
       entry.dataset.id = item;
-      name.textContent = customActivties[item].title;
+      entry.name = customActivties[item].title
+      name.textContent = entry.name;
       duration.textContent = this.updateplaylistduration(customActivties[item].duration);
       this.duration += customActivties[item].duration
       deleteButton.addEventListener('click', () => this.deleteItem(duration, item, customActivties, entry));

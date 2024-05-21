@@ -31,20 +31,25 @@ export class toast extends HTMLElement {
     this.initilized = true;
   }
 
-  async addNotification(str, timeout = 1500, imgURL = null) {
+  async addNotification(str, timeout, imgURL) {
     // has the option to add a img url if the user wants to
     // if no image url is provided then it will fetch a specific fragment
+    imgURL = imgURL || null;
+    timeout = timeout || 1500
     const URL = imgURL === null ? "./toast-item.inc" : "./toast-item-img.inc"
     const notification = await fetchFragment(import.meta.resolve(URL))
-    notification.querySelector("#toast-img").src = imgURL
+    const image = notification.querySelector("#toast-img")
+    if(image){
+      image.src =imgURL
+    }
     notification.querySelector("#toast-text").textContent = str
     this.container.appendChild(notification)
-    setTimeout(()=>{
+    setTimeout(() => {
       notification.classList.add("remove")
-      setTimeout(()=>{
+      setTimeout(() => {
         notification.remove()
-      },500)
-    },timeout)
+      }, 500)
+    }, timeout)
   }
 }
 
