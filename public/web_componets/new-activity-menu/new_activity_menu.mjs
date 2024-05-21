@@ -118,13 +118,24 @@ export class newActivtyMenu extends bottomSheetMenu {
     }, 300);
   }
 
+  toastNotification(str) {
+    document.querySelector("toast-notification").addNotification(str, 1500)
+  }
+
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
-    const description = this.descriptionInput.value;
+    if ( title == "" ) {
+      this.toastNotification(`cannot save as there is no title`)
+      throw Error("no title")
+    }
     const duration = this.timeInput.getDuration();
+    if (duration <= 0) {
+      this.toastNotification(`cannot save ${title} there is no duration`)
+      throw Error("no duration")
+    }
+    const description = this.descriptionInput.value;
     const UUID = await getUUID();
-    console.log(UUID, title, description, duration);
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);

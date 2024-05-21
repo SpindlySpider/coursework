@@ -101,11 +101,13 @@ async function editPlaylist(entry) {
   editMenu.activityItems = playlist.items;
   editMenu.nameInput.value = playlist.title;
   editMenu.setInput.value = playlist.sets
-  editMenu.restTimer.value = getStringTimeFrom(playlist.exercise_rest_time)
-  editMenu.setRestTimer.value = getStringTimeFrom(playlist.rest_sets_time)
+  // editMenu.restTimer.value = getStringTimeFrom(playlist.exercise_rest_time)
+  // editMenu.setRestTimer.value = getStringTimeFrom(playlist.rest_sets_time)
   editMenu.UUID = entry.dataset.id;
   console.log("playlist title", playlist.title)
   editMenu.headerTitle = `edit ${playlist.title}`
-  editMenu.playlistCreationTool();
+  await editMenu.playlistCreationTool();
+  editMenu.setRestTimer.setDuration(playlist.rest_sets_time)
+  editMenu.restTimer.setDuration(playlist.exercise_rest_time)
 }
 prepareHandles();

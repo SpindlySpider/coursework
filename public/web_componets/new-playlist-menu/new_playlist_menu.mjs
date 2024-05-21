@@ -291,21 +291,21 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   draggingEventListeners(element) {
     element.addEventListener('dragstart', () => {
-      element.parentNode.classList.add("dragging")
-      // element.classList.add('dragging');
+      element.parentNode.parentNode.classList.add("dragging")
     });
     element.addEventListener('touchstart', () => {
       element.parentNode.parentNode.classList.add("dragging")
-      // element.classList.add('dragging');
     });
     element.addEventListener('dragend', () => {
-      element.parentNode.classList.remove("dragging")
-      // element.classList.remove('dragging');
+      element.parentNode.parentNode.classList.remove("dragging")
     });
     element.addEventListener('touchend', () => {
       element.parentNode.parentNode.classList.remove("dragging")
-      // element.classList.remove('dragging');
     });
+  }
+
+  toastNotification(str) {
+    document.querySelector("toast-notification").addNotification(str, 1500)
   }
 
   async saveNewPlaylist() {
@@ -317,9 +317,17 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }); // turning the visual order into the saved order of events
     if (this.activityItems[0] === undefined) this.activityItems = [];
     const title = this.nameInput.value;
+    if ( title == "" ) {
+      this.toastNotification(`cannot save as there is no title`)
+      throw Error("no title")
+    }
     const sets = parseInt(this.setInput.value) || 1; // if you cant parse any value
-    const excerciseRest = stringTimeToSeconds(this.restTimer.value)
-    const setRest = stringTimeToSeconds(this.setRestTimer.value)
+    if (sets <1 || sets === undefined) {
+      this.toastNotification(`cannot save ${title} there is no duration`)
+      throw Error("no duration")
+    }
+    const excerciseRest = this.restTimer.getDuration()
+    const setRest = this.setRestTimer.getDuration()
     await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false);
     await displayPlaylistPage();
     await document.querySelector("toast-notification").addNotification(`saved ${this.nameInput.value}`, 1500)

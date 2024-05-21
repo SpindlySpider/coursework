@@ -6,13 +6,13 @@
       <p style="margin: 1vh 5vw;">number of sets:</p>
       <input id="set-input" type="number" style="font-size: 5vw; width: 10vw;border-radius: 5vw;margin: 1vh 1vw;border: 0.5vw black solid;text-align: center;" placeholder="num">
     </li>
-    <li style="justify-content: space-between;display: flex;font-size: 7vw;border: 0.5vw solid black;" id="restTimerContainer" >
+    <li style="justify-content: space-between;display: flex;font-size: 7vw;border: 0.5vw solid black;border-top: 0.5vw #cbcbcb solid;border-bottom: 0.5vw #cbcbcb solid;" id="restTimerContainer" >
       <p style="margin: 1vh 5vw;">rest between exercises:</p>
-      <input id="rest-timer-input" type="time" step="600" style="font-size: 5vw;border-radius: 5vw;padding: 1vw;margin: 2vw;">
+      <duration-picker id="rest-timer-input"></duration-picker>
     </li>
       <li style="justify-content: space-between;display: flex;font-size: 7vw;border: 0.5vw solid black;border-top: 0;border-radius: 0vw 0vw 5vw 5vw;" id="setRestContainer" >
       <p style="margin: 1vh 5vw;">rest between sets:</p>
-      <input id="set-rest-input" type="time" step="600" style="font-size: 5vw;border-radius: 5vw;padding: 1vw;margin: 2vw;">
+      <duration-picker id="set-rest-input"></duration-picker>
     </li>
   </div>
 </div>
