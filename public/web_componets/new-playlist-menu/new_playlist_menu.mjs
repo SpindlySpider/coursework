@@ -333,8 +333,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const excerciseRest = this.restTimer.getDuration()
     const setRest = this.setRestTimer.getDuration()
     await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false);
-    await displayPlaylistPage();
     await document.querySelector("toast-notification").addNotification(`saved ${this.nameInput.value}`, 1500)
+    await displayPlaylistPage();
     this.destorySelf();
   }
 }

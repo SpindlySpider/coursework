@@ -22,14 +22,11 @@ async function install() {
 }
 
 async function fetchHandle(event) {
+  // network first 
   const request = event.request.clone()
-  event.respondWith(caches.match(request).then(
-    async res => res || await fetchResource(event)
+  event.respondWith(await fetchResource(event) ||caches.match(request).then(
+    async res => res 
   ))
-  if (request.method === "GET") {
-    // update stale cache
-    event.waitUntil(fetchResource(event))
-  }
 }
 
 async function fetchResource(event) {
