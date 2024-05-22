@@ -134,7 +134,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   async customActivitesSelection() {
-    setTimeout(this.pullupAnimation.bind(this), 50, 78);
+    setTimeout(this.pullupAnimation.bind(this), 50, 60);
     let hideList = [this.nameInput, this.cancel, this.doneButton, this.addButton, this.deleteButton, this.playlistDurationText, this.excerciseList]
     let enableList = [this.backButton]
     this.cleanContent();
@@ -142,6 +142,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
     hideList.forEach((item) => item.style.display = "none")
     enableList.forEach((item) => item.style.display = "flex")
     this.setTitle('add activity');
+    this.backButton.style.backgroundColor = "var(--button-background-color)"
+    this.shadow.querySelector(".bottomsheet-header-buttons").prepend(this.backButton)
 
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     if (customActivties == null || Object.keys(customActivties).length == 0) {
@@ -225,7 +227,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   async playlistCreationTool() {
-    setTimeout(this.pullupAnimation.bind(this), 50, 70);
+    setTimeout(this.pullupAnimation.bind(this), 50, 50);
     this.cleanContent();
     this.content.append(this.excerciseList, this.optionsList)
     this.duration = 0;

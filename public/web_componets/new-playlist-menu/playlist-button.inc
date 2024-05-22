@@ -5,5 +5,5 @@
   <button type="button" class="bottomsheet-content-item" id="import-playlist">
     import playlist
   </button>
-  <input id="playlist-title" class="bottomsheet-content-item" style="display: none;">
+  <input id="playlist-title" class="bottomsheet-content-item" style="display: none;" placeholder="workout name">
 </div>

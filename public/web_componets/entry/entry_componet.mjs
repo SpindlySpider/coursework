@@ -19,6 +19,7 @@ export class Entry extends newActivtyMenu {
     this.initilized = false;
     this.seconds = 0;
     this.entryJSON = {};
+    this.shadow = this.attachShadow({ mode: 'open' });
   }
 
   deleteEntry() {
@@ -39,9 +40,7 @@ export class Entry extends newActivtyMenu {
   }
 
   async connectedCallback() {
-    if (this.editing || this.initilized) {
-      return;
-    }
+    if (this.editing || this.initilized) return;
     await this.attachTemplate();
   }
 
@@ -68,7 +67,6 @@ export class Entry extends newActivtyMenu {
       return;
     }
     // setting up inner HTML for shadowDOM
-    this.shadow = this.attachShadow({ mode: 'open' });
     this.entryJSON = await getActivtyFromID(this.entryID);
     const thumbnail = await fetch(import.meta.resolve("./thumbnail.inc")).then(item => item.text())
     this.shadow.innerHTML = thumbnail;
@@ -103,8 +101,7 @@ export class Entry extends newActivtyMenu {
     this.photoInput.value = '';
     this.backButton.style.display = 'flex';
     this.doneButton.textContent = 'save';
-    this.backButton.textContent = 'delete';
-    this.addButton.textContent = 'cancel';
+    this.backButton.textContent = 'delete exercise';
   }
 
   async getTags() {
@@ -131,17 +128,16 @@ export class Entry extends newActivtyMenu {
     this.descriptionInput.value = this.entryJSON.description;
     this.editing = true;
     this.setupEventListners();
-    setTimeout(this.pullupAnimation.bind(this), 25, 70);
+    setTimeout(this.pullupAnimation.bind(this), 25, 50);
     this.pictures = await getPhotos(this.entryID)
     await this.appendPictures()
     this.timeInput.setDuration(this.seconds);
+    this.content.append(this.backButton)
   }
 
   toastNotification(str) {
     document.querySelector("toast-notification").addNotification(str, 1500)
   }
-
-
 
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites

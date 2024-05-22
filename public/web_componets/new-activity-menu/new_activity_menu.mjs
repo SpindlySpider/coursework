@@ -29,12 +29,10 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.nameInput = this.content.querySelector("#activityNameInput")
     this.descriptionInput = this.content.querySelector("#descriptionInput")
     this.photoInput = this.content.querySelector("#addPhoto")
-    this.descriptionInput.addEventListener(
-      'keyup',
-      this.resizingTextarea.bind(this),
-    );
-    this.photoInput.addEventListener("change", this.selectedPhoto.bind(this))
+    this.cancelButton.style.display = "flex"
+    this.cancelButton.textContent = "<"
   }
+
   async selectedPhoto() {
     // https://www.youtube.com/watch?v=Uo9Jme8IwlM&t=810s
     const photo = this.photoInput.files[0]
@@ -89,7 +87,9 @@ export class newActivtyMenu extends bottomSheetMenu {
 
   setupActivityEventListeners() {
     this.doneButton.addEventListener('click', this.saveNewActivty.bind(this));
-    this.addButton.addEventListener('click', this.destorySelf.bind(this));
+    this.cancelButton.addEventListener('click', this.destorySelf.bind(this));
+    this.photoInput.addEventListener("change", this.selectedPhoto.bind(this))
+    this.descriptionInput.addEventListener('keyup', this.resizingTextarea.bind(this));
   }
 
   async attachTemplate() {
@@ -103,7 +103,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.bottomSheetPrepareHandles();
     await this.createActivtyInputs();
     this.setupActivityEventListeners();
-    setTimeout(this.pullupAnimation.bind(this), 25, 70);
+    setTimeout(this.pullupAnimation.bind(this), 25, 50);
     this.setTitle('new activity');
     this.initilized = true;
   }
@@ -152,7 +152,6 @@ export class newActivtyMenu extends bottomSheetMenu {
         await uploadPhoto(UUID, input)
       }
       photoURL = this.pictureURL
-      console.log("photo url",photoURL)
     }
     document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500, photoURL)
     this.destorySelf();
