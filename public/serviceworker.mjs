@@ -1,7 +1,5 @@
 const staticCacheName = "static"
 const dynamicCacheName = "dynamic"
-// 
-// const staticCache = await caches.open(staticCacheName)
 self.addEventListener("install", async event => install())
 self.addEventListener("activate", activate)
 self.addEventListener("fetch", fetchHandle)
@@ -24,15 +22,20 @@ async function install() {
 async function fetchHandle(event) {
   // network first 
   const request = event.request.clone()
-  event.respondWith(await fetchResource(event) ||caches.match(request).then(
-    async res => res 
+  event.respondWith(caches.match(request).then(
+    async res => await fetchResource(event) || res
   ))
 }
 
 async function fetchResource(event) {
   // get reasource from server and save it 
-  const dynamicCache = await caches.open(dynamicCacheName)
-  const response = await fetch(event.request.clone())
-  dynamicCache.put(event.request.url, response.clone())
-  return response.clone()
+  try {
+    const response = await fetch(event.request.clone())
+    const dynamicCache = await caches.open(dynamicCacheName)
+    dynamicCache.put(event.request.url, response.clone())
+    return response.clone()
+  }
+  catch {
+    return undefined
+  }
 }
