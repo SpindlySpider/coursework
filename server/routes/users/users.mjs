@@ -46,17 +46,17 @@ async function getUserActivities(req, res) {
 async function postUser(req, res) {
   // creates data
   await user.addUser(req.body.username);
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 async function postUserActivities(req, res) {
   // console.log(req.params.id, req.body.activity_id);
   await user.postUserActivties(req.params.id, req.body.activity_id);
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 async function postUserPlaylists(req, res) {
   // console.log(req.params.id, req.body.activity_id);
   await user.postUserPlaylist(req.params.id, req.body.playlist_id);
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 
 router.get('/', sendUsersList);

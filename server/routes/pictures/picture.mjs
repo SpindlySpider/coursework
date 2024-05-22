@@ -33,18 +33,18 @@ async function postPicture(req, res) {
   await multibodyParser(req, res, id, emitter)
   emitter.on("upload-success", (url) => {
     picture.uploadPicture(id, url, req.params.altText, req.params.id)
-    res.status(200).send("file successfully uploaded")
+    res.sendStatus(200)
   })
 }
 async function deletePictureFromActivity(req, res) {
   await picture.deletePictureFromActivity(req.params.picture_id, req.params.activity_id)
-  res.status(200).send("picture deleted")
+  res.sendStatus(200)
 
 }
 
 router.get('/activity/:id', sendActivityPictures);
 router.get('/:id', getPictureFromPicID);
 router.post('/:id/:altText', postPicture);
-router.get("/pictures")
+// router.get("/pictures")
 router.delete("/:activity_id/:picture_id", deletePictureFromActivity)
 

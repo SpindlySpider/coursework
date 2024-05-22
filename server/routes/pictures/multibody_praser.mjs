@@ -31,8 +31,6 @@ export async function multibodyParser(req, res,id,emitter) {
 
     const URL = `${import.meta.dirname}/../../photos/${id}${extention}`
     fs.writeFile(URL, content, () => { })
-    console.log("file upload",URL)
-    emitter.emit("upload-success",URL)
   })
 }
 

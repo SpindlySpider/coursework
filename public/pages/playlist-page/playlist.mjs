@@ -20,7 +20,7 @@ export async function displayPlaylistPage() {
   el.main.append(title);
   const menu = el.main.querySelector("#playlist-items")
   // need to see from local storage incase your offline
-  const playlists = await fetch(`/users/${user()}/playlists`).then(res => res.json());
+  const playlists = await fetch(`/users/${user()}/playlists/`).then(res => res.json());
 
   for (let item of playlists.data) {
     // extract out the playlist feature to error check

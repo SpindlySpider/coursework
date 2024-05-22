@@ -26,16 +26,15 @@ async function getPlaylistTag(req, res) {
 
 async function postPlaylist(req, res) {
   await tag.postTags(req.body.tag_list, req.params.id, 'playlist');
-  res.status(200).send('tagged this playlist');
+  res.sendStatus(200)
 }
 
 async function postActivity(req, res) {
   await tag.postTags(req.body.tag_list, req.params.id, 'activity');
-  res.status(200).send('tagged this activity');
-}
+  res.sendStatus(200)}
 async function deleteTag(req, res) {
   await tag.deleteTag(req.params.tag_name);
-  res.status(200).send('deleted tag');
+  res.sendStatus(200)
 }
 async function getTags(req, res) {
   const state = await tag.getTags();

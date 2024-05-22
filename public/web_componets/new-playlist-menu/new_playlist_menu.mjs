@@ -170,6 +170,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       }
     }
   }
+
   async getPhotoURL(UUID) {
     const photos = await getPhotos(UUID)
     if (photos[0] !== undefined) {
@@ -320,12 +321,12 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }); // turning the visual order into the saved order of events
     if (this.activityItems[0] === undefined) this.activityItems = [];
     const title = this.nameInput.value;
-    if ( title == "" ) {
+    if (title == "") {
       this.toastNotification(`cannot save as there is no title`)
       throw Error("no title")
     }
     const sets = parseInt(this.setInput.value) || 1; // if you cant parse any value
-    if (sets <1 || sets === undefined) {
+    if (sets < 1 || sets === undefined) {
       this.toastNotification(`cannot save ${title} there is no duration`)
       throw Error("no duration")
     }
