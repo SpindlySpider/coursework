@@ -187,6 +187,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   getAfterElement(y) {
+    // got this from stack overflow
     let draggableItems = this.excerciseList.querySelectorAll(
       '.draggable:not(.dragging)',
     );

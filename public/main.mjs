@@ -68,5 +68,14 @@ document
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
 
+if ("serviceWorker" in navigator) {
+  //https://www.youtube.com/watch?v=WbbAPfDVqfY
+  navigator.serviceWorker.register("serviceworker.mjs").then(registration => {
+    console.log("registered service worker")
+  }).catch(error=>{
+      console.log("service worker registration failed")
+      console.log(error)
+    })
+}
 
 displayCategoryPage()
