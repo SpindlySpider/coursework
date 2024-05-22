@@ -31,11 +31,11 @@ export class Entry extends newActivtyMenu {
     this.destorySelf();
   }
 
-  destorySelf() {
+  async destorySelf() {
     this.content.style.height = '0vh';
     this.enableNavbarBorder();
-    displayCategoryPage();
-    displayCustomCateogryPage();
+    await displayCategoryPage();
+    // await displayCustomCateogryPage();
     this.remove();
   }
 
@@ -167,7 +167,7 @@ export class Entry extends newActivtyMenu {
       photoURL = this.pictureURL
     }
     document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500, photoURL)
-    this.destorySelf();
+    await this.destorySelf();
   }
 }
 

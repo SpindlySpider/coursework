@@ -8,18 +8,19 @@ import express from 'express';
 const app = express();
 const port = 8080;
 
-app.get('/', (request, response) => {
-  app.use(express.static('public'));
-  response.setHeader("Cache-Control", "max-age=120, stale-while-revalidate=300")
-  response.sendFile(`${import.meta.dirname}/public`);
-});
+// app.get('/', (request, response, next) => {
+app.use(express.static('public'));
+//   response.append("Cache-Control", "private, max-age=100, stale-while-revalidate=300")
+//   response.sendFile(`${import.meta.dirname}/public`);
+//   next()
+// });
 app.use('/tags', tagRouter);
 app.use('/users', userRouter);
 app.use('/playlist', playlistRouter);
 app.use('/activities', activtiyRouter);
 app.use('/picture', pictureRouter);
 app.get('/api/get_uuid', (request, response) => {
-  response.setHeader("Cache-Control", "max-age=0, stale-while-revalidate=0")
+  response.setHeader("Cache-Control", "no-store")
   response.send({ uuid: generateUUID() });
 });
 

@@ -78,4 +78,4 @@ if ("serviceWorker" in navigator) {
   })
 }
 
-displayCategoryPage()
+await displayCategoryPage()
