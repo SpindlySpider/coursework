@@ -21,7 +21,7 @@ async function getPictureFromPicID(req, res) {
 
   }
   catch{
-    res.status(404).send("cannot find resource")
+    res.status(404).send({"status":"cannot find resource"})
   }
 }
 

@@ -257,6 +257,7 @@ export default class TimerComponent extends HTMLElement {
 
   disconnectedCallback() {
     clearInterval(this.intervalID);
+    this.destorySelf()
   }
 }
 customElements.define('timer-component', TimerComponent);

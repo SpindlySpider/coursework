@@ -1,3 +1,4 @@
+import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
 import { fetchTemplate } from '../utilities.mjs';
 
 export class bottomSheetMenu extends HTMLElement {

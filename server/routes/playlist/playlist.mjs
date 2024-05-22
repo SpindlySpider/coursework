@@ -23,11 +23,11 @@ async function addActivity(req, res) {
     req.params.activityID,
     req.body.orderNumber,
   );
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 async function removeActivity(req, res) {
   await playlist.removeActivity(req.params.playlistID, req.params.activityID);
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 
 async function createPlaylist(req, res) {
@@ -60,7 +60,7 @@ async function createPlaylist(req, res) {
     );
   }
 
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 async function updatePlaylistItems(req, res) {
   // find a way to check if a id is already taken
@@ -74,7 +74,7 @@ async function updatePlaylistItems(req, res) {
     req.body.items,
     req.body.createdBy,
   );
-  res.status(200).send('success');
+  res.sendStatus(200)
 }
 
 async function deletePlaylist(req, res) {

@@ -8,12 +8,8 @@ import express from 'express';
 const app = express();
 const port = 8080;
 
-// app.get('/', (request, response, next) => {
 app.use(express.static('public'));
-//   response.append("Cache-Control", "private, max-age=100, stale-while-revalidate=300")
-//   response.sendFile(`${import.meta.dirname}/public`);
-//   next()
-// });
+
 app.use('/tags', tagRouter);
 app.use('/users', userRouter);
 app.use('/playlist', playlistRouter);
