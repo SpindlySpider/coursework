@@ -105,6 +105,10 @@ async function handleMainThreadMessage(event) {
       console.log("starting timer in web worker")
       startTimer()
       break
+    case messageType.TIMERSTOPPED:
+      console.log()
+      stopTimer()
+      break
 
   }
 }
@@ -113,7 +117,7 @@ function stopTimer() {
   clearInterval(intervalID);
   seconds = 0;
   this.isTimerRunning = false;
-  self.postMessage({ type: messageType.TIMERSTOPPED })
+  // self.postMessage({ type: messageType.TIMERSTOPPED })
 }
 
 self.addEventListener("message", handleMainThreadMessage)

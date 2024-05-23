@@ -1,5 +1,9 @@
 <template>
   <style>
+    * {
+      --border-colour: grey
+    }
+
     .hidden {
       display: none;
     }
@@ -9,13 +13,13 @@
       justify-content: flex-start;
       align-items: center;
       display: none;
-      font-size: 7vw;
+      font-size: 5vw;
       z-index: 5;
       flex-direction: column;
       text-align: center;
       margin: 3vh 0vw;
       border-radius: 5vw;
-      border: 1vw black solid;
+      border: 1vw var(--border-colour) solid;
       width: 90vw;
     }
 
@@ -58,13 +62,15 @@
       flex-direction: column;
       padding: 2vw;
       height: 45vh;
-      width: 40vw;
+      width: 90%;
       border-radius: 5vw;
+      align-items: center;
 
     }
 
     #picture-clock-container {
       display: flex;
+      flex-direction: column;
     }
 
     #next-container {
@@ -73,8 +79,9 @@
       font-size: 5vw;
       width: 90vw;
       justify-content: space-around;
-      border: 1vw black solid;
+      border: 1vw var(--border-colour) solid;
       border-radius: 5vw;
+      margin-bottom: 14vh;
     }
 
     #countdown-timer {
@@ -82,6 +89,12 @@
       justify-content: center;
       align-items: center;
       display: flex;
+    }
+
+    #title {
+      width: 90%;
+      text-wrap: wrap;
+      overflow-wrap: anywhere;
     }
   </style>
   <h1 id="countdown-timer">3<h1>
@@ -95,15 +108,14 @@
               <circle id="clock" r="100" cx="125" cy="125" class="progress"></circle>
             </svg>
             <div id="time-display" class="row-direction"></div>
+            <div class="row-direction">
+              <button id="start">start</button>
+              <button id="stop">stop</button>
+            </div>
           </div>
         </div>
-        <h5 id="description">
-          </h3>
-          <div class="row-direction">
-            <button id="start">start</button>
-            <button id="stop">stop</button>
-            <button id="close">close</button>
-          </div>
+        <h3 id="description"></h3>
+
 
       </div>
       <div id="next-container">

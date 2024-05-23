@@ -47,7 +47,6 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.addButton.style.display = 'none';
     this.doneButton.style.display = 'none';
     this.addButton.textContent = '➕exercise';
-    this.header.parentNode.append(this.extraDetails);
     this.cancel.style.display = 'flex';
     this.deleteButton.textContent = "delete playlist"
     this.doneButton.textContent = 'save';

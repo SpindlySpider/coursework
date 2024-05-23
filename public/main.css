@@ -10,6 +10,11 @@
   --border-colour: gray;
 }
 
+timer-component {
+  overflow-y: scroll;
+  height: 100vh;
+}
+
 .addButtonBackground {
   background-color: var(--button-colour);
   border-radius: 7vw;
@@ -111,6 +116,7 @@ button {
   font-family: Syne, sans-serif;
   flex-direction: column;
   align-items: center;
+  overflow-y: hidden;
 }
 
 body {

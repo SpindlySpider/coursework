@@ -39,16 +39,12 @@ export default class TimerComponent extends HTMLElement {
         break;
       case messageType.STARTTIMER:
         console.log("started timer")
-        this.startTimer()
+        await this.startTimer()
         break;
       case messageType.COUNTDOWNFINISH:
         this.shadow.querySelector("#countdown-timer").style.display = "none"
         this.sendStartTimerMsg()
         console.log("finished cout down")
-        break;
-      case messageType.STARTTIMER:
-        console.log("started timer")
-        this.startTimer()
         break;
       case messageType.STARTTIMERFIRST:
         console.log("started first timer")
@@ -107,6 +103,9 @@ export default class TimerComponent extends HTMLElement {
   async nextExcerise() {
     this.titleText.textContent = this.timerList[this.timerIndex].title;
     this.description.textContent = this.timerList[this.timerIndex].description
+    if (this.description.textContent === "") {
+      this.description.style.display = "none"
+    }
     this.removePictures()
     await this.appendPictures(this.timerList[this.timerIndex].UUID)
     this.seconds = 0;
@@ -125,7 +124,7 @@ export default class TimerComponent extends HTMLElement {
     this.worker.postMessage({ type: messageType.STARTTIMER })
   }
 
-  startTimer() {
+  async startTimer() {
     this.updateTimerDisplay();
     this.time.classList.remove('hidden');
     this.upNext.classList.remove('hidden');
@@ -133,13 +132,25 @@ export default class TimerComponent extends HTMLElement {
     this.shadow.querySelector("#next-container").style.display = "flex"
     this.clockContainer.classList.remove('hidden');
     this.titleText.textContent = this.timerList[this.timerIndex].title;
-    this.close.classList.add('hidden');
+    // this.close.classList.add('hidden');
     this.clock.style.stroke = 'blue';
     this.start.textContent = 'pause';
     this.stop.classList.remove('hidden');
+    this.description.textContent = this.timerList[this.timerIndex].description
+    console.log("first timer start", this.timerList, this.timerIndex)
+    if (this.description.textContent === "") {
+      this.description.style.display = "none"
+    }
+    this.removePictures()
+    await this.appendPictures(this.timerList[this.timerIndex].UUID)
   }
   async firstStartTimer() {
-    this.totalTime.style.display = "none"
+    this.titleText.textContent = this.timerList[this.timerIndex].title;
+    this.description.textContent = this.timerList[this.timerIndex].description
+    console.log("first timer start", this.timerList, this.timerIndex)
+    if (this.description.textContent === "") {
+      this.description.style.display = "none"
+    }
     this.removePictures()
     await this.appendPictures(this.timerList[this.timerIndex].UUID)
   }
@@ -160,9 +171,7 @@ export default class TimerComponent extends HTMLElement {
     this.classList.add('popup-active');
     this.clock.style.strokeDasharray = this.circumference;
     this.clockContainer.classList.add('hidden');
-    this.totalTime = this.createText("total-time", `total time of playlist ${this.getFormatStringTime(this.getTotalTime())}`)
     this.pictureContainer.style.display = "none"
-    this.container.append(this.totalTime)
   }
 
   getFormatStringTime(seconds) {
@@ -208,7 +217,7 @@ export default class TimerComponent extends HTMLElement {
   setupEventListener() {
     this.start.addEventListener('click', this.sendStartTimerMsg.bind(this));
     this.stop.addEventListener('click', this.stopTimer.bind(this));
-    this.close.addEventListener('click', this.destorySelf.bind(this));
+    // this.close.addEventListener('click', this.destorySelf.bind(this));
   }
 
   async attachTemplate() {
@@ -244,15 +253,14 @@ export default class TimerComponent extends HTMLElement {
   }
 
   async stopTimer() {
+    this.worker.postMessage({ type: messageType.TIMERSTOPPED })
     this.upNext.classList.add('hidden');
     this.stop.classList.add('hidden');
     this.start.textContent = 'start';
     this.seconds = 0;
-    // this.playlistMenu();
     this.timerIndex = 0;
     this.isTimerRunning = false;
     this.time.classList.add('hidden');
-    this.close.classList.remove('hidden');
     this.clockContainer.classList.add('hidden');
     await displayPlaylistPage();
   }
@@ -303,7 +311,7 @@ export default class TimerComponent extends HTMLElement {
   }
 
   async disconnectedCallback() {
-    clearInterval(this.intervalID);
+    this.worker.postMessage({ type: messageType.TIMERSTOPPED })
     await this.destorySelf()
   }
 }

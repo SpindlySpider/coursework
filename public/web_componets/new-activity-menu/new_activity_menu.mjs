@@ -119,7 +119,6 @@ export class newActivtyMenu extends bottomSheetMenu {
     setTimeout(async () => {
       this.enableNavbarBorder();
       await displayCategoryPage();
-      // await displayCustomCateogryPage();
       this.remove();
     }, 300);
   }
