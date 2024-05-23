@@ -33,6 +33,15 @@ export async function displayPlaylistPage() {
     const playlistItem = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
     const entry = playlistItem.querySelector("h2")
     const edit = playlistItem.querySelector("button")
+    const duration = playlistItem.querySelector("#duration")
+    console.log(playlistDetails)
+    let count = 0
+    for (let item of response.activites) {
+      item = await fetch(`activities/${item.activity_id}`).then(res => res.json())
+      console.log(item.data[0].duration)
+      count += item.data[0].duration
+    }
+    duration.textContent = getStringTimeFrom(count)
     entry.textContent = playlistDetails.title
     entry.dataset.id = item.playlist_id
     edit.addEventListener('click', async () => {
@@ -86,8 +95,6 @@ async function startTimer(entry) {
   timer.timerList = workoutItems;
   timer.customTile = playlist.title;
   main.append(timer);
-  console.log(workoutItems);
-  console.log(timer.timerList);
 }
 
 async function editPlaylist(entry) {

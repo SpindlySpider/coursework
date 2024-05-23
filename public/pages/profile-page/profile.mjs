@@ -27,15 +27,16 @@ export async function displayProfiles() {
     const account = await fetch(`users/${user()}`).then((res) => res.json());
     const frag = await fetchFragment(import.meta.resolve("./profile-signed-in-user.inc"))
     const welcomeMessage = frag.querySelector("#welcome-message")
+    const themes = frag.querySelector("#themes")
     welcomeMessage.textContent = `hello ${account.data[0].username}`
     const signOutButton = frag.querySelector("#sign-out")
     signOutButton.addEventListener('click', signOut)
-    el.main.append(welcomeMessage,signOutButton);
+    el.main.append(welcomeMessage, signOutButton, themes);
     return;
   }
   for (let user of users.data) {
     const frag = await fetchFragment(import.meta.resolve("./profile-users.inc"))
-    const userPara =frag.querySelector("#username");
+    const userPara = frag.querySelector("#username");
     userPara.classList.add("menu-item")
     const signInbutton = frag.querySelector("#login-button");
     userPara.textContent = user.username;

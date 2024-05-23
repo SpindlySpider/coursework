@@ -1,4 +1,4 @@
-export async function uploadPhoto(activityID, photoContent, altText) {
+export async function uploadPhoto(activityID, photoContent, altText = "none") {
   const photoResponse = await fetch(`picture/${activityID}/${altText}`, {
     method: 'POST',
     body: photoContent,

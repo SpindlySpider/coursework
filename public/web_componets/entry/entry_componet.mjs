@@ -122,8 +122,9 @@ export class Entry extends newActivtyMenu {
     this.setTitle(`edit ${this.entryJSON.title}`);
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
+    this.timeInput.setDuration(this.seconds);
+    this.content.append(this.backButton)
     await this.getTags();
-    this.parentNode.append(this);
     this.nameInput.value = this.entryJSON.title;
     this.descriptionInput.value = this.entryJSON.description;
     this.editing = true;
@@ -131,8 +132,7 @@ export class Entry extends newActivtyMenu {
     setTimeout(this.pullupAnimation.bind(this), 25, 50);
     this.pictures = await getPhotos(this.entryID)
     await this.appendPictures()
-    this.timeInput.setDuration(this.seconds);
-    this.content.append(this.backButton)
+    this.parentNode.append(this);
   }
 
   toastNotification(str) {
@@ -156,10 +156,12 @@ export class Entry extends newActivtyMenu {
     await saveActivty(UUID, title, description, duration, false);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
-    document.querySelector('#main-content').textContent = '';
+    // document.querySelector('#main-content').textContent = '';
     let photoURL = null
-    if (this.photoInput.files.length >= 0) {
+    console.log(`photos ${this.photoInput.files.length}`)
+    if (this.photoInput.files.length > 0) {
       for (let file of this.photoInput.files) {
+        console.log("uploading", file)
         const input = new FormData()
         input.append("file", file)
         await uploadPhoto(UUID, input)

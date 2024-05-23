@@ -9,22 +9,23 @@ const el = {};
 
 function cleanContent() {
   el.content.textContent = ""
+  el.title.textContent = ""
 }
 
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
   el.content = el.main.querySelector("#categoryContainer")
   el.title = el.main.querySelector("#customActivtiesCategory")
+  el.headerList = el.main.querySelector("#titleContainer")
 }
 
 function setHeader(str) {
-  const headerList = el.main.querySelector("#titleContainer")
   el.title.textContent = str
   const backButton = document.createElement("button")
   backButton.textContent = "<"
   backButton.classList.add("bottomsheet-content-item")
   backButton.addEventListener("click", displayCategoryPage)
-  headerList.prepend(backButton)
+  el.headerList.prepend(backButton)
 }
 
 function isActivitiesEmpty(exercises) {
@@ -79,7 +80,6 @@ export async function displayCategoryPage() {
   const allActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
   allActivities.textContent = "all exercises"
   userActivities.textContent = "your exercises"
-
   const container = await fetchFragment(import.meta.resolve("./category-list.inc"))
   el.main.append(titleContainer, container);
   container.append(userActivities, allActivities);

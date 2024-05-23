@@ -26,6 +26,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     this.timeInput = this.content.querySelector("#timeInput")
     this.tags = this.content.querySelector("#tag")
     await this.tags.attachTemplate()
+    await this.timeInput.attachTemplate()
     this.nameInput = this.content.querySelector("#activityNameInput")
     this.descriptionInput = this.content.querySelector("#descriptionInput")
     this.photoInput = this.content.querySelector("#addPhoto")
@@ -116,10 +117,10 @@ export class newActivtyMenu extends bottomSheetMenu {
   destorySelf() {
     this.content.style.height = '0vh';
     setTimeout(async () => {
-      this.remove();
       this.enableNavbarBorder();
-      // await displayCategoryPage();
-      await displayCustomCateogryPage();
+      await displayCategoryPage();
+      // await displayCustomCateogryPage();
+      this.remove();
     }, 300);
   }
 
@@ -145,7 +146,8 @@ export class newActivtyMenu extends bottomSheetMenu {
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     let photoURL = null
-    if (this.photoInput.files.length >= 0) {
+    console.log("number of photos", this.photoInput.files.length)
+    if (this.photoInput.files.length > 0) {
       for (let file of this.photoInput.files) {
         const input = new FormData()
         input.append("file", file)

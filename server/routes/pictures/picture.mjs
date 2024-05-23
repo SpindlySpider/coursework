@@ -20,8 +20,8 @@ async function getPictureFromPicID(req, res) {
     await res.sendFile(path.resolve(pictureURL.url))
 
   }
-  catch{
-    res.status(404).send({"status":"cannot find resource"})
+  catch {
+    res.status(404).send({ "status": "cannot find resource" })
   }
 }
 
@@ -32,6 +32,7 @@ async function postPicture(req, res) {
   const id = crypto.randomUUID()
   await multibodyParser(req, res, id, emitter)
   emitter.on("upload-success", (url) => {
+    console.log("successfully uploaded", "35.picture/picture.mjs")
     picture.uploadPicture(id, url, req.params.altText, req.params.id)
     res.sendStatus(200)
   })
@@ -45,6 +46,5 @@ async function deletePictureFromActivity(req, res) {
 router.get('/activity/:id', sendActivityPictures);
 router.get('/:id', getPictureFromPicID);
 router.post('/:id/:altText', postPicture);
-// router.get("/pictures")
 router.delete("/:activity_id/:picture_id", deletePictureFromActivity)
 

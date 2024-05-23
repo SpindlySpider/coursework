@@ -3,7 +3,7 @@ import EventEmitter from "events";
 import fs from "fs"
 import { stringify } from "querystring";
 
-export async function multibodyParser(req, res,id,emitter) {
+export async function multibodyParser(req, res, id, emitter) {
   // handle emptry file here
   let requestString = stringify(req)
   requestString = requestString.replace(/\&/g, '\n')
@@ -12,7 +12,6 @@ export async function multibodyParser(req, res,id,emitter) {
   req.on("data", (chunk) => {
     bufferChunks.push(chunk)
   })
-
   req.on("end", () => {
     //store chunk
     let buffer = Buffer.from(Buffer.concat(bufferChunks), "utf8")
@@ -30,6 +29,7 @@ export async function multibodyParser(req, res,id,emitter) {
     //save file
     const URL = `${import.meta.dirname}/../../photos/${id}${extention}`
     fs.writeFile(URL, content, () => { })
+    emitter.emit("upload-success", URL)
   })
 }
 
