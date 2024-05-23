@@ -9,7 +9,7 @@ import {
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import { displayPlaylistPage } from '/../../pages/playlist-page/playlist.mjs';
 import { PLAYLIST_KEY, savePlaylist } from '../playlist-tools.mjs';
-import { ACTIVTIES_KEY, getAllCustomActivites } from '../activity-tools.mjs';
+import { ACTIVTIES_KEY, getAllCustomActivites, saveActivty } from '../activity-tools.mjs';
 import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
 
 export class newPlaylistMenu extends bottomSheetMenu {
@@ -96,6 +96,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.excerciseList.addEventListener('dragover', this.dragOverInsert.bind(this));
     this.excerciseList.addEventListener('touchmove', this.dragOverInsert.bind(this));
     this.export.addEventListener("click", this.exportPlaylist.bind(this))
+    this.importPlaylistInput.addEventListener("change", this.importPlaylistFunction.bind(this))
+
+
   }
 
   dragOverInsert(event) {
@@ -122,6 +125,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.shadow.querySelector("#bottomsheet-content").innerHTML = buttons.innerHTML
     this.createEmptyPlaylist = this.shadow.querySelector("#create-empty-playlist")
     this.importPlaylist = this.shadow.querySelector("#import-playlist")
+    this.importPlaylistInput = this.shadow.querySelector("#import-playlist-input")
     this.nameInput = this.shadow.querySelector("#playlist-title")
   }
 
@@ -317,8 +321,46 @@ export class newPlaylistMenu extends bottomSheetMenu {
     document.querySelector("toast-notification").addNotification(str, 1500)
   }
 
-  importPlaylist(){
-
+  async importPlaylistFunction() {
+    const playlist = this.importPlaylistInput.files[0]
+    console.log(playlist)
+    const urlReader = new FileReader()
+    urlReader.readAsText(playlist)
+    urlReader.onload = this.fileinputHandler.bind(this,urlReader)
+  }
+  async fileinputHandler(urlReader) {
+    try {
+      const file = JSON.parse(urlReader.result)
+      console.log("imported playlist", file)
+      // save all activity
+      const listActivities = []
+      for (let activity of Object.keys(file.activities)) {
+        listActivities.push(activity)
+        const UUID = activity
+        const title = file.activities[activity].title
+        const description = file.activities[activity].description || null
+        const duration = file.activities[activity].duration
+        await saveActivty(UUID, title, description, duration, false)
+        this.toastNotification(`imported ${title} it is now in your exercises`)
+      }
+      // save playlist
+      const playlist = file.playlist.playlistDetails
+      const UUID = playlist.playlist_id
+      const title = playlist.title
+      const items = listActivities
+      const sets = playlist.sets
+      const restDuration = playlist.exercise_rest_time
+      const setRestDuration = playlist.rest_sets_time
+      console.log("playlist payload", UUID, title, items, sets, restDuration, setRestDuration)
+      await savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, false)
+      await displayPlaylistPage();
+      this.destorySelf();
+      this.toastNotification(`imported ${title} it is now in your workoutks`)
+    }
+    catch (err) {
+      console.log("error", err)
+      this.toastNotification("error somthing wrong with file")
+    }
   }
 
   async exportPlaylist() {
