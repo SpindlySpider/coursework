@@ -3,6 +3,7 @@ import {
   getPlaylist,
 } from '../../../web_componets/playlist-tools.mjs';
 import { getStringTimeFrom, user, createButton, changeSelectedNavbar, fetchFragment } from '../../web_componets/utilities.mjs';
+import { PLAYLIST_KEY } from '../../web_componets/playlist-tools.mjs';
 
 const el = {};
 function prepareHandles() {
@@ -25,29 +26,25 @@ export async function displayPlaylistPage() {
 
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
-    const response = await fetch(`playlist/${item.playlist_id}`).then(
-      (res) => res.json(),
-    );
-    const playlistDetails = response.playlistDetails
+    const playlistDetails = await getPlaylist(item.playlist_id)
+    console.log("playlist", playlistDetails)
+    // const response = await fetch(`playlist/${item.playlist_id}`).then(
+    //   (res) => res.json(),
+    // );
+    // const playlistDetails = response.playlistDetails
     // create a entry for each playlist entry
     const playlistItem = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
     const entry = playlistItem.querySelector("h2")
     const edit = playlistItem.querySelector("button")
     const duration = playlistItem.querySelector("#duration")
     console.log(playlistDetails)
-    let count = 0
-    for (let item of response.activites) {
-      item = await fetch(`activities/${item.activity_id}`).then(res => res.json())
-      console.log(item.data[0].duration)
-      count += item.data[0].duration
-    }
-    duration.textContent = getStringTimeFrom(count)
+    // duration.textContent = 
     entry.textContent = playlistDetails.title
     entry.dataset.id = item.playlist_id
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
-    if (response.activites.length !== 0) {
+    if (playlistDetails.items.length !== 0) {
       const start = playlistItem.querySelector("#start");
       start.style.display = "flex"
       start.addEventListener('click', async () => {

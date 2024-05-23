@@ -2,7 +2,9 @@
 
 CREATE TABLE Users ( 
   user_id CHAR(36) PRIMARY KEY,
-  username TEXT NOT NULL
+  username TEXT NOT NULL,
+  exercise_time INTEGER,
+  workout_finished INTEGER
 );
 
 CREATE TABLE Tags(
@@ -16,6 +18,7 @@ CREATE TABLE Playlist(
   sets INTEGER NOT NULL,
   exercise_rest_time INTEGER NOT NULL,
   rest_sets_time INTEGER NOT NULL,
+  duration_string TEXT,
   FOREIGN KEY (created_by) REFERENCES Users(user_id)
 
 );
@@ -38,6 +41,7 @@ CREATE TABLE Activities(
 CREATE TABLE UserActivityRelation (
   user_id CHAR(36) NOT NULL,
   activity_id CHAR(36) NOT NULL,
+  finished INTEGER,
   FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
   PRIMARY KEY (user_id,activity_id)
@@ -46,6 +50,7 @@ CREATE TABLE UserActivityRelation (
 CREATE TABLE UserPlaylistRelation(
   user_id CHAR(36) NOT NULL,
   playlist_id CHAR(36) NOT NULL,
+  finished INTEGER,
   FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
   PRIMARY KEY (user_id,playlist_id)

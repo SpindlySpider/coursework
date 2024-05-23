@@ -21,6 +21,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.nameInput = document.createElement('input');
     this.initilized = false;
     this.headerTitle = "create workout"
+    this.durationText = ""
   }
 
   async connectedCallback() {
@@ -268,7 +269,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
       entry.dataset.id = item;
       entry.name = customActivties[item].title
       name.textContent = entry.name;
-      duration.textContent = this.updateplaylistduration(customActivties[item].duration);
+      this.updateplaylistduration(customActivties[item].duration);
+      duration.textContent = this.durationText
       this.duration += customActivties[item].duration
       deleteButton.addEventListener('click', () => { this.deleteItem(item, customActivties, entry) });
       this.draggingEventListeners(drag);
@@ -299,7 +301,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
     const secs = duration.seconds === 0 ? '' : `${duration.seconds}s`;
-    return `⏱︎ ${hour}${mins}${secs}`
+    this.durationText = `⏱︎ ${hour}${mins}${secs}`
   }
 
   draggingEventListeners(element) {
@@ -323,10 +325,9 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   async importPlaylistFunction() {
     const playlist = this.importPlaylistInput.files[0]
-    console.log(playlist)
     const urlReader = new FileReader()
     urlReader.readAsText(playlist)
-    urlReader.onload = this.fileinputHandler.bind(this,urlReader)
+    urlReader.onload = this.fileinputHandler.bind(this, urlReader)
   }
 
   async fileinputHandler(urlReader) {
@@ -405,7 +406,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
     }
     const excerciseRest = this.restTimer.getDuration()
     const setRest = this.setRestTimer.getDuration()
-    await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false);
+    await savePlaylist(this.UUID, title, this.activityItems, sets, excerciseRest, setRest, false, this.durationText);
+
     await document.querySelector("toast-notification").addNotification(`saved ${this.nameInput.value}`, 1500)
     await displayPlaylistPage();
     this.destorySelf();

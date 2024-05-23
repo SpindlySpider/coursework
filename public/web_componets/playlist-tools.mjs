@@ -43,7 +43,7 @@ export async function getPlaylist(UUID) {
   }
 }
 
-export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer) {
+export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer, durationString = "") {
   const online = true; // implement later
   if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
@@ -82,6 +82,7 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
   const newPlaylist = {
     title,
     items,
+    durationString
   };
   const cachedPlaylists = JSON.parse(localStorage[PLAYLIST_KEY]);
   cachedPlaylists[UUID] = newPlaylist;
