@@ -39,7 +39,7 @@ export async function getPlaylist(UUID) {
     getTags(this.entryID, ACTIVTIES_KEY)
     return cachedActivites[UUID];
   } catch (e) {
-    throw new Error(` no activity matching ${UUID} ID within local storage`);
+    console.log(` no activity matching ${UUID} ID within local storage`)
   }
 }
 
@@ -69,7 +69,7 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
     const attachUserResponse = await fetch(`users/${user()}/playlists`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ playlist_id: UUID, finished_number : finishedNumber }),
+      body: JSON.stringify({ playlist_id: UUID, finished_number: finishedNumber }),
     });
   } else {
     // queue it for upload when you go online/sign in

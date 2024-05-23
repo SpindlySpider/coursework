@@ -35,6 +35,7 @@ export async function displayPlaylistPage() {
     const duration = playlistItem.querySelector("#duration")
     entry.textContent = playlistDetails.title
     entry.dataset.id = item.playlist_id
+    duration.textContent = playlistDetails.duration_string
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
@@ -45,7 +46,6 @@ export async function displayPlaylistPage() {
         await startTimer(entry);
       });
     }
-    duration.textContent = playlistDetails.duration_string
     menu.append(playlistItem);
   }
 }

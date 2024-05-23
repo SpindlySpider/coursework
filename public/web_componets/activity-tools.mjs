@@ -1,6 +1,7 @@
 import { isLocalStorageEmpty, user } from "./utilities.mjs";
 
 export const ACTIVTIES_KEY = 'activites';
+const online = navigator.onLine; // implement later
 export async function saveActivty(
   UUID,
   title,
@@ -9,7 +10,6 @@ export async function saveActivty(
   fromServer,
 ) {
   // can be used to save over an entry, or add a new one to local db
-  const online = navigator.onLine; // implement later
   if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
     const payload = {
@@ -55,7 +55,6 @@ export async function saveActivty(
 
 
 export async function getActivtyFromID(UUID) {
-  const online = navigator.onLine; // implement later
   if (user() && online) {
     // checks if the user is logged in to an account
     const response = await fetch(`activities/${UUID}`);

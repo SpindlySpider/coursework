@@ -7,3 +7,4 @@ export async function updateUser(workoutCompletedNumber, exercise_time) {
     body: JSON.stringify({ workouts_finished: workoutCompletedNumber, exercise_time }),
   });
 }
+

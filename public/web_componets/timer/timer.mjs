@@ -1,8 +1,6 @@
 import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
-import { ACTIVTIES_KEY } from '../activity-tools.mjs';
 import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
-import { PLAYLIST_KEY } from '../playlist-tools.mjs';
-import { updateUser, updateUserFinishedActivity, updateUserFinishedPlaylist } from '../user-tools.mjs';
+import { updateUser } from '../user-tools.mjs';
 import { USER_KEY, fetchTemplate, formatedSeconds, user, } from '../utilities.mjs';
 const messageType = {
   STARTTIMER: "start-timer",
@@ -83,7 +81,6 @@ export default class TimerComponent extends HTMLElement {
         break
       case messageType.WORKOUTFINISH:
         console.log("workoutfinsihed")
-
         await this.workoutFinish()
         break;
     }
@@ -98,6 +95,7 @@ export default class TimerComponent extends HTMLElement {
       return
     }
     const userJSON = JSON.parse(localStorage.getItem(USER_KEY))
+
     userJSON.exercise_time = userJSON.exercise_time + this.totalExerciseTime || this.totalExerciseTime
     userJSON.workout_finished = userJSON.workout_finished + 1 || 1
     localStorage.setItem(USER_KEY, JSON.stringify(userJSON))

@@ -117,4 +117,3 @@ function stopTimer() {
 }
 
 self.addEventListener("message", handleMainThreadMessage)
-self.postMessage({ message: "hi im working lol" })

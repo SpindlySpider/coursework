@@ -20,6 +20,14 @@ export function createButton(name) {
   return button
 }
 
+export function getFormatStringTime(seconds) {
+  const duration = formatedSeconds(seconds);
+  const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
+  const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;
+  const secs = duration.seconds === 0 ? '0s' : `${duration.seconds}s`;
+  return `${hour}${mins}${secs}`;
+}
+
 export async function deleteFromLocal(UUID, KEY) {
   if (localStorage[KEY] != null) {
     const tempStore = JSON.parse(localStorage[KEY]);
@@ -55,6 +63,9 @@ export async function deleteFromLocal(UUID, KEY) {
 }
 
 export async function getUUID() {
+  if (!navigator.onLine) {
+    return crypto.randomUUID()
+  }
   const newUUID = await fetch('/api/get_uuid').then((response) => {
     return response.json();
   });
