@@ -32,7 +32,6 @@ async function fetchHandle(event) {
   else {
     event.respondWith(fetchResource(event))
   }
-
 }
 
 async function fetchResource(event) {

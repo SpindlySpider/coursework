@@ -179,22 +179,25 @@
         <button id="bottomsheet-add" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button">
           add
         </button>
-        <button id="bottomsheet-delete" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button">
-          delete
+        <button id="bottomsheet-back" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button"
+          style="display: none;align-self: flex-end;margin: 0vh 11vw;background-color: #ff2626;color: black;">
+          back
         </button>
-
         <button id="bottomsheet-done" class="bottomsheet-header-item bottomsheet-header-button" type="button">
           done
         </button>
       </div>
     </header>
     <main id="bottomsheet-content">
-
     </main>
-    <button id="bottomsheet-back" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button"
-      style="display: none;align-self: flex-end;margin: 0vh 11vw;background-color: #ff2626;color: black;">
-      back
-    </button>
-
+    <div id="bottom-button-container" style="display: flex;width: 100%;justify-content: space-between;">
+      <button id="bottomsheet-export" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button"
+        style="display: none;align-self: flex-end;background-color: red;color: black;">
+        export playlist
+      </button>
+      <button id="bottomsheet-delete" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button">
+        delete
+      </button>
+    </div>
   </form>
 </template>

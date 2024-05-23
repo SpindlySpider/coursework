@@ -95,6 +95,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.deleteButton.addEventListener('click', this.deletePlaylist.bind(this));
     this.excerciseList.addEventListener('dragover', this.dragOverInsert.bind(this));
     this.excerciseList.addEventListener('touchmove', this.dragOverInsert.bind(this));
+    this.export.addEventListener("click", this.exportPlaylist.bind(this))
   }
 
   dragOverInsert(event) {
@@ -216,8 +217,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   async hideOptions() {
     let emptyMessage;
-    const hideList = [this.excerciseList, this.optionsList]
-
+    const hideList = [this.excerciseList, this.optionsList, this.export]
     if (this.shadow.querySelector("#message")) {
       emptyMessage = this.shadow.querySelector("#message");
       emptyMessage.style.display = "flex"
@@ -227,6 +227,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.content.append(emptyMessage);
     }
     hideList.forEach((item) => item.style.display = "none")
+    this.content.append(this.bottomButtonContainer)
   }
 
   async playlistCreationTool() {
@@ -234,22 +235,20 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.cleanContent();
     this.content.append(this.excerciseList, this.optionsList)
     this.duration = 0;
-    const enableList = [this.nameInput, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
+    const enableList = [this.nameInput, this.export, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
     enableList.forEach((item) => item.style.display = "flex")
     this.backButton.style.display = 'none';
-    this.content.append(this.deleteButton)
     this.content.style.height = '0vh';
     this.setTitle(`${this.headerTitle}`);
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
-    if (this.headerTitle === "create workout") this.deleteButton.style.display="none"
+    if (this.headerTitle === "create workout") this.deleteButton.style.display = "none"
     else this.deleteButton.style.display = "flex"
-
+    this.content.append(this.bottomButtonContainer)
     if (this.activityItems.length == 0) {
       this.hideOptions()
       return;
     }
-
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     for (let item of this.activityItems) {
       const entry = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
@@ -272,7 +271,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.excerciseList.append(entry);
     }
     this.playlistDurationText.textContent = `excerise length :${this.updateplaylistduration(this.duration)}`;
-    this.content.append(this.deleteButton)
+    this.content.append(this.bottomButtonContainer)
   }
 
   deleteItem(item, customActivties, entry) {
@@ -317,6 +316,31 @@ export class newPlaylistMenu extends bottomSheetMenu {
   toastNotification(str) {
     document.querySelector("toast-notification").addNotification(str, 1500)
   }
+
+  importPlaylist(){
+
+  }
+
+  async exportPlaylist() {
+    // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
+    // get specific playlist JSON
+    let downloadJSON = {}
+    let playlist = await fetch(`playlist/${this.UUID}`).then(res => res.json())
+    let activities = {}
+    downloadJSON.playlist = playlist
+    for (let activity of playlist.activites) {
+      const item = await fetch(`/activities/${activity.activity_id}`).then(res => res.json())
+      activities[activity.activity_id] = item.data[0]
+    }
+    downloadJSON.activities = activities
+    // console.log("download", downloadJSON)
+    const blob = new Blob([JSON.stringify(downloadJSON)])
+    const downloadElement = document.createElement("a")
+    downloadElement.download = `${playlist.playlistDetails.title}.json`
+    downloadElement.href = URL.createObjectURL(blob)
+    downloadElement.click()
+  }
+
 
   async saveNewPlaylist() {
     if (this.UUID === undefined) this.UUID = await getUUID();

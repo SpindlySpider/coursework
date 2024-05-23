@@ -18,6 +18,8 @@ export class bottomSheetMenu extends HTMLElement {
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.deleteButton = this.shadow.querySelector('#bottomsheet-delete');
+    this.bottomButtonContainer = this.shadow.querySelector("#bottom-button-container")
+    this.export = this.shadow.querySelector("#bottomsheet-export")
     this.cancelButton = this.shadow.querySelector("#bottomsheet-cancel")
   }
 

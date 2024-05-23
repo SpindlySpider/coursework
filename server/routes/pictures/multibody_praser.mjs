@@ -28,7 +28,6 @@ export async function multibodyParser(req, res,id,emitter) {
     const filename = header.toString().match(/filename="([a-zA-Z0-9\-]*)(.*)"/g)
     const extention = filename.toString().match(/(\.)(?!.*\.)\w*/g).toString();
     //save file
-
     const URL = `${import.meta.dirname}/../../photos/${id}${extention}`
     fs.writeFile(URL, content, () => { })
   })

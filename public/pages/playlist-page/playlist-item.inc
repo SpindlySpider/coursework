@@ -2,7 +2,7 @@
   <h2 id="entry-title" style="width: 75%;justify-content: center;padding: 1vh 1vw;" data-id="" class="menu-item"></h2>
   <div>
     <button id="edit">edit ✏️</button>
-    <button id="start" style="display: flex;text-align: center;justify-content: center;align-items: center;">start ▶️</button>
+    <button id="start" style="display: none;text-align: center;justify-content: center;align-items: center;">start ▶️</button>
     </div>
 
 </li>

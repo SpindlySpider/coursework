@@ -35,7 +35,6 @@ export async function displayPlaylistPage() {
     const edit = playlistItem.querySelector("button")
     entry.textContent = playlistDetails.title
     entry.dataset.id = item.playlist_id
-
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
