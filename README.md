@@ -13,9 +13,9 @@ on the same machine you are running `npm start` go to the web address `http://lo
 I have implemented all core requirements I will now list them and where to find them
 ## build custom HIIT workout from scratch
 a user can build a custom HIIT workout, first create a new exercise,then create a playlist and add the exercise to it 
-- to create an exercise => add button in the navbar -> add activity -> input data -> save
-- to create a playlist => add button in the navbar -> create new playlist -> create empty playlist -> input data -> save
-- to add an exercise to the playlist press +exercise and then click the exercises you wish to add.
+ - to create an exercise => add button in the navbar -> add activity -> input data -> save
+ - to create a playlist => add button in the navbar -> create new playlist -> create empty playlist -> input data -> save
+ - to add an exercise to the playlist press +exercise and then click the exercises you wish to add.
 ## start, stop and pause workout
 to start a workout you must create a workout with exercises within it
 then go to playlist page, the dumbell icon in the navbar and press start on the workout you have made
@@ -28,8 +28,8 @@ when the user starts a workout there is a count in, this allows the users to get
 ## workout import and exporting - users are able to import and export playlist
 users can share playlists via a JSON file, either importing or exporting it 
 these features can be found in:
-    - playlist page -> edit -> scroll down to the bottom -> export playlist
-    - add -> create new playlist -> import playlist
+ - playlist page -> edit -> scroll down to the bottom -> export playlist
+ - add -> create new playlist -> import playlist
 
 ## tags - users can tag excerises
 users are able to tag exercises
