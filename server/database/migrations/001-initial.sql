@@ -4,7 +4,7 @@ CREATE TABLE Users (
   user_id CHAR(36) PRIMARY KEY,
   username TEXT NOT NULL,
   exercise_time INTEGER,
-  workout_finished INTEGER
+  workouts_finished INTEGER
 );
 
 CREATE TABLE Tags(
@@ -41,7 +41,6 @@ CREATE TABLE Activities(
 CREATE TABLE UserActivityRelation (
   user_id CHAR(36) NOT NULL,
   activity_id CHAR(36) NOT NULL,
-  finished INTEGER,
   FOREIGN KEY (activity_id) REFERENCES Activities(activity_id),
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
   PRIMARY KEY (user_id,activity_id)
@@ -50,7 +49,6 @@ CREATE TABLE UserActivityRelation (
 CREATE TABLE UserPlaylistRelation(
   user_id CHAR(36) NOT NULL,
   playlist_id CHAR(36) NOT NULL,
-  finished INTEGER,
   FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
   PRIMARY KEY (user_id,playlist_id)
@@ -89,10 +87,10 @@ CREATE TABLE PlaylistActivityRelation(
   PRIMARY KEY (activity_id,playlist_id,orderNumber)
 );
 
-INSERT INTO Users (user_id, username) VALUES
-( 'd7dcf380-33a3-4cb4-94c2-0323f18be441',"user1"),
-('4028fb15-c6eb-4401-822e-c06da852fc66',"user2"),
-("65f855e2-01c6-4f6a-8f63-7bd807e26517","user3");
+INSERT INTO Users (user_id, username,workouts_finished,exercise_time) VALUES
+( 'd7dcf380-33a3-4cb4-94c2-0323f18be441',"user1",0,0),
+('4028fb15-c6eb-4401-822e-c06da852fc66',"user2",0,0),
+("65f855e2-01c6-4f6a-8f63-7bd807e26517","user3",0,0);
 
 INSERT INTO Playlist (playlist_id,title,created_by,sets,exercise_rest_time,rest_sets_time) VALUES
 ("c4bc911f-01d6-499f-8f17-8b973d44f7b8","playlist 1",'d7dcf380-33a3-4cb4-94c2-0323f18be441',2,10,20);

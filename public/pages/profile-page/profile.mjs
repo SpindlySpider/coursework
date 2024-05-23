@@ -58,7 +58,13 @@ async function signOut() {
 
 async function signIn(userData) {
   document.querySelector("toast-notification").addNotification(`logged in as ${userData.username}`, 2000)
-  localStorage.setItem(USER_KEY, JSON.stringify({ user: userData.user_id }));
+  console.log("userdat", userData)
+  localStorage.setItem(USER_KEY, JSON.stringify({
+    user: userData.user_id,
+    username: userData.username,
+    exercise_time: userData.exercise_time,
+    workout_finished: userData.workouts_finished
+  }));
   await popuplateLocal();
   await displayProfiles();
 }

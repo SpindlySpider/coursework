@@ -272,7 +272,10 @@ export class newPlaylistMenu extends bottomSheetMenu {
       this.updateplaylistduration(customActivties[item].duration);
       duration.textContent = this.durationText
       this.duration += customActivties[item].duration
-      deleteButton.addEventListener('click', () => { this.deleteItem(item, customActivties, entry) });
+      deleteButton.addEventListener('click', () => {
+        this.updateplaylistduration(customActivties[item].duration);
+        this.deleteItem(item, customActivties, entry)
+      });
       this.draggingEventListeners(drag);
       this.excerciseList.append(entry);
     }
@@ -296,7 +299,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
   }
 
   updateplaylistduration(seconds) {
-    if (seconds <= 0) return ""
+    if (seconds <= 0) return this.durationText = ""
     const duration = formatedSeconds(seconds);
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
     const mins = duration.minutes === 0 ? '' : `${duration.minutes}m`;

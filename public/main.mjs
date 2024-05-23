@@ -70,7 +70,7 @@ document
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
 
-// document.querySelector("#dashboard").addEventListener("click", displayDashboardPage) no dashboard
+document.querySelector("#dashboard").addEventListener("click", displayDashboardPage) 
 
 if ("serviceWorker" in navigator) {
   //https://www.youtube.com/watch?v=WbbAPfDVqfY

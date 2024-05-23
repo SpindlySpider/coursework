@@ -2,7 +2,7 @@ import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
 import { ACTIVTIES_KEY } from '../activity-tools.mjs';
 import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
 import { PLAYLIST_KEY } from '../playlist-tools.mjs';
-import { updateUserExerciseTime, updateUserFinishedActivity, updateUserFinishedPlaylist, updateUserFinishedWorkouts } from '../user-tools.mjs';
+import { updateUser, updateUserFinishedActivity, updateUserFinishedPlaylist } from '../user-tools.mjs';
 import { USER_KEY, fetchTemplate, formatedSeconds, user, } from '../utilities.mjs';
 const messageType = {
   STARTTIMER: "start-timer",
@@ -98,24 +98,11 @@ export default class TimerComponent extends HTMLElement {
       return
     }
     const userJSON = JSON.parse(localStorage.getItem(USER_KEY))
-    const playlistJSON = JSON.parse(localStorage.getItem(PLAYLIST_KEY))
-
-    playlistJSON[this.playlistUUID].finishedNumber = playlistJSON[this.playlistUUID].finishedNumber + 1 || 1
     userJSON.exercise_time = userJSON.exercise_time + this.totalExerciseTime || this.totalExerciseTime
     userJSON.workout_finished = userJSON.workout_finished + 1 || 1
     localStorage.setItem(USER_KEY, JSON.stringify(userJSON))
-    localStorage.setItem(PLAYLIST_KEY, JSON.stringify(playlistJSON))
-    // await updateUserFinishedPlaylist(this.playlistUUID, userJSON)
-    await updateUser(userJSON.workout_finished)
-    await updateUser(this.totalExerciseTime)
-
-    const activityJSON = JSON.parse(localStorage.getItem(ACTIVTIES_KEY))
-    for (let activity of this.timerList) {
-      activityJSON[activity.UUID].finishedNumber = activityJSON[activity.UUID].finishedNumber + 1 || 1
-      // await updateUserFinishedActivity(activity.UUID, activityJSON[activity.UUID].finishedNumber)
-    }
-    localStorage.setItem(ACTIVTIES_KEY, JSON.stringify(activityJSON))
-    this.timerList
+    console.log("updating user with", userJSON)
+    await updateUser(userJSON.workout_finished, userJSON.exercise_time)
     await this.stopTimer()
 
   }
