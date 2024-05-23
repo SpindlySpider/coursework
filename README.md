@@ -1,7 +1,8 @@
 # HIIT up2107487
 
 # forword 
-within the code i use exercise and acitivity interchanagably, additionally i use workout and playlist interchanagably
+within the code i use exercise and acitivity interchanagably, additionally i use workout and playlist interchanagably 
+a link to the github can be found here: `https://github.com/SpindlySpider/coursework`
 
 # setup
 ## installation 
@@ -17,22 +18,28 @@ a user can build a custom HIIT workout, first create a new exercise,then create 
 - to add an exercise to the playlist press +exercise and then click the exercises you wish to add.
 ## start, stop and pause workout
 to start a workout you must create a workout with exercises within it
-then go to playlist page, the dumbell icon in the navbar and press start
+then go to playlist page, the dumbell icon in the navbar and press start on the workout you have made
 
+# advanced features
 
-# workout import and exporting - users are able to import and export playlist
+## visual cues - count in 
+when the user starts a workout there is a count in, this allows the users to get ready for the exercises and be sufficently prepared
+
+## workout import and exporting - users are able to import and export playlist
 users can share playlists via a JSON file, either importing or exporting it 
 these features can be found in:
     - playlist page -> edit -> scroll down to the bottom -> export playlist
     - add -> create new playlist -> import playlist
 
-# tags - users can tag excerises
+## tags - users can tag excerises
 users are able to tag exercises
 this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
 this feature can be found in:
     - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
 
-# toast notificaiton
+## toast notificaiton - web componenet
+to show notificaiton to the user there is a toast notificaiton web componenet, this can be found within `public/web_components/toast-notification`
+this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the user
 
 ## file structure
 
