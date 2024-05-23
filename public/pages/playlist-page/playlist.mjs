@@ -12,6 +12,7 @@ function prepareHandles() {
 
 export async function displayPlaylistPage() {
   changeSelectedNavbar('#workout-playlist');
+  el.main.textContent = ""
   if (document.querySelector('bottom-sheet-menu')) {
     // already have a menu on display
     return;

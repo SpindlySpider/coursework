@@ -3,13 +3,13 @@ import { PLAYLIST_KEY } from '../../web_componets/playlist-tools.mjs';
 import {
   USER_KEY,
   changeSelectedNavbar,
-  createButton,
   fetchFragment,
   popuplateLocal,
   user,
 } from '../../web_componets/utilities.mjs';
 
 const el = {};
+
 function prepareHandles() {
   el.main = document.querySelector('#main-content');
   el.navbar = document.querySelector('#navbar');
@@ -25,27 +25,25 @@ export async function displayProfiles() {
 
   if (user()) {
     const account = await fetch(`users/${user()}`).then((res) => res.json());
-    const text = document.createElement('h1');
-    const signOutbutton = createButton('sign out');
-    text.classList.add("menu-title")
-    text.textContent = `hello ${account.data[0].username}`;
-    signOutbutton.addEventListener('click', signOut);
-    signOutbutton.style.width = "34vw"
-    el.main.append(text);
-    el.main.append(signOutbutton);
+    const frag = await fetchFragment(import.meta.resolve("./profile-signed-in-user.inc"))
+    const welcomeMessage = frag.querySelector("#welcome-message")
+    welcomeMessage.textContent = `hello ${account.data[0].username}`
+    const signOutButton = frag.querySelector("#sign-out")
+    signOutButton.addEventListener('click', signOut)
+    el.main.append(welcomeMessage,signOutButton);
     return;
   }
   for (let user of users.data) {
-    const userPara = document.createElement('li');
+    const frag = await fetchFragment(import.meta.resolve("./profile-users.inc"))
+    const userPara =frag.querySelector("#username");
     userPara.classList.add("menu-item")
-    const signInbutton = createButton('login');
+    const signInbutton = frag.querySelector("#login-button");
     userPara.textContent = user.username;
     userPara.dataset.id = user.user_id;
     signInbutton.addEventListener('click', () => {
       signIn(user);
     });
-    el.main.append(userPara);
-    userPara.append(signInbutton);
+    el.main.append(frag);
   }
 }
 

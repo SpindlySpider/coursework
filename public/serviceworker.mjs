@@ -21,19 +21,27 @@ async function install() {
 
 async function fetchHandle(event) {
   // network first 
-  const request = event.request.clone()
-  event.respondWith(caches.match(request).then(
-    async res => await fetchResource(event) || res
-  ))
+  console.log("dsfsdfsdfsdfsdfs", event.request.clone().method)
+  if (event.request.clone().method === "GET") {
+    event.respondWith(caches.match(event.request).then(
+      async res => {
+        return await fetchResource(event) || res
+      }
+    ))
+  }
+  else {
+    event.respondWith(fetchResource(event))
+  }
+
 }
 
 async function fetchResource(event) {
   // get reasource from server and save it 
   try {
-    const response = await fetch(event.request.clone())
+    const response = await fetch(event.request)
     const dynamicCache = await caches.open(dynamicCacheName)
     dynamicCache.put(event.request.url, response.clone())
-    return response.clone()
+    return response
   }
   catch {
     return undefined

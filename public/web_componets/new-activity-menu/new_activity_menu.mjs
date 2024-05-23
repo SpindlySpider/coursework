@@ -115,11 +115,11 @@ export class newActivtyMenu extends bottomSheetMenu {
 
   destorySelf() {
     this.content.style.height = '0vh';
-    setTimeout(() => {
+    setTimeout(async () => {
       this.remove();
       this.enableNavbarBorder();
-      displayCategoryPage();
-      displayCustomCateogryPage();
+      // await displayCategoryPage();
+      await displayCustomCateogryPage();
     }, 300);
   }
 

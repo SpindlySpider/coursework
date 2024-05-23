@@ -216,7 +216,8 @@ export class newPlaylistMenu extends bottomSheetMenu {
 
   async hideOptions() {
     let emptyMessage;
-    const hideList = [this.deleteButton, this.excerciseList, this.optionsList]
+    const hideList = [this.excerciseList, this.optionsList]
+
     if (this.shadow.querySelector("#message")) {
       emptyMessage = this.shadow.querySelector("#message");
       emptyMessage.style.display = "flex"
@@ -236,14 +237,19 @@ export class newPlaylistMenu extends bottomSheetMenu {
     const enableList = [this.nameInput, this.doneButton, this.deleteButton, this.playlistDurationText, this.excerciseList, this.optionsList, this.addButton, this.cancel]
     enableList.forEach((item) => item.style.display = "flex")
     this.backButton.style.display = 'none';
+    this.content.append(this.deleteButton)
     this.content.style.height = '0vh';
     this.setTitle(`${this.headerTitle}`);
     this.createEmptyPlaylist.remove();
     this.importPlaylist.remove();
+    if (this.headerTitle === "create workout") this.deleteButton.style.display="none"
+    else this.deleteButton.style.display = "flex"
+
     if (this.activityItems.length == 0) {
       this.hideOptions()
       return;
     }
+
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);
     for (let item of this.activityItems) {
       const entry = await fetchFragment(import.meta.resolve("./playlist-item.inc"))

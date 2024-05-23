@@ -124,8 +124,7 @@ export default class TimerComponent extends HTMLElement {
     await this.attachTemplate();
   }
 
-  destorySelf() {
-    displayPlaylistPage();
+  async destorySelf() {
     this.remove();
   }
 
@@ -133,7 +132,7 @@ export default class TimerComponent extends HTMLElement {
     return new Date(seconds * 1000).toISOString().slice(11, 19);
   }
 
-  stopTimer() {
+  async stopTimer() {
     this.upNext.classList.add('hidden');
     this.stop.classList.add('hidden');
     this.start.textContent = 'start';
@@ -145,7 +144,7 @@ export default class TimerComponent extends HTMLElement {
     this.time.classList.add('hidden');
     this.close.classList.remove('hidden');
     this.clockContainer.classList.add('hidden');
-    displayPlaylistPage();
+    await displayPlaylistPage();
   }
 
   async incrementTimer() {
@@ -164,7 +163,7 @@ export default class TimerComponent extends HTMLElement {
 
       } else {
         // end the timer
-        this.stopTimer();
+        await this.stopTimer();
         console.log('finished');
         return;
       }
@@ -255,9 +254,9 @@ export default class TimerComponent extends HTMLElement {
       this.circumference - (percent / 100) * this.circumference;
   }
 
-  disconnectedCallback() {
+  async disconnectedCallback() {
     clearInterval(this.intervalID);
-    this.destorySelf()
+    await this.destorySelf()
   }
 }
 customElements.define('timer-component', TimerComponent);
