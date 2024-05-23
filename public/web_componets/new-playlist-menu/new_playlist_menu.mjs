@@ -328,6 +328,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     urlReader.readAsText(playlist)
     urlReader.onload = this.fileinputHandler.bind(this,urlReader)
   }
+
   async fileinputHandler(urlReader) {
     try {
       const file = JSON.parse(urlReader.result)
