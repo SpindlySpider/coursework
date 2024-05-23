@@ -65,6 +65,7 @@ button {
 
 .nav-selected {
   background-color: var(--nav-bar-item-selected);
+  padding: 0vh 3vw;
 }
 
 .nav-unselected {
@@ -84,7 +85,7 @@ button {
 }
 
 .bottom-navbar {
-  height: 9vh;
+  height: 10.5vh;
   width: 100vw;
   display: flex;
   background-color: var(--nav-bar-background-color);
@@ -120,11 +121,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: var(--main-content-background-color); */
-  flex-direction: row;
-  margin: 10px;
   flex-direction: column;
-  width: 14vw;
+  width: 21vw;
 }
 
 #navbar {

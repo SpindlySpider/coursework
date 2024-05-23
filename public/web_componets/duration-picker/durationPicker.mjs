@@ -18,8 +18,16 @@ export class durationPicker extends HTMLElement {
       '../../web_componets/duration-picker/durationTimer.html',
     );
     this.inputList = this.shadow.querySelectorAll('.duration_input');
+    this.inputList.forEach(item => item.addEventListener("keydown", this.vailidateKeyUp))
     this.setDuration(this.seconds);
     this.initilized = true;
+  }
+  vailidateKeyUp(event) {
+    if (isNaN(event.key) && event.key !== "Backspace") event.preventDefault()
+    else if (event.target.value >= 59) {
+      event.target.value = "59"
+    }
+
   }
 
   async connectedCallback() {

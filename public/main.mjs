@@ -1,4 +1,5 @@
 import { displayCategoryPage } from './pages/category-page/category.mjs';
+import { displayDashboardPage } from './pages/dashboard/dashboard.mjs';
 import { displayPlaylistPage } from './pages/playlist-page/playlist.mjs';
 import { displayProfiles } from './pages/profile-page/profile.mjs';
 
@@ -15,6 +16,7 @@ function displayNewPlaylistMenu() {
   const menu = document.createElement('new-playlist-menu');
   main.appendChild(menu);
 }
+
 
 function displayNewEntryOptions() {
   if (document.querySelector('#activtyList') == null) {
@@ -67,6 +69,8 @@ document
   .querySelector('#workout-playlist')
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
+
+// document.querySelector("#dashboard").addEventListener("click", displayDashboardPage) no dashboard
 
 if ("serviceWorker" in navigator) {
   //https://www.youtube.com/watch?v=WbbAPfDVqfY
