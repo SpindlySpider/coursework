@@ -24,17 +24,18 @@ export async function updatePlaylist(
   createdByID = null,
   sets,
   restDuration,
-  setRestDuration
+  setRestDuration,
+  durationString = ""
 ) {
   const db = await databaseConnect;
   const statement = await db.run(
-    'UPDATE Playlist SET title = ?, created_by = ? , sets = ? , exercise_rest_time =?,rest_sets_time = ? WHERE playlist_id = ?',
+    'UPDATE Playlist SET title = ?, created_by = ? , sets = ? , exercise_rest_time =?,rest_sets_time = ? , duration_string = ? WHERE playlist_id = ?',
     [
       title,
       createdByID,
       sets,
       restDuration,
-      setRestDuration, UUID],
+      setRestDuration,durationString, UUID],
   );
   await deletePlaylistActivities(UUID);
   if (items) {
@@ -54,20 +55,23 @@ export async function newPlaylist(
   createdByID = null,
   sets,
   restDuration,
-  setRestDuration
+  setRestDuration,
+  durationString = ""
 ) {
   const db = await databaseConnect;
-  await db.run('INSERT INTO Playlist VALUES (?,?,?,?,?,?)', [
+  await db.run('INSERT INTO Playlist VALUES (?,?,?,?,?,?,?)', [
     UUID,
     title,
     createdByID,
     sets,
     restDuration,
-    setRestDuration
+    setRestDuration,
+    durationString
   ]);
   if (items[0] !== null) {
     let index = 0;
     for (let item of items) {
+      console.log("activity data when saving relation line 73 database/playlist    :    ", item)
       addActivityPlaylist(UUID, item, index);
       index++;
     }

@@ -1,7 +1,16 @@
 import { ACTIVTIES_KEY, getActivtyFromID } from "./activity-tools.mjs";
 import { PLAYLIST_KEY, getPlaylist } from "./playlist-tools.mjs";
 
-export const user = () => localStorage.getItem(USER_KEY) ?? null;
+export const user = () => {
+  try {
+    let userJSON = JSON.parse(localStorage.getItem(USER_KEY))
+    return userJSON.user !== undefined ? userJSON.user : null
+  }
+  catch {
+    return null
+  }
+
+}
 export const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const USER_KEY = 'account';
 
@@ -57,7 +66,7 @@ export async function fetchFragment(URL) {
   const htmlText = await fetch(URL).then(item => item.text())
   let tempObj = document.createElement("div")
   tempObj.innerHTML = htmlText
-  console.log("fetched fragement",tempObj.firstChild)
+  console.log("fetched fragement", tempObj.firstChild)
   return tempObj.firstChild;
 
 }

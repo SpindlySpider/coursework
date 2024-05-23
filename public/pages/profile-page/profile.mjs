@@ -50,7 +50,7 @@ export async function displayProfiles() {
 
 async function signOut() {
   document.querySelector("toast-notification").addNotification(`signed out`, 2000)
-  localStorage[USER_KEY] = '';
+  localStorage[USER_KEY] = '{}';
   localStorage[ACTIVTIES_KEY] = '{}';
   localStorage[PLAYLIST_KEY] = '{}';
   await displayProfiles();
@@ -58,7 +58,7 @@ async function signOut() {
 
 async function signIn(userData) {
   document.querySelector("toast-notification").addNotification(`logged in as ${userData.username}`, 2000)
-  localStorage[USER_KEY] = userData.user_id;
+  localStorage.setItem(USER_KEY, JSON.stringify({ user: userData.user_id }));
   await popuplateLocal();
   await displayProfiles();
 }

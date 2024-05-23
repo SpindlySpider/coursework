@@ -10,6 +10,7 @@ const messageType = {
   CHANGEEXCERISE: "change-excerise",
   UPDATEMILISECONDS: "update-miliseconds",
   UPDATESECONDS: "update-seconds",
+  WORKOUTFINISH: "workout-finished"
 }
 let timeRunning = false
 let intervalID;
@@ -33,10 +34,11 @@ async function incrementTimer() {
       self.postMessage({ type: messageType.CHANGEEXCERISE, payload: index })
       seconds = 0;
       miliseconds = 0
+      // send message to server that you have finished
     } else {
       // end the timer
-      stopTimer()
-      console.log('finished');
+      endWorkout()
+
       return
     }
   }
@@ -46,6 +48,13 @@ async function incrementTimer() {
   }
   miliseconds += 100
   self.postMessage({ type: messageType.UPDATEMILISECONDS, payload: miliseconds })
+}
+function endWorkout() {
+  clearInterval(intervalID);
+  seconds = 0;
+  this.isTimerRunning = false;
+  self.postMessage({ type: messageType.WORKOUTFINISH })
+  console.log('finished');
 }
 
 function startTimer() {
@@ -96,6 +105,7 @@ async function handleMainThreadMessage(event) {
       console.log("starting timer in web worker")
       startTimer()
       break
+
   }
 }
 

@@ -70,22 +70,41 @@ export async function postUserActivties(userID, activityID) {
     activityID,
   ]);
 }
-export async function postUserPlaylist(userID, playlistID) {
+export async function postUserPlaylist(userID, playlistID, finishedNumber) {
   const db = await databaseConnect;
-
   const unique = await db.all(
     'SELECT * FROM UserPlaylistRelation WHERE user_id = ? AND playlist_id = ?',
     [userID, playlistID],
   );
-
   if (unique.length !== 0) {
+    //update the finished
+    await db.run("UPDATE UserPlaylistRelation SET finished = ? WHERE user_id = ? AND playlist_id = ?", [
+      finishedNumber, userID, playlistID
+    ])
     return;
   }
-  await db.run('INSERT INTO UserPlaylistRelation VALUES (?,?)', [
+  await db.run('INSERT INTO UserPlaylistRelation VALUES (?,?,?)', [
     userID,
     playlistID,
+    finishedNumber
   ]);
 }
+
+export async function updateExerciseTime(userID, time) {
+  const db = await databaseConnect;
+  await db.run("UPDATE Users SET exercise_time ? WHERE user_id = ?", [
+    time,
+    userID
+  ])
+}
+export async function updateWorkoutsFinished(userID, number) {
+  const db = await databaseConnect;
+  await db.run("UPDATE Users SET workouts_finished = ? WHERE user_id = ?", [
+    number,
+    userID
+  ])
+}
+
 export async function deleteUserPlaylist(playlistID) {
   const db = await databaseConnect;
   await db.run(

@@ -1,8 +1,7 @@
 import { isLocalStorageEmpty, user } from "./utilities.mjs";
-
+const online = navigator.onLine
 export const PLAYLIST_KEY = 'playlist';
 export async function getPlaylist(UUID) {
-  const online = true; // implement later
   if (user() && online) {
     // checks if the user is logged in to an account
     const response = await fetch(`playlist/${UUID}`);
@@ -21,11 +20,12 @@ export async function getPlaylist(UUID) {
           items: itemsArray,
           sets: playlist.playlistDetails.sets,
           exercise_rest_time: playlist.playlistDetails.exercise_rest_time,
-          rest_sets_time: playlist.playlistDetails.rest_sets_time
+          rest_sets_time: playlist.playlistDetails.rest_sets_time,
+          duration_string: playlist.playlistDetails.duration_string
         };
 
         // save/update the playlist locally
-        await savePlaylist(UUID, playlistJSON.title, playlistJSON.items, playlistJSON.sets, playlistJSON.exercise_rest_time, playlistJSON.rest_sets_time, true);
+        await savePlaylist(UUID, playlistJSON.title, playlistJSON.items, playlistJSON.sets, playlistJSON.exercise_rest_time, playlistJSON.rest_sets_time, true, playlistJSON.duration_string);
         return playlistJSON;
       }
     }
@@ -43,8 +43,7 @@ export async function getPlaylist(UUID) {
   }
 }
 
-export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer, durationString = "") {
-  const online = true; // implement later
+export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer, durationString = "", finishedNumber = 0) {
   if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
     const payload = {
@@ -54,7 +53,8 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
       createdBy: user(),
       sets,
       exercise_rest_time: restDuration,
-      rest_sets_time: setRestDuration
+      rest_sets_time: setRestDuration,
+      duration_string: durationString
     };
     console.log('playload', payload);
 
@@ -69,7 +69,7 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
     const attachUserResponse = await fetch(`users/${user()}/playlists`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ playlist_id: UUID }),
+      body: JSON.stringify({ playlist_id: UUID, finished_number : finishedNumber }),
     });
   } else {
     // queue it for upload when you go online/sign in
@@ -82,7 +82,8 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
   const newPlaylist = {
     title,
     items,
-    durationString
+    durationString,
+    finishedNumber
   };
   const cachedPlaylists = JSON.parse(localStorage[PLAYLIST_KEY]);
   cachedPlaylists[UUID] = newPlaylist;

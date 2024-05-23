@@ -28,17 +28,13 @@ export async function displayPlaylistPage() {
     // extract out the playlist feature to error check
     const playlistDetails = await getPlaylist(item.playlist_id)
     console.log("playlist", playlistDetails)
-    // const response = await fetch(`playlist/${item.playlist_id}`).then(
-    //   (res) => res.json(),
-    // );
-    // const playlistDetails = response.playlistDetails
     // create a entry for each playlist entry
     const playlistItem = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
     const entry = playlistItem.querySelector("h2")
     const edit = playlistItem.querySelector("button")
     const duration = playlistItem.querySelector("#duration")
     console.log(playlistDetails)
-    // duration.textContent = 
+    duration.textContent = playlistDetails.duration_string
     entry.textContent = playlistDetails.title
     entry.dataset.id = item.playlist_id
     edit.addEventListener('click', async () => {
@@ -59,6 +55,7 @@ async function startTimer(entry) {
   const main = document.querySelector('#main-content');
   main.textContent = '';
   const timer = document.createElement('timer-component');
+  timer.playlistUUID = entry.dataset.id
   const playlist = await getPlaylist(entry.dataset.id);
   console.log("timerdata", playlist)
   const workoutItems = [];

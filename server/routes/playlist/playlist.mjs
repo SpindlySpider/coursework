@@ -37,7 +37,7 @@ async function createPlaylist(req, res) {
   if (req.body.UUID) {
     UUID = req.body.UUID;
   }
-  console.log(req.body);
+  console.log(req.body, "line 40 playlist");
   if (await uniqueID('Playlist', 'playlist_id', UUID)) {
     await playlist.newPlaylist(
       UUID,
@@ -46,7 +46,8 @@ async function createPlaylist(req, res) {
       req.body.createdBy,
       req.body.sets,
       req.body.exercise_rest_time,
-      req.body.rest_sets_time
+      req.body.rest_sets_time,
+      req.body.duration_string
     );
   } else {
     await playlist.updatePlaylist(
@@ -56,7 +57,8 @@ async function createPlaylist(req, res) {
       req.body.createdBy,
       req.body.sets,
       req.body.exercise_rest_time,
-      req.body.rest_sets_time
+      req.body.rest_sets_time,
+      req.body.duration_string
     );
   }
 
@@ -73,6 +75,7 @@ async function updatePlaylistItems(req, res) {
     req.body.title,
     req.body.items,
     req.body.createdBy,
+    req.body.duration_string
   );
   res.sendStatus(200)
 }

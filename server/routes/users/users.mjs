@@ -22,7 +22,10 @@ async function getUserPlaylists(req, res) {
 async function updateUser(req, res) {
   // update data
   try {
-    await user.updateUsername(req.params.id, req.body);
+    console.log("updating user line 25 user.mjs")
+    await user.updateUsername(req.params.id, req.body.username);
+    await user.updateExerciseTime(req.params.id, req.body.exercise_time);
+    await user.updateWorkoutsFinished(req.params.id, req.body.workouts_finished);
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(404);
@@ -49,13 +52,13 @@ async function postUser(req, res) {
   res.sendStatus(200)
 }
 async function postUserActivities(req, res) {
-  // console.log(req.params.id, req.body.activity_id);
+  console.log("user/users.mjs line 57", req.params.id, req.body);
   await user.postUserActivties(req.params.id, req.body.activity_id);
   res.sendStatus(200)
 }
 async function postUserPlaylists(req, res) {
-  // console.log(req.params.id, req.body.activity_id);
-  await user.postUserPlaylist(req.params.id, req.body.playlist_id);
+  console.log("user/users.mjs line 57", req.params.id, req.body);
+  await user.postUserPlaylist(req.params.id, req.body.playlist_id, req.body.finished_number);
   res.sendStatus(200)
 }
 
@@ -64,8 +67,9 @@ router.get('/:id', getUser);
 router.get('/:id/playlists', getUserPlaylists);
 router.get('/:id/activities', getUserActivities);
 router.put('/:id', express.json(), updateUser);
+// router.put('/:id', express.json(), updateUser);
 router.post('/', postUser);
-router.post('/:id/activities', express.json(), postUserActivities);
-router.post('/:id/playlists', express.json(), postUserPlaylists);
+router.post('/:id/activity-finished', express.json(), postUserActivities);
+router.post('/:id/playlist-finished', express.json(), postUserPlaylists);
 router.delete('/:id', removeUser);
 router.delete('/:id/:playlist_id', removePlaylist);
