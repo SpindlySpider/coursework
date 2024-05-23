@@ -95,7 +95,6 @@ export default class TimerComponent extends HTMLElement {
     this.worker.postMessage({ type: messageType.STARTTIMER })
   }
 
-
   startTimer() {
     this.updateTimerDisplay();
     this.time.classList.remove('hidden');
@@ -227,36 +226,6 @@ export default class TimerComponent extends HTMLElement {
     this.close.classList.remove('hidden');
     this.clockContainer.classList.add('hidden');
     await displayPlaylistPage();
-  }
-
-  async incrementTimer() {
-    if (
-      this.timerList[this.timerIndex].duration === this.seconds) {
-      if (this.timerList.length - this.timerIndex > 1) {
-        // switch over to next activity
-        this.timerIndex++;
-        this.titleText.textContent = this.timerList[this.timerIndex].title;
-        // get change photos here
-        this.description.textContent = this.timerList[this.timerIndex].description
-        this.removePictures()
-        await this.appendPictures(this.timerList[this.timerIndex].UUID)
-        this.seconds = 0;
-        this.miliseconds = 0
-
-      } else {
-        // end the timer
-        await this.stopTimer();
-        console.log('finished');
-        return;
-      }
-    }
-    // this.updateTimerDisplay();
-    if (this.miliseconds % 1000 === 0) {
-      this.seconds++;
-    }
-    this.miliseconds += 100
-    this.updateTimerDisplay();
-    return
   }
 
   async appendPictures(UUID) {
