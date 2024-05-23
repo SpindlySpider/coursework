@@ -1,5 +1,32 @@
 # HIIT up2107487
 
+# forword 
+within the code i use exercise and acitivity interchanagably, additionally i use workout and playlist interchanagably
+
+# setup
+## installation 
+first run `npm install` then once complete run `npm start` 
+## connection
+on the same machine you are running `npm start` go to the web address `http://localhost:8080`
+# core requirements
+I have implemented all core requirements I will now list them and where to find them
+## build custom HIIT workout from scratch
+a user can build a custom HIIT workout, first create a new exercise,then create a playlist and add the exercise to it 
+
+# workout import and exporting - users are able to import and export playlist
+users can share playlists via a JSON file, either importing or exporting it 
+these features can be found in:
+    - playlist page -> edit -> scroll down to the bottom -> export playlist
+    - add -> create new playlist -> import playlist
+
+# tags - users can tag excerises
+users are able to tag exercises
+this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
+this feature can be found in:
+    - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
+
+# toast notificaiton
+
 ## file structure
 
 ## justification of design
