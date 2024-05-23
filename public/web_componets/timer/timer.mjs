@@ -1,8 +1,18 @@
 import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
 import { getPhotoFromID, getPhotos } from '../picture-tools.mjs';
 import { fetchTemplate, formatedSeconds, } from '../utilities.mjs';
-
-
+const messageType = {
+  STARTTIMER: "start-timer",
+  PAUSETIMER: "pause-timer",
+  STARTTIMERFIRST: "start-timer-first",
+  TIMERSTOPPED: "timer-stopped",
+  COUNTDOWN: "countdown",
+  COUNTDOWNFINISH: "countdown-finish",
+  SETLIST: "set-list",
+  CHANGEEXCERISE: "change-excerise",
+  UPDATEMILISECONDS: "update-miliseconds",
+  UPDATESECONDS: "update-seconds",
+}
 export default class TimerComponent extends HTMLElement {
   constructor() {
     super();
@@ -11,6 +21,103 @@ export default class TimerComponent extends HTMLElement {
     this.initilized = false;
     this.timerIndex = 0;
     this.miliseconds = 0
+    // add error checking for worker
+    this.worker = new Worker(import.meta.resolve("./timer-worker.mjs"))
+    this.worker.onmessage = this.handleWorker.bind(this)
+  }
+
+  async handleWorker(msg) {
+    const { type, payload } = msg.data
+    switch (type) {
+      case messageType.COUNTDOWN:
+        this.shadow.querySelector("#countdown-timer").textContent = payload
+        break;
+      case messageType.STARTTIMER:
+        console.log("started timer")
+        this.startTimer()
+        break;
+      case messageType.COUNTDOWNFINISH:
+        this.shadow.querySelector("#countdown-timer").style.display = "none"
+        this.sendStartTimerMsg()
+        console.log("finished cout down")
+        break;
+      case messageType.STARTTIMER:
+        console.log("started timer")
+        this.startTimer()
+        break;
+      case messageType.STARTTIMERFIRST:
+        console.log("started first timer")
+        await this.firstStartTimer()
+        break;
+      case messageType.PAUSETIMER:
+        console.log("paused timer")
+        this.pauseTimer()
+        break
+      case messageType.UPDATESECONDS:
+        console.log("updating seconds")
+        this.incrementSeconds(payload)
+        break
+      case messageType.UPDATEMILISECONDS:
+        console.log("updating miliseconds")
+        this.incrementMiliseconds(payload)
+        break
+      case messageType.CHANGEEXCERISE:
+        console.log("change exercise")
+        this.timerIndex = payload
+        this.nextExcerise()
+        break
+      case messageType.TIMERSTOPPED:
+        console.log("stop exercise")
+        await this.stopTimer()
+        break
+    }
+    // console.log("webworker", msg.data, type, payload)
+  }
+  async nextExcerise() {
+    this.titleText.textContent = this.timerList[this.timerIndex].title;
+    this.description.textContent = this.timerList[this.timerIndex].description
+    this.removePictures()
+    await this.appendPictures(this.timerList[this.timerIndex].UUID)
+    this.seconds = 0;
+    this.miliseconds = 0
+  }
+
+  incrementSeconds(s) {
+    this.seconds = s
+  }
+  incrementMiliseconds(ms) {
+    this.miliseconds = ms
+    this.updateTimerDisplay();
+  }
+
+  sendStartTimerMsg() {
+    console.log("sdffhbdsjfgsdhjkfgahjkfgdashfjkdsagfhkjadsghfjksagfhdfsukfgdshfjksadkfg")
+    this.worker.postMessage({ type: messageType.STARTTIMER })
+  }
+
+
+  startTimer() {
+    this.updateTimerDisplay();
+    this.time.classList.remove('hidden');
+    this.upNext.classList.remove('hidden');
+    this.shadow.querySelector("#container").style.display = "flex"
+    this.shadow.querySelector("#next-container").style.display = "flex"
+    this.clockContainer.classList.remove('hidden');
+    this.titleText.textContent = this.timerList[this.timerIndex].title;
+    this.close.classList.add('hidden');
+    this.clock.style.stroke = 'blue';
+    this.start.textContent = 'pause';
+    this.stop.classList.remove('hidden');
+  }
+  async firstStartTimer() {
+    this.totalTime.style.display = "none"
+    this.removePictures()
+    await this.appendPictures(this.timerList[this.timerIndex].UUID)
+  }
+  pauseTimer() {
+    this.start.textContent = 'start';
+    clearInterval(this.intervalID);
+    this.isTimerRunning = false;
   }
 
   playlistMenu() {
@@ -27,8 +134,8 @@ export default class TimerComponent extends HTMLElement {
     this.totalTime = this.createText("total-time", `total time of playlist ${this.getFormatStringTime(this.getTotalTime())}`)
     this.pictureContainer.style.display = "none"
     this.container.append(this.totalTime)
-
   }
+
   getFormatStringTime(seconds) {
     const duration = formatedSeconds(seconds);
     const hour = duration.hour === 0 ? '' : `${duration.hour}h`;
@@ -70,7 +177,7 @@ export default class TimerComponent extends HTMLElement {
   }
 
   setupEventListener() {
-    this.start.addEventListener('click', this.startTimer.bind(this));
+    this.start.addEventListener('click', this.sendStartTimerMsg.bind(this));
     this.stop.addEventListener('click', this.stopTimer.bind(this));
     this.close.addEventListener('click', this.destorySelf.bind(this));
   }
@@ -86,35 +193,10 @@ export default class TimerComponent extends HTMLElement {
     this.initilized = true;
     this.timerStartCountdown()
   }
-  timerStartCountdown() {
-    let counter = 3
-    let ms = 0
-    setTimeout(() => {
-      this.countdownStart(counter, ms)
-    }, 50)
-  }
-  countdownStart(counter, ms) {
-    // start timer
-    if (ms > 1000) {
-      this.shadow.querySelector("#countdown-timer").textContent = counter
-      if (counter <= 0) {
-        this.shadow.querySelector("#countdown-timer").style.display = "none"
-        this.startTimer()
-      }
-      else {
-        ms = 0
-        setTimeout(() => {
-          this.countdownStart(counter - 1, ms)
-        }, 50)
-      }
-    }
-    else {
-      ms += 50
-      setTimeout(() => {
-        this.countdownStart(counter, ms)
-      }, 50)
-    }
 
+  timerStartCountdown() {
+    this.worker.postMessage({ type: messageType.COUNTDOWN })
+    this.worker.postMessage({ type: messageType.SETLIST, payload: this.timerList })
   }
 
   async connectedCallback() {
@@ -199,37 +281,6 @@ export default class TimerComponent extends HTMLElement {
   }
   removePictures() {
     this.pictureContainer.textContent = ""
-  }
-
-
-  async startTimer() {
-    if (!this.isTimerRunning) {
-      this.intervalID = setInterval(this.incrementTimer.bind(this), 100);
-      this.updateTimerDisplay();
-      this.time.classList.remove('hidden');
-      this.upNext.classList.remove('hidden');
-      this.shadow.querySelector("#container").style.display = "flex"
-      this.shadow.querySelector("#next-container").style.display = "flex"
-      this.clockContainer.classList.remove('hidden');
-      this.titleText.textContent = this.timerList[this.timerIndex].title;
-      this.close.classList.add('hidden');
-      this.clock.style.stroke = 'blue';
-      this.isTimerRunning = true;
-      this.start.textContent = 'pause';
-      this.stop.classList.remove('hidden');
-    } else {
-      //paused
-      this.start.textContent = 'start';
-      clearInterval(this.intervalID);
-      this.isTimerRunning = false;
-    }
-    if (this.timerIndex == 0) {
-      // first time running 
-      this.totalTime.style.display = "none"
-      this.removePictures()
-      await this.appendPictures(this.timerList[this.timerIndex].UUID)
-      // get first photos
-    }
   }
 
   updateTimerDisplay() {
