@@ -20,6 +20,7 @@ a user can build a custom HIIT workout, first create a new exercise,then create 
 to start a workout you must create a workout with exercises within it
 then go to playlist page, the dumbell icon in the navbar and press start on the workout you have made
 
+---
 # advanced features
 
 ## visual cues - count in 
@@ -35,11 +36,30 @@ these features can be found in:
 users are able to tag exercises
 this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
 this feature can be found in:
-    - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
+ - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
 
 ## toast notificaiton - web componenet
 to show notificaiton to the user there is a toast notificaiton web componenet, this can be found within `public/web_components/toast-notification`
 this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the user
+
+## image multiparser - handling image uploads on the server
+as we were not allowed to use external libaries, it made getting images to and from the server difficult. The solution I came to was to create my own image multiparser, this can be found in the path `server/routes/pictures/multibody_praser.mjs`.
+this features is implmenting featues that a libary like multer would add. This file creates a file reader for a input stream that the user will send when uploading a file.
+to see this feature in action:
+ - simply create a new activity and press the add activity button 
+ - add an image and save it.
+ - logout of your account and log back in you can see the server has successfuly saved it.
+
+## multiple users 
+as this is a application there is account features, each user
+
+## PWA
+
+## service worker
+
+## web worker
+
+## drag and drop workout modification
 
 ## file structure
 
