@@ -50,7 +50,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     this.cancel.style.display = 'flex';
     this.deleteButton.textContent = "delete playlist"
     this.doneButton.textContent = 'save';
-    this.deleteButton.style.backgroundColor = "red"
+    this.deleteButton.style.backgroundColor = "var(--button-alternative)"
     this.deleteButton.style.alignSelf = "flex-end"
   }
 
@@ -147,7 +147,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
     hideList.forEach((item) => item.style.display = "none")
     enableList.forEach((item) => item.style.display = "flex")
     this.setTitle('add activity');
-    this.backButton.style.backgroundColor = "var(--button-background-color)"
+    // this.backButton.style.backgroundColor = "var(--button-background-color)"
     this.shadow.querySelector(".bottomsheet-header-buttons").prepend(this.backButton)
 
     const customActivties = getAllCustomActivites(ACTIVTIES_KEY);

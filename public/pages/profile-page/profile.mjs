@@ -27,11 +27,12 @@ export async function displayProfiles() {
     const account = await fetch(`users/${user()}`).then((res) => res.json());
     const frag = await fetchFragment(import.meta.resolve("./profile-signed-in-user.inc"))
     const welcomeMessage = frag.querySelector("#welcome-message")
+    const headGroup = frag.querySelector("#user-group")
     const themes = frag.querySelector("#themes")
     welcomeMessage.textContent = `${account.data[0].username}`
     const signOutButton = frag.querySelector("#sign-out")
     signOutButton.addEventListener('click', signOut)
-    el.main.append(welcomeMessage, signOutButton, themes);
+    el.main.append(headGroup, themes);
     return;
   }
   for (let user of users.data) {

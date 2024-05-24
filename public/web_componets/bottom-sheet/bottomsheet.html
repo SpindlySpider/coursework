@@ -1,15 +1,6 @@
 <!doctype html>
 <template>
   <style>
-    * {
-      font-family: Syne, sans-serif;
-      --background-color: white;
-      --button-background-color: #589aff;
-      --highlight-color: #262626;
-      --font-color: black;
-      --border-color: #262626;
-    }
-
     .clickable:active {
       transition: opacity 200ms;
       color: blue;
@@ -26,7 +17,7 @@
     }
 
     #entryThumbnail {
-      border: 0.5vw solid black;
+      border: 0.5vw solid var(--border-colour);
     }
 
     #bottomsheet-container {
@@ -40,8 +31,8 @@
       align-items: center;
       justify-content: center;
       padding-top: 4px;
-      background-color: var(--background-color);
-      border-top: 2px solid var(--border-color);
+      background-color: var(--nav-bar-background-color);
+      border-top: 2px solid var(--border-colour);
       position: absolute;
       bottom: 0;
       border-radius: 20px 20px 0 0;
@@ -61,13 +52,13 @@
     }
 
     p {
-      color: var(--font-color);
+      color: var(--text-colour);
     }
 
     #drag-bar {
       width: 5vw;
       height: 10px;
-      background-color: var(--font-color);
+      background-color: var(--text-colour);
       border: 0.5rem;
       border-radius: 30px;
       margin: 10px;
@@ -104,8 +95,8 @@
       padding: 2vh 2vw;
       justify-content: center;
       margin: 2vh;
-      border: 0.5vw var(--border-color) solid;
-      color: var(--font-color);
+      border: 0.5vw var(--border-colour) solid;
+      color: var(--text-colour);
     }
 
     .vertical-item-list {
@@ -132,9 +123,9 @@
     }
 
     button {
-      background-color: var(--button-background-color);
-      border: 1px var(--button-background-color);
-      color: var(--font-color);
+      background-color: var(--button-colour);
+      border: 1px var(--button-colour);
+      color: var(--text-colour);
       border-radius: 1vw;
     }
 
@@ -180,7 +171,7 @@
           add
         </button>
         <button id="bottomsheet-back" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button"
-          style="display: none;align-self: flex-end;margin: 0vh 11vw;background-color: #ff2626;color: black;">
+          style="display: none;align-self: flex-end;margin: 0vh 11vw;;color: var(--text-colour);">
           back
         </button>
         <button id="bottomsheet-done" class="bottomsheet-header-item bottomsheet-header-button" type="button">
@@ -192,7 +183,7 @@
     </main>
     <div id="bottom-button-container" style="display: flex;width: 100%;justify-content: space-between;">
       <button id="bottomsheet-export" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button"
-        style="display: none;align-self: flex-end;background-color: red;color: black;">
+        style="display: none;align-self: flex-end;background-color: var(--button-alternative);color: black;">
         export playlist
       </button>
       <button id="bottomsheet-delete" class="bottomsheet-header-item bottomsheet-header-button hidden" type="button">

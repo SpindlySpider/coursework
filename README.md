@@ -110,7 +110,7 @@ there are two databases within this application:
 
  - the design is mobile only, this is because users are unlikely to use the application on their laptop while they are outside or moving around as it would be difficult to use while exercising
 ### custom webcomponents design pholosiphy
-- all selections should be done within the constructor of the webcomponents , this is due to the fact we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
+- all selections should be done within the constructor of the webcomponents , this is due to the fact we cannot easily selectelements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
 
 ## TODO - additonal features that could be added
 - [x] image selector - allow the user to upload and view custom pictures for exercises

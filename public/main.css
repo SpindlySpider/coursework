@@ -1,12 +1,8 @@
 :root {
   --nav-bar-background-color: white;
-  --nav-bar-item-color: white;
-  --nav-bar-item-selected: white;
-  --activty-popup-background-color: red;
-  --main-content-background-color: white;
   --text-colour: black;
-  --onclick-colour: red;
   --button-colour: #589aff;
+  --button-alternative:red;
   --border-colour: gray;
   --background-color:#EEEEEE;
   --foreground-color:white;
