@@ -27,24 +27,27 @@ then go to playlist page, the dumbell icon in the navbar and press start on the 
 # advanced features
 
 ## visual cues - count in 
-when the user starts a workout there is a count in, this allows the users to get ready for the exercises and be sufficently prepared
-
+ - when the user starts a workout there is a count in, this allows the users to get ready for the exercises and be sufficently prepared
+ - there is a timer with a clock and text showing the current time 
+ - there is also a up next box under the timer which the user can see
+### motivation
+ this allows the user to understand and be able to quickly glimice where they are within the workout
 ## workout import and exporting - users are able to import and export playlist
 users can share playlists via a JSON file, either importing or exporting it 
 these features can be found in:
  - playlist page -> edit -> scroll down to the bottom -> export playlist
  - add -> create new playlist -> import playlist
  this feature also exports all exercies within the JSON so that all the user needs to do is import the exported JSON to add the workout and exercies to their own account. 
+### motivation
+ I believe that users should be able to share data even offline and easily share workout, providing the users with a JSON allows users to easily share workouts
 ## tags - users can tag excerises
 users are able to tag exercises
 this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
 this feature can be found in:
  - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
-
 ## toast notificaiton - web componenet
 to show notificaiton to the user there is a toast notificaiton web componenet, this can be found within `public/web_components/toast-notification`
 this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the users
-
 ## dashboard - overview 
 the dashboard gives a user an overview of how long they have worked out for and how many workouts they have completed
 
@@ -76,13 +79,27 @@ orginally I was having issues with the workout timer having consistant speed. Af
 ## drag and drop workout modification
 the user can edit the order of exercies within a workout by dragging the workout up and down. this can be found within the webapp when you edit an exercise and then hold and drag on the :: icon
 
+---
+
 # maintance
 ## file structure
+the structure for this application is comprised of two main folders: `public` and `server`. 
+ - public refers to the client side data
+  - examples include web componenets
+  - icons 
+  - css 
+  - js
+  - service worker
+the service worker is placed in the root of the public folder as it allows it to access all files and cache resources if it was placed in a child directory it would not be able to access and cache data correctly
+ - the server contains server side data this includes 
+  - database files, such as the SQL database, and files to handle each route 
+  - routes which contain javascript files telling express how to correctly route data and how to handle it 
+  - photos, which contains a folder of all the images the user uploads, when a user uploads an image it is stored with a UUID
 
 ## database
 there are two databases within this application:
  - the local database of the client(local storage) which contains 4 parts: account, activities, playlist, tag. 
- - the server database, this is a SQLLITE database which is built for scalabilitiy an ERD can be found here 
+ - the server database, this is a SQLLITE database which is built for scalabilitiy an ERD can be found here, although the database could have been a JSON stored within one table, I wanted to create a database within the server which would be better at scaling
 ![entity relationship diagram](https://github.com/SpindlySpider/coursework/assets/19748010/cc9f3b8f-6f0d-43d5-9def-83a33e8c33ff)
 
 ## justification of design
@@ -93,45 +110,21 @@ there are two databases within this application:
 
 - css varaibles are not defined in :root instead they are defined in the * selector, this is because :root varaibles are not avalaible inside template componenets and as such you are not able to define them for each web componenet there. defning them within gives avalaiblity to the entire webcomponenet DOM to use these CSS variables which allows for rapid chanignig of colours 
 ### custom webcomponents design pholosiphy
-
-- all selections should be done within the constructor of the webcomponents , this is due to the fact (i think) we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
+- all selections should be done within the constructor of the webcomponents , this is due to the fact we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
 
 ## TODO - additonal features that could be added
-
-- make a description box which has a edit button otherwise it is not editable
-- add a tag selector web componenet
-- make a equipment selector
-- add photo selector too
-- create a web componenet for storing items in a column fashion
-- [x] core functionality
-- [x] add storage of new events
-- [ ] create custom description field
-  - [ ] not editable untill edit button pressed
-- [ ] create custom add photo for customising the excerize
-- [ ] add css to make it look functional
-- [x] push the new data to the server to store it in a mysqllite database
-- [ ] difficulty rating for custom exercises
-  - [ ] have server made rests which have long rest, short rest, no rest
-  - [ ] difficulty is when the rests is longer -> shorter
-- [x] maybe make a server and client within the public folder to store code and serve
-- [x] implement timer
-- [ ] clean up code -- specifically entry componenet that has alot of mess
-- [x] database use https://github.com/portsoc/staged-simple-message-board to learn how
-- [ ] create history using reference to https://github.com/portsoc/simple-one-page
-- [ ] navigation bar should only show name of categotry when it is pressed
-- [ ] implement tags and import and exporting entire tags
-- [ ] error handling/making sure user cannot import wrong data
-- [ ] number of exercieses
-- [x] prevent multiple "new tabs" comming up when making new events
-- [ ] when first opening app make it start on playlists, and make sure it can never reach a point of not having anything on the screen
-- [ ] have title, description and time as non editable untill pressed and it will swap out the text for the input
-- [ ] promodo timer like expereince of entire workout, you should be able to swtich between views
-- [ ] need to make sure that playlist and activities read from local storage if server is offline
-- [ ] PWA
-- [ ] tags
-- [ ] import export
-- [ ] readable body svg https://youtu.be/6C-GYwxdZd4 , https://youtu.be/WMqB8sVOCtk
-
+- [x] image selector - allow the user to upload and view custom pictures for exercises
+- [x] server side storage - the user should be able to store exercises, workouts, tags and images on the server
+- [x] create web worker to reduce load on main thread
+- [x] workouts should automatically add exercise rests and set rests
+- [x] make progressive webapp
+- [x] error handling for inputs
+- [ ] equipment selector, users should be able to attach equipment to specific exercises (e.g 10KG dumbbell for deadlift)
+- [ ] server side error handling for database inputs
+- [ ] page history so that users are able to go back
+- [ ] user should be able to filter exercises by tag
+- [ ] user should be able to filter exercises by equipment
+- [ ] user should be able to filter exercises by body part, for example there should be an image of a body and if they press a bicept it should show all exercieses to do with it 
 
 
 ## AI
