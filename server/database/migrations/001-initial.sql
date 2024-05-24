@@ -99,13 +99,14 @@ INSERT INTO Activities (activity_id,title,description,duration,created_by)
 VALUES ("b91db615-17a0-4c34-acbe-e064a325e981","High Knees","bring your knees up",60,'server'),
 ("65620c6a-6a3c-420c-9257-8061760fb3e4","jumping jacks","jump and spread your arms out",60,'server'),
 ("a275347b-4785-4b47-90a6-8a0430d61004","burpees","do a pushup jump up and repeat",60,'server'),
+("faa5538c-28cb-4304-b96b-1145b89fbcfb","mountin climber","repeativly bring your knees to your chest while maintaining a plank",60,'server'),
 ("f7c91bdd-2629-4b31-bff8-5331d2890fc9","Jump Squats","start in a squat position and jump",60,'server');
--- ("f7c91bdd-2629-4b31-bff8-5331d2890fc9","Jump Squats","rest",60,'server');
 
 INSERT INTO pictures(picture_id , URL, alt_text)
 VALUES ("high-knee","./server/photos/high-knee.gif","high knee animation"),
 ("jumping-jack","./server/photos/jumping-jack.gif","jumping jack animation"),
 ("burpee","./server/photos/burpee.gif","burpee jack animation"),
+("mountin-climber","./server/photos/mountin-climber.gif","mountin climber jack animation"),
 ("squat-jump","./server/photos/squat-jumps.gif","squat jump animation");
 
 INSERT INTO Tags(tag_name)
@@ -126,6 +127,7 @@ INSERT INTO PictureActivitiesRelation(picture_id,activity_id)
 VALUES ("jumping-jack","65620c6a-6a3c-420c-9257-8061760fb3e4"),
 ("high-knee","b91db615-17a0-4c34-acbe-e064a325e981"),
 ("burpee","a275347b-4785-4b47-90a6-8a0430d61004"),
+("mountin-climber","faa5538c-28cb-4304-b96b-1145b89fbcfb"),
 ("squat-jump","f7c91bdd-2629-4b31-bff8-5331d2890fc9");
 
 INSERT INTO ActivityTagRelation(tag_name,activity_id)
@@ -145,7 +147,8 @@ VALUES ("Full-body","65620c6a-6a3c-420c-9257-8061760fb3e4"),
 ("triceps","a275347b-4785-4b47-90a6-8a0430d61004"),
 ("chest","a275347b-4785-4b47-90a6-8a0430d61004"),
 ("calves","a275347b-4785-4b47-90a6-8a0430d61004"),
-("core","a275347b-4785-4b47-90a6-8a0430d61004");
+("core","a275347b-4785-4b47-90a6-8a0430d61004"),
+("core","faa5538c-28cb-4304-b96b-1145b89fbcfb");
 
 
 INSERT INTO PlaylistActivityRelation (activity_id,playlist_id,orderNumber) VALUES 
@@ -158,8 +161,9 @@ INSERT INTO UserPlaylistRelation (user_id,playlist_id) VALUES
 INSERT INTO UserActivityRelation (user_id,activity_id) VALUES
 ("d7dcf380-33a3-4cb4-94c2-0323f18be441","b91db615-17a0-4c34-acbe-e064a325e981"),
 ("d7dcf380-33a3-4cb4-94c2-0323f18be441","65620c6a-6a3c-420c-9257-8061760fb3e4"),
-("d7dcf380-33a3-4cb4-94c2-0323f18be441","f7c91bdd-2629-4b31-bff8-5331d2890fc9");
-("d7dcf380-33a3-4cb4-94c2-0323f18be441","a275347b-4785-4b47-90a6-8a0430d61004");
+("d7dcf380-33a3-4cb4-94c2-0323f18be441","f7c91bdd-2629-4b31-bff8-5331d2890fc9"),
+("d7dcf380-33a3-4cb4-94c2-0323f18be441","a275347b-4785-4b47-90a6-8a0430d61004"),
+("d7dcf380-33a3-4cb4-94c2-0323f18be441","faa5538c-28cb-4304-b96b-1145b89fbcfb");
 
 
 
