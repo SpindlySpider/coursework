@@ -8,6 +8,7 @@ export async function saveActivty(
   description,
   duration,
   fromServer,
+  createdBy = null
 ) {
   // can be used to save over an entry, or add a new one to local db
   if (user() && online && !fromServer) {
@@ -17,7 +18,7 @@ export async function saveActivty(
       title,
       description,
       duration,
-      createdBy: user(),
+      createdBy: createdBy || user(),
     };
     const activityResponse = await fetch('activities/', {
       method: 'POST',
@@ -47,6 +48,7 @@ export async function saveActivty(
     title,
     description,
     duration,
+    created_by: createdBy
   };
   const cachedActivites = JSON.parse(localStorage.activites);
   cachedActivites[UUID] = newActivty;
@@ -67,6 +69,7 @@ export async function getActivtyFromID(UUID) {
           title: activity.title,
           description: activity.description,
           duration: activity.duration,
+          created_by: activity.created_by || user()
         };
         // save the activity locally
         await saveActivty(
@@ -75,9 +78,9 @@ export async function getActivtyFromID(UUID) {
           activityJSON.description,
           activityJSON.duration,
           true,
+          activityJSON.created_by
         );
         return activityJSON;
-        cachedTags;
       }
     }
   }
@@ -95,7 +98,7 @@ export async function getActivtyFromID(UUID) {
         title: cachedActivites[UUID].title,
         description: cachedActivites[UUID].description,
         duration: cachedActivites[UUID].duration,
-        createdBy: user(),
+        createdBy: cachedActivites[UUID].created_by ,
       };
       await fetch('activities', {
         method: 'POST',

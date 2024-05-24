@@ -73,6 +73,7 @@ export class Entry extends newActivtyMenu {
     // setting values for title, description and duration
     this.shadow.querySelector("#title").textContent = this.entryJSON.title
     this.shadow.querySelector("#description").textContent = this.entryJSON.description
+    this.editButton = this.shadow.querySelector("#edit-button")
     this.seconds = this.entryJSON.duration;
     this.shadow.querySelector("#duration").textContent = this.getFormatStringTime()
     // appending any photos if there are any
@@ -84,7 +85,8 @@ export class Entry extends newActivtyMenu {
     }
     // if own this event you can edit it
     if (this.editable) {
-      this.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
+      this.editButton.style.display = "flex"
+      this.editButton.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
         once: true,
       });
     }

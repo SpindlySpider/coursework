@@ -4,6 +4,6 @@
   <p id="description" style="margin: 0px; text-align: center;"></p>
   <ul style="display: flex; justify-content: space-around; margin: 0px; padding: 0px; height: 10vh; text-align: center; font-size: 8vw;">
     <p id="duration" ></p>
-    <button style="align-self: center; font-size: 9vw; background-color: var(--button-colour); padding: 1vw; border: 1px; border-radius: 2vw; margin: 2vw; width: 26vw;">edit</button>
+    <button id="edit-button" style="display: none; align-self: center; font-size: 9vw; background-color: var(--button-colour); padding: 1vw; border: 1px; border-radius: 2vw; margin: 2vw; width: 26vw;justify-content: center;">edit</button>
   </ul>
 </ul>

@@ -53,6 +53,10 @@ export async function displayCustomCateogryPage() {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
     entry.entryID = item;
+    console.log(exercises[item].created_by)
+    if (user() !== exercises[item].created_by) {
+      entry.editable = false
+    }
     entry.classList.add("menu-item")
     el.content.append(entry);
   }
