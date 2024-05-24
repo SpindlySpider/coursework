@@ -2,11 +2,11 @@
   --nav-bar-background-color: white;
   --text-colour: black;
   --button-colour: #589aff;
-  --button-alternative:red;
+  --button-alternative: #ff5a34;
   --border-colour: gray;
-  --background-color:#EEEEEE;
-  --foreground-color:white;
-  --banner-color:white;
+  --background-color: #EEEEEE;
+  --foreground-color: white;
+  --banner-color: white;
 }
 
 timer-component {
@@ -173,7 +173,8 @@ body {
   width: 50vw;
   height: 50vh;
 }
-#app-container{
+
+#app-container {
   height: 100vh;
   width: 100vw;
   background-color: var(--background-color);

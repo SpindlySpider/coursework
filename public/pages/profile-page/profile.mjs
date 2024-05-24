@@ -15,6 +15,29 @@ function prepareHandles() {
   el.navbar = document.querySelector('#navbar');
 }
 
+function lightThemeChange() {
+  console.log("light theme")
+  document.documentElement.style.setProperty('--nav-bar-background-color', 'white');
+  document.documentElement.style.setProperty('--text-colour', 'black');
+  document.documentElement.style.setProperty('--button-colour', '#589aff');
+  document.documentElement.style.setProperty('--button-alternative', '#ff5a34');
+  document.documentElement.style.setProperty('--border-colour', 'gray');
+  document.documentElement.style.setProperty('--background-color', '#EEEEEE');
+  document.documentElement.style.setProperty('--foreground-color', 'white');
+  document.documentElement.style.setProperty('--banner-color', 'white');
+}
+function darkThemeChange() {
+  console.log("dark theme")
+  document.documentElement.style.setProperty('--nav-bar-background-color', 'black');
+  document.documentElement.style.setProperty('--text-colour', 'black');
+  document.documentElement.style.setProperty('--button-colour', '#589aff');
+  document.documentElement.style.setProperty('--button-alternativee', '#ff5a34');
+  document.documentElement.style.setProperty('--border-colour', 'gray');
+  document.documentElement.style.setProperty('--background-color', '#EEEEEE');
+  document.documentElement.style.setProperty('--foreground-color', 'white');
+  document.documentElement.style.setProperty('--banner-color', 'white');
+}
+
 export async function displayProfiles() {
   changeSelectedNavbar('#profile');
   const users = await fetch('users/').then((res) => {
@@ -29,6 +52,10 @@ export async function displayProfiles() {
     const welcomeMessage = frag.querySelector("#welcome-message")
     const headGroup = frag.querySelector("#user-group")
     const themes = frag.querySelector("#themes")
+    const lightTheme = frag.querySelector("#light-theme")
+    const darkTheme = frag.querySelector("#dark-theme")
+    lightTheme.addEventListener("click", lightThemeChange)
+    darkTheme.addEventListener("click", darkThemeChange)
     welcomeMessage.textContent = `${account.data[0].username}`
     const signOutButton = frag.querySelector("#sign-out")
     signOutButton.addEventListener('click', signOut)
