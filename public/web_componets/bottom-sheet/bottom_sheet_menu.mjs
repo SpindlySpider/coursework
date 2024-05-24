@@ -21,6 +21,12 @@ export class bottomSheetMenu extends HTMLElement {
     this.bottomButtonContainer = this.shadow.querySelector("#bottom-button-container")
     this.export = this.shadow.querySelector("#bottomsheet-export")
     this.cancelButton = this.shadow.querySelector("#bottomsheet-cancel")
+    document.addEventListener("click", e => {
+      const clicked = this.contains(e.target)
+      if (!clicked) {
+        this.destorySelf()
+      }
+    }, { once: true })
   }
 
   disableNavbarBorder() {
@@ -55,6 +61,7 @@ export class bottomSheetMenu extends HTMLElement {
     }
     await this.attachTemplate();
     this.initilized = true;
+
   }
 
   destorySelf() {

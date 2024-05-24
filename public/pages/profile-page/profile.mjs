@@ -35,14 +35,14 @@ function darkThemeChange() {
   for (let icon of document.querySelectorAll(".icon")) {
     icon.style.filter = "invert(1)"
   }
-  document.documentElement.style.setProperty('--nav-bar-background-color', '#302D3C');
-  document.documentElement.style.setProperty('--text-colour', 'white');
-  document.documentElement.style.setProperty('--button-colour', '#2B5960');
+  document.documentElement.style.setProperty('--nav-bar-background-color', '#292244');
+  document.documentElement.style.setProperty('--text-colour', '#ffebeb');
+  document.documentElement.style.setProperty('--button-colour', '#774eea');
   document.documentElement.style.setProperty('--button-alternative', '#ff5a34');
-  document.documentElement.style.setProperty('--border-colour', 'black');
-  document.documentElement.style.setProperty('--background-color', '#1F1D26');
-  document.documentElement.style.setProperty('--foreground-color', '#302D3C');
-  document.documentElement.style.setProperty('--banner-color', '#302D3C');
+  document.documentElement.style.setProperty('--border-colour', '#9c9595');
+  document.documentElement.style.setProperty('--background-color', '#120F1C');
+  document.documentElement.style.setProperty('--foreground-color', '#292244');
+  document.documentElement.style.setProperty('--banner-color', '#292244');
 }
 
 export async function displayProfiles() {

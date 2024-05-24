@@ -42,6 +42,10 @@ export class Entry extends newActivtyMenu {
   async connectedCallback() {
     if (this.editing || this.initilized) return;
     await this.attachTemplate();
+    if (document.querySelector("new-activty-menu") || document.querySelector("activity-entry")) {
+      // already have from attached
+      this.destorySelf()
+    }
   }
 
   getFormatStringTime() {
