@@ -1,8 +1,8 @@
 # HIIT up2107487
 
-# forword 
-within the code i use exercise and acitivity interchanagably, additionally i use workout and playlist interchanagably 
-a link to the github can be found here: `https://github.com/SpindlySpider/coursework`
+# foreword
+ - Within the code, I use exercise and activity interchangeably. Additionally, I use workout and playlist interchangeably.
+ - a link to the github can be found here: `https://github.com/SpindlySpider/coursework`
  - mobile only application as its unlikely people will be working out with their laptop/computer and as such it is taloired for a mobile experience 
 
 # setup
@@ -90,7 +90,7 @@ the structure for this application is comprised of two main folders: `public` an
     - css 
     - js
     - service worker
-the service worker is placed in the root of the public folder as it allows it to access all files and cache resources if it was placed in a child directory it would not be able to access and cache data correctly
+ - the service worker is placed in the root of the public folder as it allows it to access all files and cache resources if it was placed in a child directory it would not be able to access and cache data correctly
  - the server contains server side data this includes 
     - database files, such as the SQL database, and files to handle each route 
     - routes which contain javascript files telling express how to correctly route data and how to handle it 
@@ -106,9 +106,9 @@ there are two databases within this application:
 
 - multiple of the same activity title can exist, this is because users may want different versions of the activity, example : squats with differnt times
 
-
-
 - css varaibles are not defined in :root instead they are defined in the * selector, this is because :root varaibles are not avalaible inside template componenets and as such you are not able to define them for each web componenet there. defning them within gives avalaiblity to the entire webcomponenet DOM to use these CSS variables which allows for rapid chanignig of colours 
+
+ - the design is mobile only, this is because users are unlikely to use the application on their laptop while they are outside or moving around as it would be difficult to use while exercising
 ### custom webcomponents design pholosiphy
 - all selections should be done within the constructor of the webcomponents , this is due to the fact we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
 
@@ -126,6 +126,7 @@ there are two databases within this application:
 - [ ] user should be able to filter exercises by equipment
 - [ ] user should be able to filter exercises by body part, for example there should be an image of a body and if they press a bicept it should show all exercieses to do with it 
 
+---
 
 ## AI
 within this project I tried to minimise the amount of AI I used, instead I looked through stack overflow, youtube videos and mdn. This is because at the begining of the coursework I used AI to learn about web componenets however it didnt provide me with useful information and instead left me more confused. Instead, I started reading through javascript documentation on MDN and found it significantly more useful. Because of this I do not have many AI prompts as I would just refer to documentation or other examples of implementation to do with specific features. 
