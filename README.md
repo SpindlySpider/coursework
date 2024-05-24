@@ -84,17 +84,17 @@ the user can edit the order of exercies within a workout by dragging the workout
 # maintance
 ## file structure
 the structure for this application is comprised of two main folders: `public` and `server`. 
- - public refers to the client side data
-  - examples include web componenets
-  - icons 
-  - css 
-  - js
-  - service worker
+ - public refers to the client side database 
+    - examples include web componenets
+    - icons 
+    - css 
+    - js
+    - service worker
 the service worker is placed in the root of the public folder as it allows it to access all files and cache resources if it was placed in a child directory it would not be able to access and cache data correctly
  - the server contains server side data this includes 
-  - database files, such as the SQL database, and files to handle each route 
-  - routes which contain javascript files telling express how to correctly route data and how to handle it 
-  - photos, which contains a folder of all the images the user uploads, when a user uploads an image it is stored with a UUID
+    - database files, such as the SQL database, and files to handle each route 
+    - routes which contain javascript files telling express how to correctly route data and how to handle it 
+    - photos, which contains a folder of all the images the user uploads, when a user uploads an image it is stored with a UUID
 
 ## database
 there are two databases within this application:
