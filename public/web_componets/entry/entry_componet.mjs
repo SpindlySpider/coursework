@@ -155,7 +155,7 @@ export class Entry extends newActivtyMenu {
     }
     const description = this.descriptionInput.value;
     const UUID = this.entryID;
-    await saveActivty(UUID, title, description, duration, false);
+    await saveActivty(UUID, title, description, duration, false, this.entryJSON.created_by);
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     // document.querySelector('#main-content').textContent = '';

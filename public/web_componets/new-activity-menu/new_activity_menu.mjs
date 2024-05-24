@@ -2,6 +2,7 @@ import {
   getUUID,
   fetchTemplate,
   fetchFragment,
+  user,
 } from '../utilities.mjs';
 import { bottomSheetMenu } from '../bottom-sheet/bottom_sheet_menu.mjs';
 import {
@@ -141,7 +142,7 @@ export class newActivtyMenu extends bottomSheetMenu {
     }
     const description = this.descriptionInput.value;
     const UUID = await getUUID();
-    await saveActivty(UUID, title, description, duration, false);
+    await saveActivty(UUID, title, description, duration, false, user());
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     let photoURL = null
