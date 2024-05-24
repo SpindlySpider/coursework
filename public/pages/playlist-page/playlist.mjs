@@ -23,6 +23,8 @@ export async function displayPlaylistPage() {
   const menu = el.main.querySelector("#playlist-items")
   // need to see from local storage incase your offline
   const playlists = await fetch(`/users/${user()}/playlists/`).then(res => res.json());
+  if(playlists.data.length <1){
+  }
 
   for (let item of playlists.data) {
     // extract out the playlist feature to error check
@@ -56,7 +58,6 @@ async function startTimer(entry) {
   const timer = document.createElement('timer-component');
   timer.playlistUUID = entry.dataset.id
   const playlist = await getPlaylist(entry.dataset.id);
-  console.log("timerdata", playlist)
   const workoutItems = [];
   if (playlist.sets < 1) {
     playlist.sets = 1
@@ -101,8 +102,6 @@ async function editPlaylist(entry) {
   editMenu.activityItems = playlist.items;
   editMenu.nameInput.value = playlist.title;
   editMenu.setInput.value = playlist.sets
-  // editMenu.restTimer.value = getStringTimeFrom(playlist.exercise_rest_time)
-  // editMenu.setRestTimer.value = getStringTimeFrom(playlist.rest_sets_time)
   editMenu.UUID = entry.dataset.id;
   console.log("playlist title", playlist.title)
   editMenu.headerTitle = `edit ${playlist.title}`

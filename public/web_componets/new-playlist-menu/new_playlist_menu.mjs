@@ -293,7 +293,7 @@ export class newPlaylistMenu extends bottomSheetMenu {
       return true
     });
     if (this.activityItems.length == 0) this.hideOptions();
-    this.shadow.querySelector('#total-duration').textContent = `excerise length :${this.updateplaylistduration(this.duration)}`
+    this.updateplaylistduration(this.duration)
     entry.remove();
   }
 

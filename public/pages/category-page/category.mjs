@@ -24,6 +24,8 @@ function setHeader(str) {
   const backButton = document.createElement("button")
   backButton.textContent = "<"
   backButton.classList.add("bottomsheet-content-item")
+  backButton.style.padding = "1vh 1vw"
+  backButton.style.width = "10vw"
   backButton.addEventListener("click", displayCategoryPage)
   el.headerList.prepend(backButton)
 }
@@ -42,7 +44,7 @@ function isActivitiesEmpty(exercises) {
 
 export async function displayCustomCateogryPage() {
   cleanContent()
-  setHeader("your exercises")
+  setHeader("Your Exercises")
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
   if (isActivitiesEmpty(exercises)) {
     return
@@ -58,7 +60,7 @@ export async function displayCustomCateogryPage() {
 
 async function displayAllActivities() {
   cleanContent()
-  setHeader("all exercises")
+  setHeader("All Exercises")
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
   if (isActivitiesEmpty(exercises)) {
     return
@@ -78,8 +80,8 @@ export async function displayCategoryPage() {
   const titleContainer = await fetchFragment(import.meta.resolve("./category-title.inc"))
   const userActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
   const allActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
-  allActivities.textContent = "all exercises"
-  userActivities.textContent = "your exercises"
+  allActivities.textContent = "All Exercises"
+  userActivities.textContent = "Your Exercises"
   const container = await fetchFragment(import.meta.resolve("./category-list.inc"))
   el.main.append(titleContainer, container);
   container.append(userActivities, allActivities);

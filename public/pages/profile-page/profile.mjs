@@ -28,7 +28,7 @@ export async function displayProfiles() {
     const frag = await fetchFragment(import.meta.resolve("./profile-signed-in-user.inc"))
     const welcomeMessage = frag.querySelector("#welcome-message")
     const themes = frag.querySelector("#themes")
-    welcomeMessage.textContent = `hello ${account.data[0].username}`
+    welcomeMessage.textContent = `${account.data[0].username}`
     const signOutButton = frag.querySelector("#sign-out")
     signOutButton.addEventListener('click', signOut)
     el.main.append(welcomeMessage, signOutButton, themes);
@@ -58,7 +58,6 @@ async function signOut() {
 
 async function signIn(userData) {
   document.querySelector("toast-notification").addNotification(`logged in as ${userData.username}`, 2000)
-  console.log("userdat", userData)
   localStorage.setItem(USER_KEY, JSON.stringify({
     user: userData.user_id,
     username: userData.username,

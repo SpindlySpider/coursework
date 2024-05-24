@@ -1,4 +1,4 @@
-<ul id="entryThumbnail" style="display: flex; border: 0.5vw solid black; border-radius: 5vw; flex-direction: column; overflow-wrap: anywhere; width: 75vw; place-content: center; padding: 2vh 2vw;">
+<ul id="entryThumbnail" style="display: flex; border: 0.5vw solid var(--border-colour); border-radius: 5vw; flex-direction: column; overflow-wrap: anywhere; width: 75vw; place-content: center; padding: 2vh 2vw;margin: 1vh 0vw;background-color: var(--foreground-color);">
   <img id="image" src="" style="object-fit: contain;border-radius: 6vw;">
   <h3 id="title" style="margin-bottom: 0px; text-align: center;"></h3>
   <p id="description" style="margin: 0px; text-align: center;"></p>

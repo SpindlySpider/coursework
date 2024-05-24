@@ -8,6 +8,9 @@
   --onclick-colour: red;
   --button-colour: #589aff;
   --border-colour: gray;
+  --background-color:#EEEEEE;
+  --foreground-color:white;
+  --banner-color:white;
 }
 
 timer-component {
@@ -28,7 +31,7 @@ timer-component {
 .navbar-icon {
   display: flex;
   object-fit: contain;
-  height: 80%;
+  height: 70%;
 }
 
 .dragging {
@@ -140,10 +143,11 @@ body {
 }
 
 .category-item {
-  margin: 10px;
+  margin: 3vw 0vw;
   justify-content: center;
   background-color: var(--button-colour);
   border-radius: 2vw;
+  padding: 2vw;
 }
 
 .category-item:hover {
@@ -172,6 +176,11 @@ body {
   flex-direction: column;
   width: 50vw;
   height: 50vh;
+}
+#app-container{
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--background-color);
 }
 
 .popup-item {
