@@ -42,7 +42,7 @@ these features can be found in:
  I believe that users should be able to share data even offline and easily share workout, providing the users with a JSON allows users to easily share workouts
 ## tags - users can tag excerises
 users are able to tag exercises
-this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
+this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout. at the moment tags will show up in categories, which means user can find a specific tag, however when adding exercises to a workout it is not possible to filter by tag.
 this feature can be found in:
  - either add or edit exercise -> type a tag -> press enter -> tag is now assocaited with this exercise
 ## toast notificaiton - web componenet
@@ -50,7 +50,9 @@ to show notificaiton to the user there is a toast notificaiton web componenet, t
 this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the users
 ## dashboard - overview 
 the dashboard gives a user an overview of how long they have worked out for and how many workouts they have completed
-
+## theme changing - light and dark mode
+there are two themes for the user, a light and dark mode, it allow the user to ajust the app to a colour theme which wil work best for them. this feature can be found in:
+ - profile -> sign in -> choose light and dark mode
 ## image multiparser - handling image uploads on the server
 as we were not allowed to use external libaries, it made getting images to and from the server difficult. The solution I came to was to create my own image multiparser, this can be found in the path `server/routes/pictures/multibody_praser.mjs`.
 this features is implmenting featues that a libary like multer would add. This file creates a file reader for a input stream that the user will send when uploading a file.
@@ -58,7 +60,8 @@ to see this feature in action:
  - simply create a new activity and press the add activity button 
  - add an image and save it.
  - logout of your account and log back in you can see the server has successfuly saved it.
-
+## user cannot delete exercises they did not make
+ users are not able to delete exercises in which they did not create, this means that acticvities shared betweeen mutiple users are not vunrible to other people changing them 
 ## multiple users 
 this application supports multiple users. you are able to log in and out of differnt accounts. each account keeps track of what the user has done. to log in and out of accounts go to:
  - the person icon in the nav bar -> login / out
@@ -162,3 +165,12 @@ I am having issues when using async connectedCallback, I have been utilizing set
 chatgpt is not correctly understanding my issue, it is suggesting that using a initilise async within the connectedCallback. This does not solve my problem as the issue is not with connectedCallback being excuted, rather the connectedCallback not being complete in external code leading to attributes not being avalaible.
 
 one method I can think to fix this is having an asyncronise function which acts as the on connectedCallback, which can be invoked through a method call externally. we can use a variable called initilised, to check wether we need to append to the DOM or wether the method has already been invoked externally or from the connectedCallback.
+
+# images
+ - I have got the navigation bar icons from `https://icon-sets.iconify.design/?query=exercise`
+ - The gif of workouts were found form various different sources 
+    - jumping jack `https://dribbble.com/shots/5720362-JUMPING-JACK-GIF`
+    - high knees `https://j.gifs.com/v1eOgG.gif`
+    - jump squats `https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/workouts/2016/03/bodyweightsquatjump-1457041758.gif?resize=768:*`
+    - burpee `https://media1.tenor.com/images/fc8a230c037b69697faac61ce7f5315d/tenor.gif?itemid=10862744`
+    - mountin climber `https://i.pinimg.com/originals/32/a7/d0/32a7d00d6123dd416e459ba67cf1691b.gif`
