@@ -75,10 +75,11 @@ document.querySelector('#dashboard').addEventListener('click', displayDashboardP
 if ('serviceWorker' in navigator) {
   // https://www.youtube.com/watch?v=WbbAPfDVqfY
   navigator.serviceWorker.register('serviceworker.mjs').then(() => {
-    console.log('registered service worker');
+
   }).catch(error => {
-    console.log('service worker registration failed');
-    console.log(error);
+    console.log(error)
+
+
   });
 }
 

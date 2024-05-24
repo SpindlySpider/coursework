@@ -59,7 +59,7 @@ export async function getTags(UUID, KEY) {
       // plalist
       const response = await fetch(`tags/${UUID}/activity/get-tags`);
       const playlist = await response.json();
-      console.log(playlist.data);
+
       saveTags(UUID, ACTIVTIES_KEY, playlist.data, true);
       return playlist.data;
     }
@@ -110,8 +110,6 @@ export function cleanLocalTag(UUID, KEY) {
   }
   const cachedTags = JSON.parse(localStorage[TAG_KEY]);
   for (const tag of Object.keys(cachedTags)) {
-    console.log('key', tag);
-    console.log('local', cachedTags[tag][cleanDestination]);
     cachedTags[tag][cleanDestination] = cachedTags[tag][
       cleanDestination
     ].filter((item) => item !== UUID);

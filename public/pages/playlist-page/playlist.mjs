@@ -1,9 +1,9 @@
-import { getActivtyFromID } from '/../../web_componets/activity-tools.mjs';
+import { getActivtyFromID } from './../../web_componets/activity-tools.mjs';
 import {
   getPlaylist,
 } from '../../../web_componets/playlist-tools.mjs';
-import { getStringTimeFrom, user, createButton, changeSelectedNavbar, fetchFragment } from '../../web_componets/utilities.mjs';
-import { PLAYLIST_KEY } from '../../web_componets/playlist-tools.mjs';
+import {user, changeSelectedNavbar, fetchFragment } from '../../web_componets/utilities.mjs';
+
 
 const el = {};
 function prepareHandles() {
@@ -13,43 +13,41 @@ function prepareHandles() {
 
 export async function displayPlaylistPage() {
   changeSelectedNavbar('#workout-playlist');
-  el.main.textContent = ""
+  el.main.textContent = '';
   if (document.querySelector('bottom-sheet-menu')) {
     // already have a menu on display
     return;
   }
-  const title = await fetchFragment(import.meta.resolve("./playlist-list.inc"))
+  const title = await fetchFragment(import.meta.resolve('./playlist-list.inc'));
   el.main.append(title);
-  const menu = el.main.querySelector("#playlist-items")
+  const menu = el.main.querySelector('#playlist-items');
   // need to see from local storage incase your offline
   const playlists = await fetch(`/users/${user()}/playlists/`).then(res => res.json());
   if (playlists.data.length < 1) {
-    let emptyMessage = document.createElement('p');
-    emptyMessage.style = "font-size: 5vw;text-align: center;padding: 5vh;"
+    const emptyMessage = document.createElement('p');
+    emptyMessage.style = 'font-size: 5vw;text-align: center;padding: 5vh;';
     emptyMessage.textContent =
       'press the + at the bottom to make new playlist';
     el.main.append(emptyMessage);
-    console.log("no playlist")
   }
 
-  for (let item of playlists.data) {
+  for (const item of playlists.data) {
     // extract out the playlist feature to error check
-    const playlistDetails = await getPlaylist(item.playlist_id)
-    console.log("playlist", playlistDetails)
+    const playlistDetails = await getPlaylist(item.playlist_id);
     // create a entry for each playlist entry
-    const playlistItem = await fetchFragment(import.meta.resolve("./playlist-item.inc"))
-    const entry = playlistItem.querySelector("h2")
-    const edit = playlistItem.querySelector("button")
-    const duration = playlistItem.querySelector("#duration")
-    entry.textContent = playlistDetails.title
-    entry.dataset.id = item.playlist_id
-    duration.textContent = playlistDetails.duration_string
+    const playlistItem = await fetchFragment(import.meta.resolve('./playlist-item.inc'));
+    const entry = playlistItem.querySelector('h2');
+    const edit = playlistItem.querySelector('button');
+    const duration = playlistItem.querySelector('#duration');
+    entry.textContent = playlistDetails.title;
+    entry.dataset.id = item.playlist_id;
+    duration.textContent = playlistDetails.duration_string;
     edit.addEventListener('click', async () => {
       await editPlaylist(entry);
     });
     if (playlistDetails.items.length !== 0) {
-      const start = playlistItem.querySelector("#start");
-      start.style.display = "flex"
+      const start = playlistItem.querySelector('#start');
+      start.style.display = 'flex';
       start.addEventListener('click', async () => {
         await startTimer(entry);
       });
@@ -62,33 +60,33 @@ async function startTimer(entry) {
   const main = document.querySelector('#main-content');
   main.textContent = '';
   const timer = document.createElement('timer-component');
-  timer.playlistUUID = entry.dataset.id
+  timer.playlistUUID = entry.dataset.id;
   const playlist = await getPlaylist(entry.dataset.id);
   const workoutItems = [];
   if (playlist.sets < 1) {
-    playlist.sets = 1
+    playlist.sets = 1;
   }
-  let rest = { title: "rest", description: "rest between excerise", duration: playlist.exercise_rest_time }
+  let rest = { title: 'rest', description: 'rest between excerise', duration: playlist.exercise_rest_time };
   if (playlist.exercise_rest_time < 1) {
-    rest = null
+    rest = null;
   }
   for (let i = 0; i < playlist.sets; i++) {
-    for (let id of playlist.items) {
-      let item = await getActivtyFromID(id)
-      item["UUID"] = id
+    for (const id of playlist.items) {
+      const item = await getActivtyFromID(id);
+      item.UUID = id;
       workoutItems.push(item);
       if (rest != null) {
         // probbay a more efficent way of doing this as it checkes very time if rest is null
-        workoutItems.push(rest)
+        workoutItems.push(rest);
       }
     }
     if (playlist.exercise_rest_time > 0) {
       // make sure that rest and rest are not next to each other
-      workoutItems.pop()
+      workoutItems.pop();
     }
-    if (playlist.rest_sets_time > 0 && i != playlist.sets - 1) {
+    if (playlist.rest_sets_time > 0 && i !== playlist.sets - 1) {
       // add set rests unless it is the final set
-      workoutItems.push({ title: "set rest", description: "rest between set", duration: playlist.rest_sets_time })
+      workoutItems.push({ title: 'set rest', description: 'rest between set', duration: playlist.rest_sets_time });
     }
   }
 
@@ -98,21 +96,18 @@ async function startTimer(entry) {
 }
 
 async function editPlaylist(entry) {
-  console.log(`edit ${entry.dataset.id}`);
-  let editMenu = document.createElement('new-playlist-menu');
+  const editMenu = document.createElement('new-playlist-menu');
   await editMenu.attachTemplate();
   el.main.append(editMenu);
   const playlist = await getPlaylist(entry.dataset.id);
   // since the on connect call back is async it ensure all of it is connected
-  console.log('playlist', playlist.title);
   editMenu.activityItems = playlist.items;
   editMenu.nameInput.value = playlist.title;
-  editMenu.setInput.value = playlist.sets
+  editMenu.setInput.value = playlist.sets;
   editMenu.UUID = entry.dataset.id;
-  console.log("playlist title", playlist.title)
-  editMenu.headerTitle = `edit ${playlist.title}`
+  editMenu.headerTitle = `edit ${playlist.title}`;
   await editMenu.playlistCreationTool();
-  editMenu.setRestTimer.setDuration(playlist.rest_sets_time)
-  editMenu.restTimer.setDuration(playlist.exercise_rest_time)
+  editMenu.setRestTimer.setDuration(playlist.rest_sets_time);
+  editMenu.restTimer.setDuration(playlist.exercise_rest_time);
 }
 prepareHandles();

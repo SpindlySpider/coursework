@@ -71,8 +71,8 @@ export class bottomSheetMenu extends HTMLElement {
   destorySelf() {
     this.content.style.height = '0vh';
     setTimeout(() => {
-      this.remove();
       this.enableNavbarBorder();
+      this.remove();
     }, 300);
   }
 

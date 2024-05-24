@@ -21,18 +21,18 @@ export class Entry extends newActivtyMenu {
     this.shadow = this.attachShadow({ mode: 'open' });
   }
 
-  deleteEntry() {
+  async deleteEntry() {
     deleteFromLocal(this.entryID, ACTIVTIES_KEY);
     for (const id of this.pictures) {
       this.deletePicture(id);
     }
     document.querySelector('toast-notification').addNotification(`deleted ${this.entryJSON.title}`, 1500);
-    this.destorySelf();
+    await this.destorySelf();
   }
 
   async destorySelf() {
     cleanLocalTag(this.entryJSON.UUID, ACTIVTIES_KEY);
-    this.content.style.height = '0vh';
+    // this.content.style.height = '0vh';
     this.enableNavbarBorder();
     await displayCategoryPage();
     this.remove();
@@ -41,10 +41,6 @@ export class Entry extends newActivtyMenu {
   async connectedCallback() {
     if (this.editing || this.initilized) return;
     await this.attachTemplate();
-    if (document.querySelector('new-activty-menu') || document.querySelector('activity-entry')) {
-      // already have from attached
-      this.destorySelf();
-    }
   }
 
   getFormatStringTime() {
@@ -163,10 +159,10 @@ export class Entry extends newActivtyMenu {
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     // document.querySelector('#main-content').textContent = '';
     let photoURL = null;
-    console.log(`photos ${this.photoInput.files.length}`);
+    ;
     if (this.photoInput.files.length > 0) {
       for (const file of this.photoInput.files) {
-        console.log('uploading', file);
+        ;
         const input = new FormData();
         input.append('file', file);
         await uploadPhoto(UUID, input);

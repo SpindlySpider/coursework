@@ -34,7 +34,6 @@ export async function deleteFromLocal(UUID, KEY) {
       const playlistStorage = JSON.parse(localStorage[PLAYLIST_KEY]);
       for (const item of Object.keys(playlistStorage)) {
         if (playlistStorage[item].items.includes(UUID)) {
-          console.log('includes', UUID);
           playlistStorage[item].items = playlistStorage[item].items.filter(
             (activity) => {
               return activity !== UUID;
@@ -42,7 +41,7 @@ export async function deleteFromLocal(UUID, KEY) {
           );
         }
       }
-      console.log(playlistStorage);
+
       localStorage[PLAYLIST_KEY] = JSON.stringify(playlistStorage);
       await fetch(`activities/${UUID}`, {
         method: 'DELETE',
@@ -75,7 +74,7 @@ export async function fetchFragment(URL) {
   const htmlText = await fetch(URL).then(item => item.text());
   const tempObj = document.createElement('div');
   tempObj.innerHTML = htmlText;
-  console.log('fetched fragement', tempObj.firstChild);
+
   return tempObj.firstChild;
 }
 

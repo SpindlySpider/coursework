@@ -1,46 +1,48 @@
-const staticCacheName = 'static';
-const dynamicCacheName = 'dynamic';
-self.addEventListener('install', async () => install());
-self.addEventListener('activate', activate);
-self.addEventListener('fetch', fetchHandle);
+const staticCacheName = "static"
+const dynamicCacheName = "dynamic"
+self.addEventListener("install", async event => install())
+self.addEventListener("activate", activate)
+self.addEventListener("fetch", fetchHandle)
 
 
 // make a fall back https://youtu.be/KLQELCvb-B0?list=PL4cUxeGkcC9gTxqJBcDmoi5Q2pzDusSL7
 
-function activate() {
-  console.log('activated sw');
+async function activate(event) {
+  console.log("activated sw")
   // add removal of old cache here
 }
 
 async function install() {
-  const staticCache = await caches.open(staticCacheName);
-  staticCache.addAll(['./', './main.css']);
+  const staticCache = await caches.open(staticCacheName)
+  staticCache.addAll(["./", "./main.css"])
   // add all static things here
-  console.log('install');
+  console.log("install")
 }
 
-function fetchHandle(event) {
-  // network first
-  console.log('dsfsdfsdfsdfsdfs', event.request.clone().method);
-  if (event.request.clone().method === 'GET') {
+async function fetchHandle(event) {
+  // network first 
+  console.log("dsfsdfsdfsdfsdfs", event.request.clone().method)
+  if (event.request.clone().method === "GET") {
     event.respondWith(caches.match(event.request).then(
       async res => {
-        return await fetchResource(event) || res;
-      },
-    ));
-  } else {
-    event.respondWith(fetchResource(event));
+        return await fetchResource(event) || res
+      }
+    ))
+  }
+  else {
+    event.respondWith(fetchResource(event))
   }
 }
 
 async function fetchResource(event) {
-  // get reasource from server and save it
+  // get reasource from server and save it 
   try {
-    const response = await fetch(event.request);
-    const dynamicCache = await caches.open(dynamicCacheName);
-    dynamicCache.put(event.request.url, response.clone());
-    return response;
-  } catch {
-    return undefined;
+    const response = await fetch(event.request)
+    const dynamicCache = await caches.open(dynamicCacheName)
+    dynamicCache.put(event.request.url, response.clone())
+    return response
+  }
+  catch {
+    return undefined
   }
 }
