@@ -23,7 +23,13 @@ export async function displayPlaylistPage() {
   const menu = el.main.querySelector("#playlist-items")
   // need to see from local storage incase your offline
   const playlists = await fetch(`/users/${user()}/playlists/`).then(res => res.json());
-  if(playlists.data.length <1){
+  if (playlists.data.length < 1) {
+    let emptyMessage = document.createElement('p');
+    emptyMessage.style = "font-size: 5vw;text-align: center;padding: 5vh;"
+    emptyMessage.textContent =
+      'press the + at the bottom to make new playlist';
+    el.main.append(emptyMessage);
+    console.log("no playlist")
   }
 
   for (let item of playlists.data) {

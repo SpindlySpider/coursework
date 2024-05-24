@@ -53,7 +53,7 @@ button {
   border: 1px;
   border-radius: 2vw;
   margin: 2vw;
-  width: 14vw;
+  color: var(--text-colour);
 }
 
 
@@ -183,7 +183,8 @@ body {
 .popup-item {
   font-size: 5vw;
   padding: 5vw;
-  background-color: white;
+  background-color: var(--foreground-color);
+  color: var(--text-colour);
   margin: 2vh;
   border-radius: 4vw;
 }

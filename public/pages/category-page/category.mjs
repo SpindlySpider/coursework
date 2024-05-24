@@ -1,4 +1,5 @@
 import { getAllCustomActivites, ACTIVTIES_KEY } from '../../../web_componets/activity-tools.mjs';
+import { getActivtyFromID } from '../../web_componets/activity-tools.mjs';
 import { TAG_KEY, getTags } from '../../web_componets/tag-tools.mjs';
 import {
   changeSelectedNavbar,
@@ -41,10 +42,10 @@ async function isActivitiesEmpty(exercises) {
     el.content.append(emptyMessage);
     return true
   }
-    console.log("execse", exercises)
+  console.log("execse", exercises)
   for (let item of Object.keys(exercises)) {
     // console.log("activity", item)
-    await getTags(item,ACTIVTIES_KEY)
+    await getTags(item, ACTIVTIES_KEY)
   }
   return false
 }
@@ -92,16 +93,20 @@ async function getTagActivites(tag, exercises) {
   cleanContent()
   setHeader(tag)
   exercises = await fetch(`/tags/${tag}/get-activities`).then(res => res.json());
-  exercises = exercises.data.map((item) => item.activity_id)
+  // exercises = exercises.data.map((item) => item.activity_id)
+  let list = []
   console.log("tafgsdfsdf", exercises)
-  if (await isActivitiesEmpty(exercises)) {
+  for (let exercise of exercises.data) {
+    list.push(await getActivtyFromID(exercise.activity_id))
+  }
+  if (await isActivitiesEmpty(list)) {
     return
   }
-  for (let item of exercises) {
+  for (let index = 0; index < exercises.data.length; index++) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
-    entry.entryID = item;
-    if (user() !== item.created_by) {
+    entry.entryID = exercises.data[index].activity_id;
+    if (user() !== list[index].created_by) {
       entry.editable = false
     }
     entry.classList.add("menu-item")

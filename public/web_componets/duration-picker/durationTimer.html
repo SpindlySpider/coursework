@@ -1,11 +1,6 @@
 <!doctype html>
 <template>
   <style>
-    * {
-      --text-colour: black;
-      --background-colour: white;
-    }
-
     input {
       outline: none;
       font-size: 7vw;
@@ -18,13 +13,18 @@
 
     .duration-input-holder {
       outline: none;
-      border: 0.5vw solid var(--text-colour);
+      border: 0.5vw solid var(--border-colour);
       color: var(--text-colour);
-      background-color: var(--background-colour);
+      background-color: var(--nav-bar-background-color);
       text-align: center;
       box-sizing: border-box;
       font-size: 5em;
       border-radius: 5vw;
+    }
+
+    input {
+      color: var(--text-colour);
+      background-color: var(--nav-bar-background-color);
     }
 
     #content {

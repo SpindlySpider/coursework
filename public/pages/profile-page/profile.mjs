@@ -18,6 +18,9 @@ function prepareHandles() {
 
 function lightThemeChange() {
   console.log("light theme")
+  for (let icon of document.querySelectorAll(".icon")) {
+    icon.style.filter = "invert(0)"
+  }
   document.documentElement.style.setProperty('--nav-bar-background-color', 'white');
   document.documentElement.style.setProperty('--text-colour', 'black');
   document.documentElement.style.setProperty('--button-colour', '#589aff');
@@ -29,14 +32,17 @@ function lightThemeChange() {
 }
 function darkThemeChange() {
   console.log("dark theme")
-  document.documentElement.style.setProperty('--nav-bar-background-color', 'black');
-  document.documentElement.style.setProperty('--text-colour', 'black');
-  document.documentElement.style.setProperty('--button-colour', '#589aff');
-  document.documentElement.style.setProperty('--button-alternativee', '#ff5a34');
-  document.documentElement.style.setProperty('--border-colour', 'gray');
-  document.documentElement.style.setProperty('--background-color', '#EEEEEE');
-  document.documentElement.style.setProperty('--foreground-color', 'white');
-  document.documentElement.style.setProperty('--banner-color', 'white');
+  for (let icon of document.querySelectorAll(".icon")) {
+    icon.style.filter = "invert(1)"
+  }
+  document.documentElement.style.setProperty('--nav-bar-background-color', '#302D3C');
+  document.documentElement.style.setProperty('--text-colour', 'white');
+  document.documentElement.style.setProperty('--button-colour', '#2B5960');
+  document.documentElement.style.setProperty('--button-alternative', '#ff5a34');
+  document.documentElement.style.setProperty('--border-colour', 'black');
+  document.documentElement.style.setProperty('--background-color', '#1F1D26');
+  document.documentElement.style.setProperty('--foreground-color', '#302D3C');
+  document.documentElement.style.setProperty('--banner-color', '#302D3C');
 }
 
 export async function displayProfiles() {

@@ -32,10 +32,10 @@ export class Entry extends newActivtyMenu {
   }
 
   async destorySelf() {
+    cleanLocalTag(this.entryJSON.UUID, ACTIVTIES_KEY);
     this.content.style.height = '0vh';
     this.enableNavbarBorder();
     await displayCategoryPage();
-    // await displayCustomCateogryPage();
     this.remove();
   }
 
