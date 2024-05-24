@@ -3,12 +3,14 @@
 # forword 
 within the code i use exercise and acitivity interchanagably, additionally i use workout and playlist interchanagably 
 a link to the github can be found here: `https://github.com/SpindlySpider/coursework`
+ - mobile only application as its unlikely people will be working out with their laptop/computer and as such it is taloired for a mobile experience 
 
 # setup
 ## installation 
 first run `npm install` then once complete run `npm start` 
 ## connection
 on the same machine you are running `npm start` go to the web address `http://localhost:8080`
+---
 # core requirements
 I have implemented all core requirements I will now list them and where to find them
 ## build custom HIIT workout from scratch
@@ -51,12 +53,18 @@ to see this feature in action:
  - logout of your account and log back in you can see the server has successfuly saved it.
 
 ## multiple users 
-as this is a application there is account features, each user
-
-## PWA
-
-## service worker
-
+this application supports multiple users. you are able to log in and out of differnt accounts. each account keeps track of what the user has done. to log in and out of accounts go to:
+ - the person icon in the nav bar -> login / out
+### not signed in user
+a user of the application should still be able to use the app without being signed in. And as such the if you are not signed in you are able to create and edit exercises, however you are not able to add pictures or have dashboard information
+## PWA - progressive web app
+this application is also a progressive web app and is installable on supported devices as well has support for offline
+### service worker - static and dynamic caching
+I have also set up a service worker (`/public/serviceworker.mjs`) which caches static assests on install, and has a network-first dynamic caching stratagy when caching fetch requests
+orginally I wanted to have a stale-while-revailidate stratagy, however I found it difficult to properly set up service workers. additionally when impleneted it caused unwanted behaviour as the cached response was returned rather than the freshest version. In the future I think that stale-while-revailidate stratagy would be good for images, however text and exercise lists must be a network-first cache
+### offline - partially implemented
+because of the service worker if you have used the app while online you are still able to browse and edit exercises, and if you completed a work out the application will also allow you to complete a workout.
+ - the reason it is partially implemented is because you are not able to create new playlists while ofline.
 ## web worker
 
 ## drag and drop workout modification
