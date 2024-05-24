@@ -10,6 +10,7 @@ a link to the github can be found here: `https://github.com/SpindlySpider/course
 first run `npm install` then once complete run `npm start` 
 ## connection
 on the same machine you are running `npm start` go to the web address `http://localhost:8080`
+
 ---
 # core requirements
 I have implemented all core requirements I will now list them and where to find them
@@ -65,8 +66,10 @@ orginally I wanted to have a stale-while-revailidate stratagy, however I found i
 ### offline - partially implemented
 because of the service worker if you have used the app while online you are still able to browse and edit exercises, and if you completed a work out the application will also allow you to complete a workout.
  - the reason it is partially implemented is because you are not able to create new playlists while ofline.
-## web worker
-
+## web worker - for timer 
+ a web worker `./public/web_componets/timer/timer-worker.mjs` is used for a timer web componenet to reduce stress on the main thread
+ ### motivation for this 
+orginally I was having issues with the workout timer having consistant speed. After some research I have found that setinterval and settimeout are not the most aucrate. I was having issues where the timer would take around 3 seconds to actually start. I beleive this is because of lots of operations occuring on the main thread. To mitigate the delay with the set interval timer I decided to create a web worker to handle set intervals and calculations to reduce the load on the main thread.  
 ## drag and drop workout modification
 
 ## file structure
