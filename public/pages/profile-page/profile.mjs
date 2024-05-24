@@ -1,5 +1,6 @@
 import { ACTIVTIES_KEY } from '../../web_componets/activity-tools.mjs';
 import { PLAYLIST_KEY } from '../../web_componets/playlist-tools.mjs';
+import { TAG_KEY } from '../../web_componets/tag-tools.mjs';
 import {
   USER_KEY,
   changeSelectedNavbar,
@@ -81,6 +82,7 @@ async function signOut() {
   localStorage[USER_KEY] = '{}';
   localStorage[ACTIVTIES_KEY] = '{}';
   localStorage[PLAYLIST_KEY] = '{}';
+  localStorage[TAG_KEY] = '{}';
   await displayProfiles();
 }
 

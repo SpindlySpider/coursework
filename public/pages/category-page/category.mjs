@@ -1,7 +1,9 @@
 import { getAllCustomActivites, ACTIVTIES_KEY } from '../../../web_componets/activity-tools.mjs';
+import { TAG_KEY, getTags } from '../../web_componets/tag-tools.mjs';
 import {
   changeSelectedNavbar,
   fetchFragment,
+  isLocalStorageEmpty,
   user,
 } from '../../web_componets/utilities.mjs';
 
@@ -30,7 +32,7 @@ function setHeader(str) {
   el.headerList.prepend(backButton)
 }
 
-function isActivitiesEmpty(exercises) {
+async function isActivitiesEmpty(exercises) {
   if (exercises == null || Object.keys(exercises).length == 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.style = "font-size: 5vw;text-align: center;padding: 5vh;"
@@ -39,6 +41,11 @@ function isActivitiesEmpty(exercises) {
     el.content.append(emptyMessage);
     return true
   }
+    console.log("execse", exercises)
+  for (let item of Object.keys(exercises)) {
+    // console.log("activity", item)
+    await getTags(item,ACTIVTIES_KEY)
+  }
   return false
 }
 
@@ -46,7 +53,7 @@ export async function displayCustomCateogryPage() {
   cleanContent()
   setHeader("Your Exercises")
   const exercises = getAllCustomActivites(ACTIVTIES_KEY);
-  if (isActivitiesEmpty(exercises)) {
+  if (await isActivitiesEmpty(exercises)) {
     return
   }
   for (let item of Object.keys(exercises)) {
@@ -54,6 +61,25 @@ export async function displayCustomCateogryPage() {
     const entry = document.createElement('activity-entry');
     entry.entryID = item;
     console.log(exercises[item].created_by)
+    if (user() === exercises[item].created_by) {
+      entry.classList.add("menu-item")
+      el.content.append(entry);
+      entry.editable = true
+    }
+  }
+}
+
+async function displayAllActivities() {
+  cleanContent()
+  setHeader("All Exercises")
+  const exercises = getAllCustomActivites(ACTIVTIES_KEY);
+  if (await isActivitiesEmpty(exercises)) {
+    return
+  }
+  for (let item of Object.keys(exercises)) {
+    // make a web componenet for the event
+    const entry = document.createElement('activity-entry');
+    entry.entryID = item;
     if (user() !== exercises[item].created_by) {
       entry.editable = false
     }
@@ -62,17 +88,22 @@ export async function displayCustomCateogryPage() {
   }
 }
 
-async function displayAllActivities() {
+async function getTagActivites(tag, exercises) {
   cleanContent()
-  setHeader("All Exercises")
-  const exercises = getAllCustomActivites(ACTIVTIES_KEY);
-  if (isActivitiesEmpty(exercises)) {
+  setHeader(tag)
+  exercises = await fetch(`/tags/${tag}/get-activities`).then(res => res.json());
+  exercises = exercises.data.map((item) => item.activity_id)
+  console.log("tafgsdfsdf", exercises)
+  if (await isActivitiesEmpty(exercises)) {
     return
   }
-  for (let item of Object.keys(exercises)) {
+  for (let item of exercises) {
     // make a web componenet for the event
     const entry = document.createElement('activity-entry');
     entry.entryID = item;
+    if (user() !== item.created_by) {
+      entry.editable = false
+    }
     entry.classList.add("menu-item")
     el.content.append(entry);
   }
@@ -86,9 +117,21 @@ export async function displayCategoryPage() {
   const allActivities = await fetchFragment(import.meta.resolve("./category-item.inc"))
   allActivities.textContent = "All Exercises"
   userActivities.textContent = "Your Exercises"
+
   const container = await fetchFragment(import.meta.resolve("./category-list.inc"))
   el.main.append(titleContainer, container);
   container.append(userActivities, allActivities);
+  if (isLocalStorageEmpty(TAG_KEY) !== undefined) {
+    const tagJSON = JSON.parse(localStorage.getItem(TAG_KEY))
+    for (let key of Object.keys(tagJSON)) {
+      console.log("tag", key, tagJSON[key])
+      const tagSelect = await fetchFragment(import.meta.resolve("./category-item.inc"))
+      tagSelect.textContent = key
+      tagSelect.addEventListener("click", () => { getTagActivites(key, tagJSON[key].activites) })
+      container.append(tagSelect);
+    }
+  }
+
   prepareHandles()
   userActivities.addEventListener('click', displayCustomCateogryPage);
   allActivities.addEventListener('click', displayAllActivities);
