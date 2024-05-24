@@ -23,11 +23,11 @@ async function addActivity(req, res) {
     req.params.activityID,
     req.body.orderNumber,
   );
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 async function removeActivity(req, res) {
   await playlist.removeActivity(req.params.playlistID, req.params.activityID);
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 
 async function createPlaylist(req, res) {
@@ -37,7 +37,7 @@ async function createPlaylist(req, res) {
   if (req.body.UUID) {
     UUID = req.body.UUID;
   }
-  console.log(req.body, "line 40 playlist");
+  console.log(req.body, 'line 40 playlist');
   if (await uniqueID('Playlist', 'playlist_id', UUID)) {
     await playlist.newPlaylist(
       UUID,
@@ -47,7 +47,7 @@ async function createPlaylist(req, res) {
       req.body.sets,
       req.body.exercise_rest_time,
       req.body.rest_sets_time,
-      req.body.duration_string
+      req.body.duration_string,
     );
   } else {
     await playlist.updatePlaylist(
@@ -58,15 +58,15 @@ async function createPlaylist(req, res) {
       req.body.sets,
       req.body.exercise_rest_time,
       req.body.rest_sets_time,
-      req.body.duration_string
+      req.body.duration_string,
     );
   }
 
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 async function updatePlaylistItems(req, res) {
   // find a way to check if a id is already taken
-  const UUID = req.body.UUID;
+  let UUID = req.body.UUID;
   if (req.body.UUID) {
     UUID = req.body.UUID;
   }
@@ -75,9 +75,9 @@ async function updatePlaylistItems(req, res) {
     req.body.title,
     req.body.items,
     req.body.createdBy,
-    req.body.duration_string
+    req.body.duration_string,
   );
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 
 async function deletePlaylist(req, res) {

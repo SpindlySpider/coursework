@@ -90,17 +90,17 @@ export async function postUserPlaylist(userID, playlistID) {
 
 export async function updateExerciseTime(userID, time, finishedNumber = 0) {
   const db = await databaseConnect;
-  await db.run("UPDATE Users SET exercise_time = ? WHERE user_id = ?", [
+  await db.run('UPDATE Users SET exercise_time = ? WHERE user_id = ?', [
     time,
-    userID
-  ])
+    userID,
+  ]);
 }
 export async function updateWorkoutsFinished(userID, number) {
   const db = await databaseConnect;
-  await db.run("UPDATE Users SET workouts_finished = ? WHERE user_id = ?", [
+  await db.run('UPDATE Users SET workouts_finished = ? WHERE user_id = ?', [
     number,
-    userID
-  ])
+    userID,
+  ]);
 }
 
 export async function deleteUserPlaylist(playlistID) {

@@ -18,16 +18,16 @@ export class durationPicker extends HTMLElement {
       '../../web_componets/duration-picker/durationTimer.html',
     );
     this.inputList = this.shadow.querySelectorAll('.duration_input');
-    this.inputList.forEach(item => item.addEventListener("keydown", this.vailidateKeyUp))
+    this.inputList.forEach(item => item.addEventListener('keydown', this.vailidateKeyUp));
     this.setDuration(this.seconds);
     this.initilized = true;
   }
-  vailidateKeyUp(event) {
-    if (isNaN(event.key) && event.key !== "Backspace") event.preventDefault()
-    else if (event.target.value >= 59) {
-      event.target.value = "59"
-    }
 
+  vailidateKeyUp(event) {
+    if (isNaN(event.key) && event.key !== 'Backspace') event.preventDefault();
+    else if (event.target.value >= 59) {
+      event.target.value = '59';
+    }
   }
 
   async connectedCallback() {
@@ -38,7 +38,7 @@ export class durationPicker extends HTMLElement {
   getDuration() {
     let multiplier = 3600;
     this.seconds = 0;
-    for (let input of this.inputList) {
+    for (const input of this.inputList) {
       this.seconds += input.value * multiplier;
       multiplier = multiplier / 60;
     }

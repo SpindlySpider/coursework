@@ -1,7 +1,5 @@
-import { generateUUID } from '../server_utilities.js';
 import {
   databaseConnect,
-  uniqueID,
   uniqueOrderNumber,
 } from './database_utlilites.mjs';
 import { deleteUserPlaylist } from './users.mjs';
@@ -25,7 +23,7 @@ export async function updatePlaylist(
   sets,
   restDuration,
   setRestDuration,
-  durationString = ""
+  durationString = '',
 ) {
   const db = await databaseConnect;
   const statement = await db.run(
@@ -35,12 +33,12 @@ export async function updatePlaylist(
       createdByID,
       sets,
       restDuration,
-      setRestDuration,durationString, UUID],
+      setRestDuration, durationString, UUID],
   );
   await deletePlaylistActivities(UUID);
   if (items) {
     let index = 0;
-    for (let item of items) {
+    for (const item of items) {
       addActivityPlaylist(UUID, item, index);
       index++;
     }
@@ -56,7 +54,7 @@ export async function newPlaylist(
   sets,
   restDuration,
   setRestDuration,
-  durationString = ""
+  durationString = '',
 ) {
   const db = await databaseConnect;
   await db.run('INSERT INTO Playlist VALUES (?,?,?,?,?,?,?)', [
@@ -66,12 +64,12 @@ export async function newPlaylist(
     sets,
     restDuration,
     setRestDuration,
-    durationString
+    durationString,
   ]);
   if (items[0] !== null) {
     let index = 0;
-    for (let item of items) {
-      console.log("activity data when saving relation line 73 database/playlist    :    ", item)
+    for (const item of items) {
+      console.log('activity data when saving relation line 73 database/playlist    :    ', item);
       addActivityPlaylist(UUID, item, index);
       index++;
     }

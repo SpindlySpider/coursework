@@ -5,8 +5,8 @@ export class toast extends HTMLElement {
     this.initilized = false;
   }
 
-  async prepareHandle() {
-    this.container = this.shadow.querySelector("#toast-container")
+  prepareHandle() {
+    this.container = this.shadow.querySelector('#toast-container');
   }
 
   async attachTemplate() {
@@ -17,9 +17,9 @@ export class toast extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' });
     await fetchTemplate(
       this.shadow,
-      import.meta.resolve("./toast-container.html"),
+      import.meta.resolve('./toast-container.html'),
     );
-    await this.prepareHandle()
+    await this.prepareHandle();
     this.initilized = true;
   }
 
@@ -35,21 +35,21 @@ export class toast extends HTMLElement {
     // has the option to add a img url if the user wants to
     // if no image url is provided then it will fetch a specific fragment
     imgURL = imgURL || null;
-    timeout = timeout || 1500
-    const URL = imgURL === null ? "./toast-item.inc" : "./toast-item-img.inc"
-    const notification = await fetchFragment(import.meta.resolve(URL))
-    const image = notification.querySelector("#toast-img")
-    if(image){
-      image.src =imgURL
+    timeout = timeout || 1500;
+    const URL = imgURL === null ? './toast-item.inc' : './toast-item-img.inc';
+    const notification = await fetchFragment(import.meta.resolve(URL));
+    const image = notification.querySelector('#toast-img');
+    if (image) {
+      image.src = imgURL;
     }
-    notification.querySelector("#toast-text").textContent = str
-    this.container.appendChild(notification)
+    notification.querySelector('#toast-text').textContent = str;
+    this.container.appendChild(notification);
     setTimeout(() => {
-      notification.classList.add("remove")
+      notification.classList.add('remove');
       setTimeout(() => {
-        notification.remove()
-      }, 500)
-    }, timeout)
+        notification.remove();
+      }, 500);
+    }, timeout);
   }
 }
 

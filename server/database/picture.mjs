@@ -1,4 +1,3 @@
-import { generateUUID } from '../server_utilities.js';
 import {
   databaseConnect,
 } from './database_utlilites.mjs';
@@ -29,21 +28,19 @@ export async function getPictureFromID(UUID) {
 export async function getPicturesOfActivity(UUID) {
   const db = await databaseConnect;
   return db.all('SELECT picture_id FROM PictureActivitiesRelation WHERE activity_id = ?', UUID);
-
 }
 
-export async function deletePictureFromActivity(pictureID,activityID) {
+export async function deletePictureFromActivity(pictureID, activityID) {
   const db = await databaseConnect;
-  console.log(await getPicturesOfActivity(activityID))
+  console.log(await getPicturesOfActivity(activityID));
   if (await getPicturesOfActivity(activityID).length === 0) {
     // the picture isnt realated to any activity
     await db.run(
       'DELETE FROM Pictures WHERE picture_id = ?',
-      pictureID)
-    return 
+      pictureID);
+    return;
   }
   await db.run(
-    'DELETE FROM PictureActivitiesRelation WHERE picture_id = ? AND activity_id = ? ' ,
-    pictureID,activityID)
+    'DELETE FROM PictureActivitiesRelation WHERE picture_id = ? AND activity_id = ? ',
+    pictureID, activityID);
 }
-

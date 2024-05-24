@@ -7,7 +7,6 @@ import { deleteFromLocal, formatedSeconds, fetchTemplate } from '../utilities.mj
 import { newActivtyMenu } from '../new-activity-menu/new_activity_menu.mjs';
 import {
   displayCategoryPage,
-  displayCustomCateogryPage,
 } from '../../pages/category-page/category.mjs';
 import { cleanLocalTag, saveTags, getTags } from '../tag-tools.mjs';
 import { getPhotos, getPhotoFromID, uploadPhoto } from '../picture-tools.mjs';
@@ -24,10 +23,10 @@ export class Entry extends newActivtyMenu {
 
   deleteEntry() {
     deleteFromLocal(this.entryID, ACTIVTIES_KEY);
-    for (let id of this.pictures) {
+    for (const id of this.pictures) {
       this.deletePicture(id);
     }
-    document.querySelector("toast-notification").addNotification(`deleted ${this.entryJSON.title}`, 1500)
+    document.querySelector('toast-notification').addNotification(`deleted ${this.entryJSON.title}`, 1500);
     this.destorySelf();
   }
 
@@ -42,9 +41,9 @@ export class Entry extends newActivtyMenu {
   async connectedCallback() {
     if (this.editing || this.initilized) return;
     await this.attachTemplate();
-    if (document.querySelector("new-activty-menu") || document.querySelector("activity-entry")) {
+    if (document.querySelector('new-activty-menu') || document.querySelector('activity-entry')) {
       // already have from attached
-      this.destorySelf()
+      this.destorySelf();
     }
   }
 
@@ -72,24 +71,24 @@ export class Entry extends newActivtyMenu {
     }
     // setting up inner HTML for shadowDOM
     this.entryJSON = await getActivtyFromID(this.entryID);
-    const thumbnail = await fetch(import.meta.resolve("./thumbnail.inc")).then(item => item.text())
+    const thumbnail = await fetch(import.meta.resolve('./thumbnail.inc')).then(item => item.text());
     this.shadow.innerHTML = thumbnail;
     // setting values for title, description and duration
-    this.shadow.querySelector("#title").textContent = this.entryJSON.title
-    this.shadow.querySelector("#description").textContent = this.entryJSON.description
-    this.editButton = this.shadow.querySelector("#edit-button")
+    this.shadow.querySelector('#title').textContent = this.entryJSON.title;
+    this.shadow.querySelector('#description').textContent = this.entryJSON.description;
+    this.editButton = this.shadow.querySelector('#edit-button');
     this.seconds = this.entryJSON.duration;
-    this.shadow.querySelector("#duration").textContent = this.getFormatStringTime()
+    this.shadow.querySelector('#duration').textContent = this.getFormatStringTime();
     // appending any photos if there are any
-    const photoIDs = await getPhotos(this.entryID)
+    const photoIDs = await getPhotos(this.entryID);
     if (photoIDs.length > 0) {
-      this.image = this.shadow.querySelector("#image")
-      const response = await getPhotoFromID(photoIDs[0])
-      this.image.src = response.url
+      this.image = this.shadow.querySelector('#image');
+      const response = await getPhotoFromID(photoIDs[0]);
+      this.image.src = response.url;
     }
     // if own this event you can edit it
     if (this.editable) {
-      this.editButton.style.display = "flex"
+      this.editButton.style.display = 'flex';
       this.editButton.addEventListener('click', this.eventOptionsBottomSheet.bind(this), {
         once: true,
       });
@@ -129,33 +128,33 @@ export class Entry extends newActivtyMenu {
     this.setupActivityEventListeners();
     this.editMenuPrepareHandles();
     this.timeInput.setDuration(this.seconds);
-    this.content.append(this.backButton)
+    this.content.append(this.backButton);
     await this.getTags();
     this.nameInput.value = this.entryJSON.title;
     this.descriptionInput.value = this.entryJSON.description;
     this.editing = true;
     this.setupEventListners();
     setTimeout(this.pullupAnimation.bind(this), 25, 50);
-    this.pictures = await getPhotos(this.entryID)
-    await this.appendPictures()
+    this.pictures = await getPhotos(this.entryID);
+    await this.appendPictures();
     this.parentNode.append(this);
   }
 
   toastNotification(str) {
-    document.querySelector("toast-notification").addNotification(str, 1500)
+    document.querySelector('toast-notification').addNotification(str, 1500);
   }
 
   async saveNewActivty() {
     // should abtract this to a general store activties/ edit activites
     const title = this.nameInput.value;
-    if (title == "") {
-      this.toastNotification(`cannot save as there is no title`)
-      throw Error("no title")
+    if (title === '') {
+      this.toastNotification('cannot save as there is no title');
+      throw Error('no title');
     }
     const duration = this.timeInput.getDuration();
     if (duration <= 0) {
-      this.toastNotification(`cannot save ${title} there is no duration`)
-      throw Error("no duration")
+      this.toastNotification(`cannot save ${title} there is no duration`);
+      throw Error('no duration');
     }
     const description = this.descriptionInput.value;
     const UUID = this.entryID;
@@ -163,18 +162,18 @@ export class Entry extends newActivtyMenu {
     cleanLocalTag(UUID, ACTIVTIES_KEY);
     await saveTags(UUID, ACTIVTIES_KEY, this.tags.getTags(), false);
     // document.querySelector('#main-content').textContent = '';
-    let photoURL = null
-    console.log(`photos ${this.photoInput.files.length}`)
+    let photoURL = null;
+    console.log(`photos ${this.photoInput.files.length}`);
     if (this.photoInput.files.length > 0) {
-      for (let file of this.photoInput.files) {
-        console.log("uploading", file)
-        const input = new FormData()
-        input.append("file", file)
-        await uploadPhoto(UUID, input)
+      for (const file of this.photoInput.files) {
+        console.log('uploading', file);
+        const input = new FormData();
+        input.append('file', file);
+        await uploadPhoto(UUID, input);
       }
-      photoURL = this.pictureURL
+      photoURL = this.pictureURL;
     }
-    document.querySelector("toast-notification").addNotification(`saved ${title}`, 1500, photoURL)
+    document.querySelector('toast-notification').addNotification(`saved ${title}`, 1500, photoURL);
     await this.destorySelf();
   }
 }

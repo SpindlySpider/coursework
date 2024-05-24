@@ -61,7 +61,7 @@ class TagComponent extends HTMLElement {
   }
 
   setTags(textList = []) {
-    for (let tag of textList) {
+    for (const tag of textList) {
       this.addTag(tag);
     }
     this.itemList.prepend(this.inputField);

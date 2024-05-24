@@ -1,4 +1,3 @@
-import { displayPlaylistPage } from '../../pages/playlist-page/playlist.mjs';
 import { fetchTemplate } from '../utilities.mjs';
 
 export class bottomSheetMenu extends HTMLElement {
@@ -18,15 +17,21 @@ export class bottomSheetMenu extends HTMLElement {
     this.addButton = this.shadow.querySelector('#bottomsheet-add');
     this.backButton = this.shadow.querySelector('#bottomsheet-back');
     this.deleteButton = this.shadow.querySelector('#bottomsheet-delete');
-    this.bottomButtonContainer = this.shadow.querySelector("#bottom-button-container")
-    this.export = this.shadow.querySelector("#bottomsheet-export")
-    this.cancelButton = this.shadow.querySelector("#bottomsheet-cancel")
-    document.addEventListener("click", e => {
-      const clicked = this.contains(e.target)
-      if (!clicked) {
-        this.destorySelf()
-      }
-    }, { once: true })
+    this.bottomButtonContainer = this.shadow.querySelector(
+      '#bottom-button-container',
+    );
+    this.export = this.shadow.querySelector('#bottomsheet-export');
+    this.cancelButton = this.shadow.querySelector('#bottomsheet-cancel');
+    document.addEventListener(
+      'click',
+      (e) => {
+        const clicked = this.contains(e.target);
+        if (!clicked) {
+          this.destorySelf();
+        }
+      },
+      { once: true },
+    );
   }
 
   disableNavbarBorder() {
@@ -61,7 +66,6 @@ export class bottomSheetMenu extends HTMLElement {
     }
     await this.attachTemplate();
     this.initilized = true;
-
   }
 
   destorySelf() {

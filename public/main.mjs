@@ -70,16 +70,16 @@ document
   .addEventListener('click', displayPlaylistPage);
 document.querySelector('#profile').addEventListener('click', displayProfiles);
 
-document.querySelector("#dashboard").addEventListener("click", displayDashboardPage) 
+document.querySelector('#dashboard').addEventListener('click', displayDashboardPage);
 
-if ("serviceWorker" in navigator) {
-  //https://www.youtube.com/watch?v=WbbAPfDVqfY
-  navigator.serviceWorker.register("serviceworker.mjs").then(registration => {
-    console.log("registered service worker")
+if ('serviceWorker' in navigator) {
+  // https://www.youtube.com/watch?v=WbbAPfDVqfY
+  navigator.serviceWorker.register('serviceworker.mjs').then(() => {
+    console.log('registered service worker');
   }).catch(error => {
-    console.log("service worker registration failed")
-    console.log(error)
-  })
+    console.log('service worker registration failed');
+    console.log(error);
+  });
 }
 
-await displayCategoryPage()
+displayCategoryPage();

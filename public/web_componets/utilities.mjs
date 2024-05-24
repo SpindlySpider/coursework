@@ -1,23 +1,21 @@
-import { ACTIVTIES_KEY, getActivtyFromID } from "./activity-tools.mjs";
-import { PLAYLIST_KEY, getPlaylist } from "./playlist-tools.mjs";
+import { ACTIVTIES_KEY, getActivtyFromID } from './activity-tools.mjs';
+import { PLAYLIST_KEY, getPlaylist } from './playlist-tools.mjs';
 
 export const user = () => {
   try {
-    let userJSON = JSON.parse(localStorage.getItem(USER_KEY))
-    return userJSON.user !== undefined ? userJSON.user : null
+    const userJSON = JSON.parse(localStorage.getItem(USER_KEY));
+    return userJSON.user !== undefined ? userJSON.user : null;
+  } catch {
+    return null;
   }
-  catch {
-    return null
-  }
-
-}
+};
 export const isLocalStorageEmpty = (keyName) => localStorage[keyName] === undefined;
 export const USER_KEY = 'account';
 
 export function createButton(name) {
   const button = document.createElement('button');
   button.textContent = name;
-  return button
+  return button;
 }
 
 export function getFormatStringTime(seconds) {
@@ -34,7 +32,7 @@ export async function deleteFromLocal(UUID, KEY) {
     if (KEY === ACTIVTIES_KEY) {
       // aslo delete this event from playlists that include it
       const playlistStorage = JSON.parse(localStorage[PLAYLIST_KEY]);
-      for (let item of Object.keys(playlistStorage)) {
+      for (const item of Object.keys(playlistStorage)) {
         if (playlistStorage[item].items.includes(UUID)) {
           console.log('includes', UUID);
           playlistStorage[item].items = playlistStorage[item].items.filter(
@@ -57,14 +55,14 @@ export async function deleteFromLocal(UUID, KEY) {
     delete tempStore[UUID];
     localStorage[KEY] = JSON.stringify(tempStore);
   } else {
-    throw Error("event doesnt exist")
+    throw Error('event doesnt exist');
     // event doesnt exist
   }
 }
 
 export async function getUUID() {
   if (!navigator.onLine) {
-    return crypto.randomUUID()
+    return crypto.randomUUID();
   }
   const newUUID = await fetch('/api/get_uuid').then((response) => {
     return response.json();
@@ -74,12 +72,11 @@ export async function getUUID() {
 
 export async function fetchFragment(URL) {
   // fetches fragement(.inc) and returns DOM html
-  const htmlText = await fetch(URL).then(item => item.text())
-  let tempObj = document.createElement("div")
-  tempObj.innerHTML = htmlText
-  console.log("fetched fragement", tempObj.firstChild)
+  const htmlText = await fetch(URL).then(item => item.text());
+  const tempObj = document.createElement('div');
+  tempObj.innerHTML = htmlText;
+  console.log('fetched fragement', tempObj.firstChild);
   return tempObj.firstChild;
-
 }
 
 export async function fetchTemplate(shadow, templateURL) {
@@ -98,15 +95,15 @@ export function formatedSeconds(seconds) {
 
 export function stringTimeToSeconds(str) {
   // takes stirng of value 00:00:00
-  const timeArr = str.split(":")
+  const timeArr = str.split(':');
   // [hour, mins , secs]
-  let multipler = 3600
-  let seconds = 0
-  for (let time of timeArr) {
-    seconds += time * multipler
-    multipler = multipler / 60
+  let multipler = 3600;
+  let seconds = 0;
+  for (const time of timeArr) {
+    seconds += time * multipler;
+    multipler = multipler / 60;
   }
-  return seconds
+  return seconds;
 }
 
 export function changeSelectedNavbar(navButtonSelector) {
@@ -114,16 +111,16 @@ export function changeSelectedNavbar(navButtonSelector) {
   const navCategories = document.querySelector(navButtonSelector);
   const main = document.querySelector('#main-content');
   if (lastNavSelected != null) {
-    const icons = lastNavSelected.querySelectorAll(".icon")
-    for (let item of icons) {
-      item.classList.toggle("hidden")
+    const icons = lastNavSelected.querySelectorAll('.icon');
+    for (const item of icons) {
+      item.classList.toggle('hidden');
     }
     lastNavSelected.classList.remove('nav-selected');
     lastNavSelected.classList.add('nav-unselected');
   }
-  const icons = navCategories.querySelectorAll(".icon")
-  for (let item of icons) {
-    item.classList.toggle("hidden")
+  const icons = navCategories.querySelectorAll('.icon');
+  for (const item of icons) {
+    item.classList.toggle('hidden');
   }
   navCategories.classList.add('nav-selected');
   navCategories.classList.remove('nav-unselected');
@@ -132,22 +129,20 @@ export function changeSelectedNavbar(navButtonSelector) {
 
 export async function popuplateLocal() {
   if (!(user())) {
-    return
+    return;
   }
   const activities = await fetch(`users/${user()}/activities`).then((res) => res.json());
   // popuplates all activities
-  for (let item of activities.data) {
+  for (const item of activities.data) {
     await getActivtyFromID(item.activity_id);
   } // popuplates local storage with upto date sever infromation
   const playlists = await fetch(`users/${user()}/playlists`).then((res) => res.json());
   // populates playlists
-  for (let item of playlists.data) {
-    await getPlaylist(item.playlist_id)
+  for (const item of playlists.data) {
+    await getPlaylist(item.playlist_id);
   }
-
 }
 
 export function getStringTimeFrom(seconds) {
   return new Date(seconds * 1000).toISOString().slice(11, 19);
 }
-

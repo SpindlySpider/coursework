@@ -1,5 +1,7 @@
-import { isLocalStorageEmpty, user } from "./utilities.mjs";
-const online = navigator.onLine
+import { isLocalStorageEmpty, user } from './utilities.mjs';
+import { getTags } from './tag-tools.mjs';
+import { ACTIVTIES_KEY } from './activity-tools.mjs';
+const online = navigator.onLine;
 export const PLAYLIST_KEY = 'playlist';
 export async function getPlaylist(UUID) {
   if (user() && online) {
@@ -7,10 +9,10 @@ export async function getPlaylist(UUID) {
     const response = await fetch(`playlist/${UUID}`);
     if (response.ok) {
       const playlist = await response.json();
-      console.log("playlist", playlist)
+      console.log('playlist', playlist);
       if (playlist.playlistDetails !== undefined) {
         // if the activity is on the server
-        console.log("fetched from server for localdb update", playlist);
+        console.log('fetched from server for localdb update', playlist);
         // create playlist JSON HERE
         // SQL playlist always makes sure its in ascending order
         const itemsArray = playlist.activites.map((item) => item.activity_id);
@@ -21,7 +23,7 @@ export async function getPlaylist(UUID) {
           sets: playlist.playlistDetails.sets,
           exercise_rest_time: playlist.playlistDetails.exercise_rest_time,
           rest_sets_time: playlist.playlistDetails.rest_sets_time,
-          duration_string: playlist.playlistDetails.duration_string
+          duration_string: playlist.playlistDetails.duration_string,
         };
 
         // save/update the playlist locally
@@ -36,14 +38,14 @@ export async function getPlaylist(UUID) {
   }
   const cachedActivites = JSON.parse(localStorage[PLAYLIST_KEY]);
   try {
-    getTags(this.entryID, ACTIVTIES_KEY)
+    getTags(this.entryID, ACTIVTIES_KEY);
     return cachedActivites[UUID];
   } catch (e) {
-    console.log(` no activity matching ${UUID} ID within local storage`)
+    console.log(` no activity matching ${UUID} ID within local storage`);
   }
 }
 
-export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer, durationString = "", finishedNumber = 0) {
+export async function savePlaylist(UUID, title, items, sets, restDuration, setRestDuration, fromServer, durationString = '', finishedNumber = 0) {
   if (user() && online && !fromServer) {
     // checks if the user is logged in to an account
     const payload = {
@@ -54,19 +56,17 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
       sets,
       exercise_rest_time: restDuration,
       rest_sets_time: setRestDuration,
-      duration_string: durationString
+      duration_string: durationString,
     };
     console.log('playload', payload);
 
-    const playlistResponse = await fetch('playlist/', {
+    await fetch('playlist/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
-    console.log('running next');
-
-    const attachUserResponse = await fetch(`users/${user()}/playlists`, {
+    await fetch(`users/${user()}/playlists`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ playlist_id: UUID, finished_number: finishedNumber }),
@@ -83,7 +83,7 @@ export async function savePlaylist(UUID, title, items, sets, restDuration, setRe
     title,
     items,
     durationString,
-    finishedNumber
+    finishedNumber,
   };
   const cachedPlaylists = JSON.parse(localStorage[PLAYLIST_KEY]);
   cachedPlaylists[UUID] = newPlaylist;

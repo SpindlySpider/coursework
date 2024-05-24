@@ -1,5 +1,4 @@
-import { generateUUID } from '../server_utilities.js';
-import { databaseConnect, uniqueID } from './database_utlilites.mjs';
+import { databaseConnect } from './database_utlilites.mjs';
 // used for accessing user releated fields in the db
 export async function getActivites() {
   const db = await databaseConnect;

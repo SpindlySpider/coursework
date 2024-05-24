@@ -22,12 +22,12 @@ async function getUserPlaylists(req, res) {
 async function updateUser(req, res) {
   // update data
   try {
-    console.log("updating user line 25 user.mjs")
+    console.log('updating user line 25 user.mjs');
     await user.updateExerciseTime(req.params.id, req.body.exercise_time);
     await user.updateWorkoutsFinished(req.params.id, req.body.workouts_finished);
     res.sendStatus(200);
   } catch (error) {
-    console.log("error on line 30",error)
+    console.log('error on line 30', error);
     res.sendStatus(404);
   }
 }
@@ -60,7 +60,7 @@ async function postUserPlaylists(req, res) {
 async function postUser(req, res) {
   // creates data
   await user.addUser(req.body.username);
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 
 router.get('/', sendUsersList);

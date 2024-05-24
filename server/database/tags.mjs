@@ -2,7 +2,7 @@ import { databaseConnect, uniqueID } from './database_utlilites.mjs';
 
 export async function postTags(tagList, UUID, KEY) {
   const db = await databaseConnect;
-  for (let tagName of tagList) {
+  for (const tagName of tagList) {
     console.log('saving', tagName, 'to', UUID, 'under:');
     if (await uniqueID('Tags', 'tag_name', tagName)) {
       // if this tag doesnt exist
@@ -13,13 +13,12 @@ export async function postTags(tagList, UUID, KEY) {
 
   if (KEY === 'playlist') {
     await db.run('DELETE FROM PlaylistTagRelation WHERE playlist_id = ?', [UUID]);
-    for (let tagName of tagList) {
-      await postTagPlaylist(tagName, UUID)
+    for (const tagName of tagList) {
+      await postTagPlaylist(tagName, UUID);
     }
-  }
-  else {
+  } else {
     await db.run('DELETE FROM ActivityTagRelation WHERE activity_id = ?', [UUID]);
-    for (let tagName of tagList) {
+    for (const tagName of tagList) {
       await postTagActivity(tagName, UUID);
     }
   }
@@ -57,20 +56,20 @@ export async function getTagPlaylist(UUID) {
 
 export async function getTags() {
   const db = await databaseConnect;
-  const list = []
+  const list = [];
   const joinedSQL = await db.all(
     'SELECT a.tag_name, a.activity_id , p.playlist_id FROM ActivityTagRelation a LEFT JOIN PlaylistTagRelation p ON p.tag_name = a.tag_name',
   );
-  const tagActivity = await db.all("SELECT * FROM ActivityTagRelation")
-  const tagPlaylist = await db.all("SELECT * FROM PlaylistTagRelation")
-  list.push(joinedSQL, tagActivity, tagPlaylist)
-  return list
+  const tagActivity = await db.all('SELECT * FROM ActivityTagRelation');
+  const tagPlaylist = await db.all('SELECT * FROM PlaylistTagRelation');
+  list.push(joinedSQL, tagActivity, tagPlaylist);
+  return list;
 }
-export async function getActivityPlaylistFromTag(tagName){
+export async function getActivityPlaylistFromTag(tagName) {
   const db = await databaseConnect;
   return await db.all(
-    'SELECT a.tag_name, a.activity_id , p.playlist_id FROM ActivityTagRelation a LEFT JOIN PlaylistTagRelation p ON p.tag_name = a.tag_name WHERE a.tag_name = ?',tagName
-  ); 
+    'SELECT a.tag_name, a.activity_id , p.playlist_id FROM ActivityTagRelation a LEFT JOIN PlaylistTagRelation p ON p.tag_name = a.tag_name WHERE a.tag_name = ?', tagName,
+  );
 }
 
 export async function getTagActivity(UUID) {
