@@ -2,40 +2,51 @@
   <style>
     ul {
       display: flex;
-      border: 2px solid white;
+      border: 2px solid var(--border-colour);
       padding: 7px;
       flex-wrap: wrap;
       width: 70vw;
+      border-radius: 5vw;
     }
+
     ul li {
       list-style: none;
-      border: 2px solid white;
-      color: black;
-      background-color: white;
-      padding: 2px;
+      border: 2px solid var(--border-colour);
+      color: var(--text-colour);
+      background-color: var(--nav-bar-background-color);
+      padding: 2vw;
       margin: 2px;
       display: flex;
       flex-direction: row;
       font-size: 5vw;
+      border-radius: 2vw;
     }
+
     ul li button {
       border-radius: 50%;
-      padding: 2vw;
       border: none;
+      background: var(--nav-bar-background-color);
+      font-size: 4vw;
     }
+
     p {
       margin: 0px;
       padding: 0px;
     }
+
     input {
       flex: 1;
       outline: none;
-      border: 1px solid black;
+      border: 1px solid var(--nav-bar-background-color);
       padding: 2px;
       margin: 2px;
       font-size: 5vw;
       width: 10vw;
+      border-radius: 5vw;
+      background-color: var(--nav-bar-background-color);
+      color: var(--text-colour);
     }
+
     #tagBox {
       display: flex;
     }

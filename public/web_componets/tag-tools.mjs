@@ -120,6 +120,10 @@ export function cleanLocalTag(UUID, KEY) {
     cachedTags[tag][cleanDestination] = cachedTags[tag][
       cleanDestination
     ].filter((item) => item !== UUID);
+    if (cachedTags[tag].length === 0) {
+      // delete tag
+      cachedTags[tag] === null
+    }
   }
   localStorage[TAG_KEY] = JSON.stringify(cachedTags);
   // save it locally here
