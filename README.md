@@ -83,7 +83,7 @@ the user can edit the order of exercies within a workout by dragging the workout
 there are two databases within this application:
  - the local database of the client(local storage) which contains 4 parts: account, activities, playlist, tag. 
  - the server database, this is a SQLLITE database which is built for scalabilitiy an ERD can be found here 
-![entity relationship diagram](./entity relationship diagram.png)
+![entity relationship diagram](./entity relationship diagram.png?raw=true "Title")
 
 ## justification of design
 
