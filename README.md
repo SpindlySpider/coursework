@@ -34,7 +34,7 @@ users can share playlists via a JSON file, either importing or exporting it
 these features can be found in:
  - playlist page -> edit -> scroll down to the bottom -> export playlist
  - add -> create new playlist -> import playlist
-
+ this feature also exports all exercies within the JSON so that all the user needs to do is import the exported JSON to add the workout and exercies to their own account. 
 ## tags - users can tag excerises
 users are able to tag exercises
 this feature is not complete, the idea was that exercises could be filtered on tags, which would allow for easily adding exercices to a workout
@@ -43,7 +43,10 @@ this feature can be found in:
 
 ## toast notificaiton - web componenet
 to show notificaiton to the user there is a toast notificaiton web componenet, this can be found within `public/web_components/toast-notification`
-this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the user
+this web componenet allows you to show messages on the user screen that disapear after a timeout, in addition you are able to provide a URL to a photo allowing you to create custom messages to show the users
+
+## dashboard - overview 
+the dashboard gives a user an overview of how long they have worked out for and how many workouts they have completed
 
 ## image multiparser - handling image uploads on the server
 as we were not allowed to use external libaries, it made getting images to and from the server difficult. The solution I came to was to create my own image multiparser, this can be found in the path `server/routes/pictures/multibody_praser.mjs`.
@@ -71,8 +74,16 @@ because of the service worker if you have used the app while online you are stil
  ### motivation for this 
 orginally I was having issues with the workout timer having consistant speed. After some research I have found that setinterval and settimeout are not the most aucrate. I was having issues where the timer would take around 3 seconds to actually start. I beleive this is because of lots of operations occuring on the main thread. To mitigate the delay with the set interval timer I decided to create a web worker to handle set intervals and calculations to reduce the load on the main thread.  
 ## drag and drop workout modification
+the user can edit the order of exercies within a workout by dragging the workout up and down. this can be found within the webapp when you edit an exercise and then hold and drag on the :: icon
 
+# maintance
 ## file structure
+
+## database
+there are two databases within this application:
+ - the local database of the client(local storage) which contains 4 parts: account, activities, playlist, tag. 
+ - the server database, this is a SQLLITE database which is built for scalabilitiy an ERD can be found here 
+![entity relationship diagram](./entity relationship diagram.png)
 
 ## justification of design
 
@@ -81,8 +92,11 @@ orginally I was having issues with the workout timer having consistant speed. Af
 
 
 - css varaibles are not defined in :root instead they are defined in the * selector, this is because :root varaibles are not avalaible inside template componenets and as such you are not able to define them for each web componenet there. defning them within gives avalaiblity to the entire webcomponenet DOM to use these CSS variables which allows for rapid chanignig of colours 
+### custom webcomponents design pholosiphy
 
-## TODO
+- all selections should be done within the constructor of the webcomponents , this is due to the fact (i think) we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
+
+## TODO - additonal features that could be added
 
 - make a description box which has a edit button otherwise it is not editable
 - add a tag selector web componenet
@@ -118,41 +132,10 @@ orginally I was having issues with the workout timer having consistant speed. Af
 - [ ] import export
 - [ ] readable body svg https://youtu.be/6C-GYwxdZd4 , https://youtu.be/WMqB8sVOCtk
 
-## Key features
 
-- HOMEMADE IMAGE MULTIPARSER
-
-REMOVE ME: Introduce the key features, paying special attention to the non-code ones. Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.
-
-## drag and drop
-
-learning to make drag and drop using
-https://youtu.be/jfYWwQrtzzY
-
-### new activities.
-
-this is a feature which will allow users to create custom workout events by giving it a title, description, duration, tags and equipment assocaited with it.
-
-### custom webcomponents design pholosiphy
-
-- all selections should be done within the constructor of the webcomponents , this is due to the fact (i think) we cannot easily select elements form the shadowDOM outside of the constructor, therefore doing this reduces the long lines of query selectors to get a specific element
-
-### Key Another Feature Name/Description.
-
-Words words. Words words words.
-
-Words words words words. Words words words.
-
-Words words words words words. Words.
-
-### Final Key Feature Name/Description.
-
-Words.
 
 ## AI
-
-REMOVE ME: Detail your use of AI, listing of the prompts you used, and whether the results formed or inspired part of your final submission and where we can see this (and if not, why not?). You may wish to group prompts into headings/sections - use markdown in any way that it helps you communicate your use of AI.
-
+within this project I tried to minimise the amount of AI I used, instead I looked through stack overflow, youtube videos and mdn. This is because at the begining of the coursework I used AI to learn about web componenets however it didnt provide me with useful information and instead left me more confused. Instead, I started reading through javascript documentation on MDN and found it significantly more useful. Because of this I do not have many AI prompts as I would just refer to documentation or other examples of implementation to do with specific features. 
 ### Prompts to develop my understanding of webcomponents
 
 this sqeuence of prompts are used to try and help me grasp a better understanding of how the structure of a shadowDOM should be within a webcomponent.  
@@ -185,27 +168,3 @@ I am having issues when using async connectedCallback, I have been utilizing set
 chatgpt is not correctly understanding my issue, it is suggesting that using a initilise async within the connectedCallback. This does not solve my problem as the issue is not with connectedCallback being excuted, rather the connectedCallback not being complete in external code leading to attributes not being avalaible.
 
 one method I can think to fix this is having an asyncronise function which acts as the on connectedCallback, which can be invoked through a method call externally. we can use a variable called initilised, to check wether we need to append to the DOM or wether the method has already been invoked externally or from the connectedCallback.
-
----
-
-> this is an example prompt given to a chatbot detailing XYZ
-> The response was better so I could speifically ask about QRST
-
-The response was proved useless because the prompt wasn't specific enough about XYZ, so:
-
-> how can I integrate QRST here?
-> The suggestion worked with minor modification.
-
-
-### Prompts to understand how to keep code good quaility
-this is a sequence of prompts I have used to try to understand the best way I can go about keeping code clean 
-
-> what is the best way of keeping my code clean when i am defning html elements within jacvascript?
-
-
-### Prompts to develop GHIJ (exmaple)
-
-For the GHIJ feature I ...
-
-> this is an example prompt given to a chatbot
-> words words words etc.
